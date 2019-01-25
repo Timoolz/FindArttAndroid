@@ -1,6 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="photo_placeholder">#ccc</color>
+
+
+    <color name="color_primary">#63564B</color>
+    <color name="color_primary_dark">#8D7E71</color>
+    <color name="color_primary_light">#C6C4BB</color>
+    <color name="color_accent">#DBA534</color>
+
+    <color name="color_primary_text">#1D1F1F</color>
+    <color name="color_secondary_text">#5B605D</color>
+    <color name="color_detail_text">#FFFFFF</color>
+
+    <color name="ltgray">#C0C0BE</color>
+
+
+
+
 </resources>

@@ -3,4 +3,23 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+
+    <string name="up">Up</string>
+
+    <string name="app_dummy_text_long">Test String that is very long</string>
+    <string name="app_dummy_text_medium">A medium Test String </string>
+    <string name="app_dummy_text_short">Test String</string>
+    <string name="app_dummy_number">04</string>
+    <string name="refresh">Refresh</string>
+    <string name="retry">Retry</string>
+    <string name="internet_error">Action requires network connection.  Connect to the Internet and try Again </string>
+    <string name="welcome_text">Welcome\n What kind of art do you like </string>
+    <string name="description">Description</string>
+    <string name="next">Next</string>
+    <string name="prev">Prev</string>
+
 </resources>
