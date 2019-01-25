@@ -3,8 +3,8 @@
     <color name="photo_placeholder">#ccc</color>
 
 
-    <color name="color_primary">#63564B</color>
-    <color name="color_primary_dark">#8D7E71</color>
+    <color name="color_primary">#8D7E71</color>
+        <color name="color_primary_dark">#63564B</color>
     <color name="color_primary_light">#C6C4BB</color>
     <color name="color_accent">#DBA534</color>
 
