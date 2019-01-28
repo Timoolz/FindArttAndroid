@@ -4,9 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -64,7 +68,9 @@ public class LogInFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_log_in, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
+        ButterKnife.bind(this, rootView);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +110,17 @@ public class LogInFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    @OnClick(R.id.sign_up_sug)
+    void loadSignUp(){
+        FragmentManager fragmentManager = getFragmentManager();
+
+        SignUpFragment signUpFragment = new SignUpFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.sign_in_frame, signUpFragment)
+                .commit();
+
     }
 }

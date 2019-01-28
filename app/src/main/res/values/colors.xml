@@ -3,16 +3,16 @@
     <color name="photo_placeholder">#ccc</color>
 
 
-    <color name="color_primary">#8D7E71</color>
-        <color name="color_primary_dark">#63564B</color>
-    <color name="color_primary_light">#C6C4BB</color>
+    <color name="color_primary">#AEA8A3</color>
+        <color name="color_primary_dark">#62554b</color>
+    <color name="color_primary_light">#E4E2E1</color>
     <color name="color_accent">#DBA534</color>
 
     <color name="color_primary_text">#1D1F1F</color>
     <color name="color_secondary_text">#5B605D</color>
     <color name="color_detail_text">#FFFFFF</color>
 
-    <color name="ltgray">#C0C0BE</color>
+    <color name="light_grey">#E9E8E7</color>
 
 
 

@@ -20,7 +20,6 @@ public class SignInActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         LogInFragment logInFragment = new LogInFragment();
         fragmentManager.beginTransaction()
                 .add(R.id.sign_in_frame, logInFragment)

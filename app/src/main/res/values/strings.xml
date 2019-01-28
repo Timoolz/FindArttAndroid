@@ -11,7 +11,7 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string-array name="gender">
-        <item>Not Specified</item>
+        <item>Gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
@@ -25,14 +25,21 @@
     <string name="next">Next</string>
     <string name="prev">Prev</string>
 
-    <string name="login">Login In</string>
+    <string name="login">Login </string>
     <string name="signup">Sign Up</string>
     <string name="login_suggest">Already have an account? Login In</string>
     <string name="signup_suggest">Don\'t have an account? Sign Up</string>
+    <string name="fname">First Name</string>
+    <string name="lname">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="gender">Gender</string>
+    <string name="country">Country</string>
     <string name="email_address">Email Address</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="forgort_password">Forgot Password?</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="confirm_password">Confirm Password</string>
+
     <string name="remember">Remember me?</string>
 
     <string name="app_dummy_text_long">Test String that is very long. lonng but not as large as
