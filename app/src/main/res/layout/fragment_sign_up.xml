@@ -49,62 +49,39 @@
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+
+                    />
 
                 <EditText
                     android:id="@+id/et_fname"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/fname"
                     android:inputType="text"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                     />
 
                 <EditText
                     android:id="@+id/et_lname"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/lname"
                     android:inputType="text"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                    />
 
                 <EditText
                     android:id="@+id/et_phone"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/phone"
                     android:inputType="phone"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                    />
 
 
 
@@ -114,28 +91,17 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/gender"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
+                    style="@style/AppTheme.EditText"
                      />
 
                 <EditText
                     android:id="@+id/et_country"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/country"
                     android:inputType="text"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                    />
 
 
 
@@ -143,33 +109,22 @@
                 <EditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
+
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                    />
 
 
                 <EditText
                     android:id="@+id/et_password_confirm"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="20dp"
-                    android:drawablePadding="15dp"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
-                    android:padding="10dp"
-                    android:textColor="@color/color_secondary_text"
-                    android:textColorHint="@color/color_secondary_text" />
+                    style="@style/AppTheme.EditText"
+                    />
 
 
 
@@ -178,14 +133,8 @@
                 <Button
                     android:id="@+id/btn_sign_up"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@color/color_accent"
                     android:text="@string/signup"
-                    android:elevation="4dp"
-                    android:textColor="@color/color_primary_text" />
+                    style="@style/AppTheme.Button" />
 
 
                 <!--<LinearLayout-->
@@ -229,17 +178,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:padding="10dp"
         android:text="@string/login_suggest"
-        android:textColor="@color/color_primary_text"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/AppTheme.TextViewSmall"
         />
 
 </android.support.constraint.ConstraintLayout>
