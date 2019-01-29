@@ -1,9 +1,12 @@
-package com.olamide.findartt;
+package com.olamide.findartt.activity;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+
+import com.olamide.findartt.R;
+import com.olamide.findartt.fragment.LogInFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

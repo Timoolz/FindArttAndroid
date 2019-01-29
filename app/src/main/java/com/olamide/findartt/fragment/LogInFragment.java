@@ -1,4 +1,4 @@
-package com.olamide.findartt;
+package com.olamide.findartt.fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.olamide.findartt.R;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
