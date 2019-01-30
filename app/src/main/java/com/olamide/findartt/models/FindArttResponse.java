@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.ErrorCode;
 
 
-public class FindArttResponse {
+public class FindArttResponse<T> {
 
     @SerializedName("code")
     private int code;
@@ -17,7 +17,7 @@ public class FindArttResponse {
     private String status;
 
     @SerializedName("data")
-    private Object data;
+    private T data;
 
     @SerializedName("errorCode")
     private ErrorCode errorCode;
@@ -50,11 +50,11 @@ public class FindArttResponse {
         this.status = status;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

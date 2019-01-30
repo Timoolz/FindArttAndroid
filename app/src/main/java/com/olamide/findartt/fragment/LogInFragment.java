@@ -11,9 +11,19 @@ import android.view.ViewGroup;
 
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
+import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.models.UserResult;
+import com.olamide.findartt.utils.network.FindArttService;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
 
@@ -30,14 +40,8 @@ public class LogInFragment extends Fragment {
 
     FragmentDataPasser dataPasser;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Call<FindArttResponse<UserResult>> responseCall;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,31 +49,37 @@ public class LogInFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LogInFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LogInFragment newInstance(String param1, String param2) {
-        LogInFragment fragment = new LogInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
+        UserLogin login = new UserLogin();
+        login.setEmail("string@string.com");
+        login.setPassword("string");
+
+        responseCall = FindArttService.login(login);
+        responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
+            @Override
+            public void onResponse(Call<FindArttResponse<UserResult>> call, Response<FindArttResponse<UserResult>> response) {
+
+               FindArttResponse<UserResult> arttResponse =  response.body();
+               UserResult userResult = arttResponse.getData();
+                Timber.e(userResult.getTokenInfo().getAccessToken());
+            }
+
+            @Override
+            public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
+                t.printStackTrace();
+                Timber.e(t.getMessage());
+            }
+        });
+
     }
 
     @Override
@@ -110,16 +120,6 @@ public class LogInFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

@@ -13,7 +13,7 @@ import com.olamide.findartt.utils.Converters;
 import java.time.LocalDateTime;
 
 
-public class User extends AbstractEntity implements Parcelable {
+public class UserDetails extends AbstractEntity implements Parcelable {
 
     @SerializedName("email")
     private String email;
@@ -28,7 +28,7 @@ public class User extends AbstractEntity implements Parcelable {
     private String imageUrl;
 
     @SerializedName("dateOfBirth")
-    private LocalDateTime dateOfBirth;
+    private String dateOfBirth;
 
     @SerializedName("dateOfBirthEpoch")
     private Long dateOfBirthEpoch;
@@ -140,11 +140,11 @@ public class User extends AbstractEntity implements Parcelable {
     }
 
 
-    public LocalDateTime getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -196,7 +196,7 @@ public class User extends AbstractEntity implements Parcelable {
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(imageUrl);
-        dest.writeLong(Converters.toEpochLong(dateOfBirth));
+        dest.writeString((dateOfBirth));
         dest.writeLong(dateOfBirthEpoch);
         dest.writeByte((byte) (active ? 1 : 0));
         dest.writeString(phone);
@@ -211,34 +211,34 @@ public class User extends AbstractEntity implements Parcelable {
     }
 
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
-        public User createFromParcel(Parcel in) {
-            User user = new User();
-            user.email = in.readString();
-            user.firstName = in.readString();
-            user.lastName = in.readString();
-            user.imageUrl = in.readString();
-            user.email = in.readString();
-            user.dateOfBirth = Converters.toDateTime(in.readLong());
-            user.dateOfBirthEpoch = in.readLong();
-            user.active = in.readByte()!=0;
-            user.phone = in.readString();
-            user.socialSignUp = in.readByte()!=0;
-            user.address = in.readString();
-            user.country = in.readString();
-            user.gender = Gender.valueOf(in.readString());
-            user.socialId = in.readString();
-            user.verified = in.readByte()!=0;
+        public UserDetails createFromParcel(Parcel in) {
+            UserDetails userdetails = new UserDetails();
+            userdetails.email = in.readString();
+            userdetails.firstName = in.readString();
+            userdetails.lastName = in.readString();
+            userdetails.imageUrl = in.readString();
+            userdetails.email = in.readString();
+            userdetails.dateOfBirth = (in.readString());
+            userdetails.dateOfBirthEpoch = in.readLong();
+            userdetails.active = in.readByte()!=0;
+            userdetails.phone = in.readString();
+            userdetails.socialSignUp = in.readByte()!=0;
+            userdetails.address = in.readString();
+            userdetails.country = in.readString();
+            userdetails.gender = Gender.valueOf(in.readString());
+            userdetails.socialId = in.readString();
+            userdetails.verified = in.readByte()!=0;
 
 
-            return user;
+            return userdetails;
         }
 
         @Override
-        public User[] newArray(int size) {
-            return new User[size];
+        public UserDetails[] newArray(int size) {
+            return new UserDetails[size];
         }
     };
 

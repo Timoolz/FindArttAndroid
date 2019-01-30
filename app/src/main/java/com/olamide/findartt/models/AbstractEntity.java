@@ -9,7 +9,6 @@ import android.support.annotation.RequiresApi;
 import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.utils.Converters;
 
-import java.time.LocalDateTime;
 
 
 public class AbstractEntity implements Parcelable {
@@ -19,13 +18,13 @@ public class AbstractEntity implements Parcelable {
     private Integer id;
 
     @SerializedName("createdDate")
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     @SerializedName("createdDateEpoch")
     private Long createdDateEpoch;
 
     @SerializedName("updatedDate")
-    private LocalDateTime updatedDate;
+    private String updatedDate;
 
     @SerializedName("updatedDateEpoch")
     private Long updatedDateEpoch;
@@ -38,20 +37,20 @@ public class AbstractEntity implements Parcelable {
         this.id = id;
     }
 
-    public LocalDateTime getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
 
     }
 
-    public LocalDateTime getUpdatedDate() {
+    public String getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(LocalDateTime updatedDate) {
+    public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
 
@@ -84,9 +83,9 @@ public class AbstractEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeInt(id);
-        dest.writeLong(Converters.toEpochLong(createdDate));
+        dest.writeString((createdDate));
         dest.writeLong(createdDateEpoch);
-        dest.writeLong(Converters.toEpochLong(updatedDate));
+        dest.writeString((updatedDate));
         dest.writeLong(updatedDateEpoch);
 
     }
@@ -98,9 +97,9 @@ public class AbstractEntity implements Parcelable {
         public AbstractEntity createFromParcel(Parcel in) {
             AbstractEntity abstractEntity = new AbstractEntity();
             abstractEntity.id = in.readInt();
-            abstractEntity.createdDate = Converters.toDateTime(in.readLong());
+            abstractEntity.createdDate = (in.readString());
             abstractEntity.createdDateEpoch = in.readLong();
-            abstractEntity.updatedDate = Converters.toDateTime(in.readLong());
+            abstractEntity.updatedDate = (in.readString());
             abstractEntity.updatedDateEpoch = in.readLong();
 
             return abstractEntity;

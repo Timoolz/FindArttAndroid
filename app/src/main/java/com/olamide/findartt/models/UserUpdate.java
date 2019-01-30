@@ -3,8 +3,6 @@ package com.olamide.findartt.models;
 import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.Gender;
 
-import java.time.LocalDateTime;
-
 public class UserUpdate {
 
 
@@ -21,7 +19,7 @@ public class UserUpdate {
     private String imageUrl;
 
     @SerializedName("dateOfBirth")
-    private LocalDateTime dateOfBirth;
+    private String dateOfBirth;
 
     @SerializedName("phone")
     private String phone;
@@ -103,11 +101,11 @@ public class UserUpdate {
     }
 
 
-    public LocalDateTime getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
 
     }

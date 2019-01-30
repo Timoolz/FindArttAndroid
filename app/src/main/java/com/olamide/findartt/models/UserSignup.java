@@ -3,9 +3,6 @@ package com.olamide.findartt.models;
 import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.Gender;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
 public class UserSignup {
 
     @SerializedName("email")
@@ -21,7 +18,7 @@ public class UserSignup {
     private String imageUrl;
 
     @SerializedName("dateOfBirth")
-    private LocalDateTime dateOfBirth;
+    private String dateOfBirth;
 
     @SerializedName("password")
     private String password;
@@ -116,11 +113,11 @@ public class UserSignup {
     }
 
 
-    public LocalDateTime getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
 
     }

@@ -11,8 +11,8 @@ public class UserResult implements Parcelable{
     @SerializedName("tokenInfo")
     private TokenInfo tokenInfo;
     
-    @SerializedName("user")
-    private User user;
+    @SerializedName("userDetails")
+    private UserDetails userDetails;
 
 
    
@@ -25,12 +25,12 @@ public class UserResult implements Parcelable{
         this.tokenInfo = tokenInfo;
     }
 
-    public User getUser() {
-        return user;
+    public UserDetails getUserDetails() {
+        return userDetails;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
     }
 
 
@@ -43,7 +43,7 @@ public class UserResult implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeParcelable(tokenInfo, flags);
-        dest.writeParcelable(user,flags);
+        dest.writeParcelable(userDetails,flags);
 
     }
 
@@ -53,7 +53,7 @@ public class UserResult implements Parcelable{
         public UserResult createFromParcel(Parcel in) {
             UserResult userResult = new UserResult();
             userResult.tokenInfo = in.readParcelable(TokenInfo.class.getClassLoader());
-            userResult.user = in.readParcelable(User.class.getClassLoader());
+            userResult.userDetails = in.readParcelable(UserDetails.class.getClassLoader());
 
             return userResult;
         }
