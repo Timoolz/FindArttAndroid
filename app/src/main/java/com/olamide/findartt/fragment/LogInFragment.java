@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
 
 
 /**
@@ -24,6 +27,9 @@ import butterknife.OnClick;
  * create an instance of this fragment.
  */
 public class LogInFragment extends Fragment {
+
+    FragmentDataPasser dataPasser;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,6 +91,11 @@ public class LogInFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        dataPasser = (FragmentDataPasser) context;
+        Bundle bundle = new Bundle();
+        bundle.putString(TYPE_STRING,"LOGIN");
+        dataPasser.onDataPass(bundle);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
@@ -115,10 +126,10 @@ public class LogInFragment extends Fragment {
     }
 
 
+
     @OnClick(R.id.sign_up_sug)
     void loadSignUp(){
         FragmentManager fragmentManager = getFragmentManager();
-
         SignUpFragment signUpFragment = new SignUpFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.sign_in_frame, signUpFragment)
