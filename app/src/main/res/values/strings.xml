@@ -19,7 +19,8 @@
     <string name="app_dummy_number">04</string>
     <string name="refresh">Refresh</string>
     <string name="retry">Retry</string>
-    <string name="internet_error">Action requires network connection.  Connect to the Internet and try Again </string>
+    <string name="internet_error">Unable to complete action.  Check Internet connection and try Again </string>
+    <string name="error">Unable to complete action, System error. </string>
     <string name="welcome_text">Welcome\n What kind of art do you like </string>
     <string name="description">Description</string>
     <string name="next">Next</string>

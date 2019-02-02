@@ -3,6 +3,7 @@ package com.olamide.findartt.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -28,6 +30,9 @@ import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
  */
 public class SignUpFragment extends Fragment {
 
+
+    @BindView(R.id.cl_root)
+    CoordinatorLayout clRoot;
 
     FragmentDataPasser dataPasser;
 

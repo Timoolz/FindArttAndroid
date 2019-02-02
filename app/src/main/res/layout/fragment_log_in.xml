@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_sug"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="15dp">
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/sign_up_sug"
+            app:layout_constraintTop_toTopOf="parent">
 
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="400dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -43,41 +47,49 @@
 
                     <EditText
                         android:id="@+id/et_email"
+                        style="@style/AppTheme.EditText"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
                         android:hint="@string/email"
-                        android:inputType="textEmailAddress"
-                        style="@style/AppTheme.EditText"
-                         />
+                        android:inputType="textEmailAddress" />
 
 
                     <EditText
                         android:id="@+id/et_password"
+                        style="@style/AppTheme.EditText"
                         android:layout_width="match_parent"
                         android:layout_gravity="center"
                         android:hint="@string/password"
-                        android:inputType="textPassword"
-                        style="@style/AppTheme.EditText"
-                         />
+                        android:inputType="textPassword" />
 
 
                     <CheckBox
                         android:id="@+id/chb_remember_me"
+                        style="@style/AppTheme.EditText.Check"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        style="@style/AppTheme.EditText.Check"
 
 
                         android:text="@string/remember" />
 
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                    <Button
-                        android:id="@+id/btn_login"
-                        android:layout_width="match_parent"
-                        android:text="@string/login"
-                        style="@style/AppTheme.Button"
-                         />
+                        <Button
+                            android:id="@+id/btn_login"
+                            style="@style/AppTheme.Button"
+                            android:layout_width="match_parent"
+                            android:text="@string/login" />
+
+                        <ProgressBar
+                            android:id="@+id/pb_loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:visibility="invisible" />
+                    </RelativeLayout>
 
 
                     <!--<LinearLayout-->
@@ -98,33 +110,23 @@
                     <!--</LinearLayout>-->
 
 
-            </LinearLayout>
+                </LinearLayout>
 
 
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
+            </RelativeLayout>
+        </ScrollView>
 
 
-        </RelativeLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/sign_up_sug"
+            style="@style/AppTheme.TextView.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/signup_suggest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-
-
-
-    <TextView
-        android:id="@+id/sign_up_sug"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/signup_suggest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/AppTheme.TextView.Small"
-        />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

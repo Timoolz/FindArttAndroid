@@ -7,13 +7,9 @@ import android.support.annotation.RequiresApi;
 
 import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.Gender;
-import com.olamide.findartt.utils.Converters;
 
 
-import java.time.LocalDateTime;
-
-
-public class UserDetails extends AbstractEntity implements Parcelable {
+public class User extends AbstractEntity implements Parcelable {
 
     @SerializedName("email")
     private String email;
@@ -211,11 +207,11 @@ public class UserDetails extends AbstractEntity implements Parcelable {
     }
 
 
-    public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
-        public UserDetails createFromParcel(Parcel in) {
-            UserDetails userdetails = new UserDetails();
+        public User createFromParcel(Parcel in) {
+            User userdetails = new User();
             userdetails.email = in.readString();
             userdetails.firstName = in.readString();
             userdetails.lastName = in.readString();
@@ -237,8 +233,8 @@ public class UserDetails extends AbstractEntity implements Parcelable {
         }
 
         @Override
-        public UserDetails[] newArray(int size) {
-            return new UserDetails[size];
+        public User[] newArray(int size) {
+            return new User[size];
         }
     };
 
