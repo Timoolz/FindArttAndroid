@@ -33,20 +33,6 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
 
         if(savedInstanceState != null){
             typeString = savedInstanceState.getString(TYPE_STRING);
-
-            if(typeString != null && typeString.equals( "LOGIN")){
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                LogInFragment logInFragment = new LogInFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.sign_in_frame, logInFragment)
-                        .commit();
-            }else {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                SignUpFragment signUpFragment = new SignUpFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.sign_in_frame, signUpFragment)
-                        .commit();
-            }
         }else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             LogInFragment logInFragment = new LogInFragment();
@@ -54,10 +40,6 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
                     .add(R.id.sign_in_frame, logInFragment)
                     .commit();
         }
-
-
-
-
 
     }
 
@@ -71,10 +53,9 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
     @Override
     public void onDataPass(Bundle bundle) {
         if (bundle!=null){
-            Log.d("LOG","hello " + bundle.getString(TYPE_STRING));
+            Timber.e("hello " + bundle.getString(TYPE_STRING));
             typeString = bundle.getString(TYPE_STRING);
         }
-
 
     }
 

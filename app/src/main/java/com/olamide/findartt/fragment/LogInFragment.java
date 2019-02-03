@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
@@ -88,6 +90,8 @@ public class LogInFragment extends Fragment {
 //        }
 
         if(savedInstanceState!= null){
+            userEmail = savedInstanceState.getString("userEmail");
+            userPassword = savedInstanceState.getString("userPassword");
 
         }
 
@@ -105,9 +109,12 @@ public class LogInFragment extends Fragment {
         if (savedInstanceState != null) {
             userEmail = savedInstanceState.getString("userEmail");
             userPassword = savedInstanceState.getString("userPassword");
-            emailText.setText(userEmail);
-            passwordText.setText(userPassword);
+//            emailText.setText(userEmail);
+//            passwordText.setText(userPassword);
+
         }
+
+
         return rootView;
     }
 
@@ -139,6 +146,7 @@ public class LogInFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
