@@ -1,32 +1,38 @@
 package com.olamide.findartt.utils;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.olamide.findartt.R;
+import com.olamide.findartt.activity.SignInActivity;
+import com.olamide.findartt.enums.ErrorCode;
 import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.UserLogin;
 
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import timber.log.Timber;
 
+import static com.olamide.findartt.Constants.USEREMAIL_STRING;
+import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+
 public class ErrorUtils {
+
+
 
     private static final int INTERNAL_SERVER_ERROR = 500;
 
     public static void handleError( Context context, CoordinatorLayout coordinatorLayout){
         String error = context.getString(R.string.error);
 //        Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-
         showErrorSnack(error,context,coordinatorLayout);
     }
 
@@ -38,6 +44,11 @@ public class ErrorUtils {
 
             if(findArttResponse.getCode()==INTERNAL_SERVER_ERROR){
                 handleError(context, coordinatorLayout);
+            }else if(findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)){
+                handleError(context, coordinatorLayout);
+                //re direct to sign in activiy
+                Intent intent = new Intent(context, SignInActivity.class);
+                context.startActivity(intent);
             }else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
                 showErrorSnack(findArttResponse.getMessage(),context,coordinatorLayout);

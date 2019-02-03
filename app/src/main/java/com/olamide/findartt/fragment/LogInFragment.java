@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +14,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import com.olamide.findartt.Constants;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
+import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
 
@@ -34,7 +34,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
+import static com.olamide.findartt.Constants.TYPE_STRING;
+import static com.olamide.findartt.Constants.USEREMAIL_STRING;
+import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 
 
 /**
@@ -74,6 +76,8 @@ public class LogInFragment extends Fragment {
     private String userEmail;
     private String userPassword;
 
+    private boolean remember = false;
+
 
     public LogInFragment() {
         // Required empty public constructor
@@ -84,17 +88,18 @@ public class LogInFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-
-        if(savedInstanceState!= null){
-            userEmail = savedInstanceState.getString("userEmail");
-            userPassword = savedInstanceState.getString("userPassword");
-
+        if (getArguments() != null) {
+            userEmail = getArguments().getString(USEREMAIL_STRING);
+            userPassword = getArguments().getString(USERPASSWORD_STRING);
+            updateLogin(false);
+            login(login);
         }
 
+        if (savedInstanceState != null) {
+            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
+            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
+
+        }
 
 
     }
@@ -107,13 +112,12 @@ public class LogInFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         if (savedInstanceState != null) {
-            userEmail = savedInstanceState.getString("userEmail");
-            userPassword = savedInstanceState.getString("userPassword");
+            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
+            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
 //            emailText.setText(userEmail);
 //            passwordText.setText(userPassword);
 
         }
-
 
         return rootView;
     }
@@ -156,20 +160,21 @@ public class LogInFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        updateLogin();
-        outState.putString("userEmail",userEmail);
-        outState.putString("userPassword",userPassword);
+        updateLogin(true);
+        outState.putString(USEREMAIL_STRING, userEmail);
+        outState.putString(USERPASSWORD_STRING, userPassword);
 //        outState.p
     }
 
     @OnClick(R.id.btn_login)
-    void login() {
+    void loginClick() {
+        updateLogin(true);
+        login(login);
+    }
+
+    void login(final UserLogin login) {
         loadingPb.setVisibility(View.VISIBLE);
         loginBt.setVisibility(View.INVISIBLE);
-        updateLogin();
-        login.setEmail(userEmail);
-        login.setPassword(userPassword);
-
         responseCall = FindArttService.login(login);
         responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
 
@@ -181,10 +186,14 @@ public class LogInFragment extends Fragment {
                 if (response.body() != null) {
                     FindArttResponse<UserResult> arttResponse = response.body();
                     UserResult userResult = arttResponse.getData();
-                    Timber.e(userResult.getTokenInfo().getAccessToken());
-                    UiUtils.showSnack("Successful Login. Welcome "+userResult.getUser().getName(),getContext(),clRoot );
+
+                    storeAccessToken(userResult.getTokenInfo().getAccessToken());
+                    if (remember) {
+                        storeUserCredentials(login);
+                    }
+                    UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
                 } else {
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(),clRoot);
+                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
                 }
 
             }
@@ -193,10 +202,12 @@ public class LogInFragment extends Fragment {
             public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
                 loadingPb.setVisibility(View.INVISIBLE);
                 loginBt.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(),clRoot);
+                ErrorUtils.handleInternetError(getContext(), clRoot);
                 Timber.e(t);
             }
         });
+
+
     }
 
 
@@ -210,8 +221,21 @@ public class LogInFragment extends Fragment {
 
     }
 
-    void updateLogin(){
-        userEmail = emailText.getText().toString();
-        userPassword = passwordText.getText().toString();
+    void updateLogin(boolean withUi) {
+        if(withUi){
+            userEmail = emailText.getText().toString();
+            userPassword = passwordText.getText().toString();
+            remember = rememberCheck.isChecked();
+        }
+        login.setEmail(userEmail);
+        login.setPassword(userPassword);
+    }
+
+    void storeAccessToken(String accessToken) {
+        TempStorageUtils.writeSharedPreferenceString(getContext(), Constants.ACCESS_TOKEN_STRING, accessToken);
+    }
+
+    void storeUserCredentials(UserLogin userLogin) {
+        TempStorageUtils.storeUserLogin(getContext(), userLogin);
     }
 }

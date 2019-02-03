@@ -9,15 +9,28 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 
+import com.olamide.findartt.Constants;
+import com.olamide.findartt.enums.Gender;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
+import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.models.UserResult;
+import com.olamide.findartt.models.UserSignup;
+import com.olamide.findartt.utils.TempStorageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
 
-import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
+import static com.olamide.findartt.Constants.TYPE_STRING;
 
 
 /**
@@ -30,52 +43,68 @@ import static com.olamide.findartt.activity.SignInActivity.TYPE_STRING;
  */
 public class SignUpFragment extends Fragment {
 
+    private Call<FindArttResponse<UserResult>> responseCall;
+
+
+    FragmentDataPasser dataPasser;
+
+    private OnFragmentInteractionListener mListener;
 
     @BindView(R.id.cl_root)
     CoordinatorLayout clRoot;
 
-    FragmentDataPasser dataPasser;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.et_email)
+    EditText emailText;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.et_fname)
+    EditText fnameText;
 
-    private OnFragmentInteractionListener mListener;
+    @BindView(R.id.et_lname)
+    EditText lnameText;
+
+    @BindView(R.id.et_phone)
+    EditText phoneText;
+
+    @BindView(R.id.sp_gender)
+    Spinner genderSp;
+
+    @BindView(R.id.et_country)
+    EditText countryText;
+
+    @BindView(R.id.et_password)
+    EditText passwordText;
+
+    @BindView(R.id.et_password_confirm)
+    EditText passwordConfirmText;
+
+    @BindView(R.id.pb_loading)
+    ProgressBar loadingPb;
+
+    @BindView(R.id.btn_sign_up)
+    Button signUpbt;
+
+
+    private UserSignup signup = new UserSignup();
+    private String userEmail;
+    private String fname;
+    private String lname;
+    private String phone;
+    private Gender gender;
+    private String country;
+    private String confirmUserPassword;
+    private String userPassword;
+
 
     public SignUpFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SignUpFragment newInstance(String param1, String param2) {
-        SignUpFragment fragment = new SignUpFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -84,7 +113,8 @@ public class SignUpFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
-        return rootView;    }
+        return rootView;
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -94,14 +124,12 @@ public class SignUpFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         dataPasser = (FragmentDataPasser) context;
         Bundle bundle = new Bundle();
-        bundle.putString(TYPE_STRING,"SIGNUP");
+        bundle.putString(TYPE_STRING, "SIGNUP");
         dataPasser.onDataPass(bundle);
 
 
@@ -136,7 +164,7 @@ public class SignUpFragment extends Fragment {
 
 
     @OnClick(R.id.login_sug)
-    void loadLogin(){
+    void loadLogin() {
         FragmentManager fragmentManager = getFragmentManager();
         LogInFragment logInFragment = new LogInFragment();
         fragmentManager.beginTransaction()
@@ -145,6 +173,32 @@ public class SignUpFragment extends Fragment {
 
     }
 
+
+    void updateSignUp(boolean withUi) {
+        if (withUi) {
+            userEmail = emailText.getText().toString();
+            fname = fnameText.getText().toString();
+            lname = lnameText.getText().toString();
+            phone = phoneText.getText().toString();
+            gender = Gender.valueOf(genderSp.getSelectedItem().toString());
+            country = countryText.getText().toString();
+            confirmUserPassword = passwordConfirmText.getText().toString();
+            userPassword = passwordText.getText().toString();
+
+
+        }
+        signup.setEmail(userEmail);
+        signup.setFirstName(fname);
+        signup.setLastName(lname);
+        signup.setPhone(phone);
+        signup.setGender(gender);
+        signup.setCountry(country);
+        signup.setPassword(userPassword);
+    }
+
+    void storeAccessToken(String accessToken) {
+        TempStorageUtils.writeSharedPreferenceString(getContext(), Constants.ACCESS_TOKEN_STRING, accessToken);
+    }
 
 
 }

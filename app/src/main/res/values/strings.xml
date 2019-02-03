@@ -11,7 +11,7 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string-array name="gender">
-        <item>Gender</item>
+        <!--<item>Gender</item>-->
         <item>Male</item>
         <item>Female</item>
     </string-array>

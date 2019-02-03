@@ -1,23 +1,30 @@
 package com.olamide.findartt.activity;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.fragment.LogInFragment;
 import com.olamide.findartt.fragment.SignUpFragment;
+import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.utils.TempStorageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
+import static com.olamide.findartt.Constants.TYPE_STRING;
+import static com.olamide.findartt.Constants.USEREMAIL_STRING;
+import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+
 public class SignInActivity extends AppCompatActivity implements FragmentDataPasser {
 
-    public final static String TYPE_STRING = "typeString";
 
     private String typeString = "";
 
@@ -31,11 +38,22 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             typeString = savedInstanceState.getString(TYPE_STRING);
-        }else {
+        } else {
+
+            UserLogin userLogin = TempStorageUtils.getUserLogin(getApplicationContext());
             FragmentManager fragmentManager = getSupportFragmentManager();
             LogInFragment logInFragment = new LogInFragment();
+
+            if (!userLogin.getEmail().isEmpty() && !userLogin.getPassword().isEmpty()) {
+                Bundle bundle = new Bundle();
+                bundle.putString(USEREMAIL_STRING, userLogin.getEmail());
+                bundle.putString(USERPASSWORD_STRING,userLogin.getPassword());
+                logInFragment.setArguments(bundle);
+            }
+
+
             fragmentManager.beginTransaction()
                     .add(R.id.sign_in_frame, logInFragment)
                     .commit();
@@ -46,13 +64,13 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(TYPE_STRING,typeString);
+        savedInstanceState.putString(TYPE_STRING, typeString);
     }
 
 
     @Override
     public void onDataPass(Bundle bundle) {
-        if (bundle!=null){
+        if (bundle != null) {
             Timber.e("hello " + bundle.getString(TYPE_STRING));
             typeString = bundle.getString(TYPE_STRING);
         }
