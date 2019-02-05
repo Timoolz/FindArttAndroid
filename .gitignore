@@ -1,7 +1,8 @@
 *.iml
 .gradle
+
 .google-services.json
-gradle.properties
+.gradle.propertiesgradle.properties
 /gradle.properties
 /local.properties
 /.idea/caches/build_file_checksums.ser
