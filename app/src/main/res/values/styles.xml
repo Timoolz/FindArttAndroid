@@ -50,6 +50,14 @@
 
     </style>
 
+    <style name="AppTheme.Button.Google">
+
+        <item name="android:background">@drawable/common_google_signin_btn_icon_light_normal</item>
+        <item name="android:padding">0dp</item>
+
+
+    </style>
+
 
     <style name="AppTheme.TextView">
         <item name="android:layout_marginLeft">8dp</item>

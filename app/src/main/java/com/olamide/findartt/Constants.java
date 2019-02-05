@@ -3,6 +3,11 @@ package com.olamide.findartt;
 public class Constants {
     public static final String FINDARTT_BASE_URL = "https://findartt.appspot.com/api/";
 
+    public static final String GOOGLE_WEB_CLIENT_ID = BuildConfig.GOOGLE_WEB_CLIENT_ID;
+    public static final String GOOGLE_SERVER_CLIENT_ID = BuildConfig.GOOGLE_SERVER_CLIENT_ID;
+    public final static int RC_SIGN_IN = 9001;
+
+
     public final static String TYPE_STRING = "typeString";
 
     public static final String ACCESS_TOKEN_STRING = "accessToken";

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.olamide.findartt.Constants;
 import com.olamide.findartt.R;
 import com.olamide.findartt.activity.SignInActivity;
 import com.olamide.findartt.enums.ErrorCode;
@@ -46,7 +47,9 @@ public class ErrorUtils {
                 handleError(context, coordinatorLayout);
             }else if(findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)){
                 handleError(context, coordinatorLayout);
-                //re direct to sign in activiy
+                //remove current stored accessToken
+                TempStorageUtils.removeSharedPreference(context, Constants.ACCESS_TOKEN_STRING);
+                //re direct to sign in activity
                 Intent intent = new Intent(context, SignInActivity.class);
                 context.startActivity(intent);
             }else {

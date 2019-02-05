@@ -18,46 +18,62 @@ public class TempStorageUtils {
     static int tempInt = 0;
     static String tempString = "";
 
-    public static int readSharedPreferenceInt(Context context, String key){
+    public static int readSharedPreferenceInt(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        tempInt = preferences.getInt(key,DEFAULT_INT);
+        tempInt = preferences.getInt(key, DEFAULT_INT);
         return tempInt;
     }
 
-    public static String readSharedPreferenceString(Context context, String key){
+    public static String readSharedPreferenceString(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        tempString = preferences.getString(key,DEFAULT_STRING);
+        tempString = preferences.getString(key, DEFAULT_STRING);
         return tempString;
     }
 
-    public static void writeSharedPreferenceString(Context context,String key,String value){
+    public static void writeSharedPreferenceString(Context context, String key, String value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(key,value);
+        editor.putString(key, value);
         editor.apply();
     }
 
-    public static void writeSharedPreferenceInt(Context context,String key,int value){
+    public static void writeSharedPreferenceInt(Context context, String key, int value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(key,value);
+        editor.putInt(key, value);
         editor.apply();
     }
 
-    public static void storeUserLogin(Context context, UserLogin userLogin){
-        writeSharedPreferenceString(context, Constants.USEREMAIL_STRING,GeneralUtils.encrypt(userLogin.getEmail()));
-        writeSharedPreferenceString(context,Constants.USERPASSWORD_STRING,GeneralUtils.encrypt(userLogin.getPassword()));
+
+    public static void removeSharedPreference(Context context, String key) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
+
+    public static void storeUserLogin(Context context, UserLogin userLogin) {
+        writeSharedPreferenceString(context, Constants.USEREMAIL_STRING, GeneralUtils.encrypt(userLogin.getEmail()));
+        writeSharedPreferenceString(context, Constants.USERPASSWORD_STRING, GeneralUtils.encrypt(userLogin.getPassword()));
 
     }
 
-    public static UserLogin getUserLogin(Context context){
+    public static UserLogin getUserLogin(Context context) {
 
         UserLogin userLogin = new UserLogin();
         String userEmail = TempStorageUtils.readSharedPreferenceString(context, USEREMAIL_STRING);
-        String userPass = TempStorageUtils.readSharedPreferenceString(context,USERPASSWORD_STRING);
+        String userPass = TempStorageUtils.readSharedPreferenceString(context, USERPASSWORD_STRING);
         userLogin.setEmail(GeneralUtils.decrypt(userEmail));
         userLogin.setPassword(GeneralUtils.decrypt(userPass));
         return userLogin;
+    }
+
+    public static void removeUserLogin(Context context) {
+
+        TempStorageUtils.removeSharedPreference(context, USEREMAIL_STRING);
+        TempStorageUtils.removeSharedPreference(context, USERPASSWORD_STRING);
+
     }
 
 }

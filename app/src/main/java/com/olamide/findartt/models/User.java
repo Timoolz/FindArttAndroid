@@ -17,7 +17,7 @@ public class User extends AbstractEntity implements Parcelable {
     @SerializedName("firstName")
     private String firstName;
 
-    @SerializedName("LastName")
+    @SerializedName("lastName")
     private String lastName;
 
     @SerializedName("imageUrl")
