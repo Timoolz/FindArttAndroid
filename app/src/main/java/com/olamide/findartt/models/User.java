@@ -199,7 +199,9 @@ public class User extends AbstractEntity implements Parcelable {
         dest.writeByte((byte) (socialSignUp ? 1 : 0));
         dest.writeString(address);
         dest.writeString(country);
-        dest.writeString(gender.getName());
+        if(gender!=null){
+            dest.writeString(gender.getName());
+        }
         dest.writeString(socialId);
         dest.writeByte((byte) (verified ? 1 : 0));
 

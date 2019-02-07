@@ -19,6 +19,7 @@
     <string name="app_dummy_number">04</string>
     <string name="refresh">Refresh</string>
     <string name="retry">Retry</string>
+    <string name="empty_art">No Artwork found at the moment Try again later </string>
     <string name="internet_error">Unable to complete action.  Check Internet connection and try Again </string>
     <string name="error">Unable to complete action, System error. </string>
     <string name="welcome_text">Welcome\n What kind of art do you like </string>
@@ -48,7 +49,6 @@
     <string name="app_dummy_text_medium"> Test String that is quite medium</string>
     <string name="app_dummy_text_short">A short Test String </string>
     <string name="app_dummy_text">Test String</string>
-
 
 
     <string name="large_text">

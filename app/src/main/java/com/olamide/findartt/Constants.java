@@ -13,4 +13,6 @@ public class Constants {
     public static final String ACCESS_TOKEN_STRING = "accessToken";
     public static final String USEREMAIL_STRING = "userName";
     public static final String USERPASSWORD_STRING = "userPassword";
+
+    public static final String CURRENT_USER = "currentUser";
 }

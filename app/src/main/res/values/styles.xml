@@ -6,10 +6,27 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="colorControlNormal">@color/color_detail_text</item>
-        <item name="android:colorBackground">@color/color_primary_light</item>
+        <item name="android:colorBackground">@color/light_grey</item>
         <item name="android:colorForeground">@color/color_primary_dark</item>
     </style>
 
+
+
+    <style name="AppTheme.CardView">
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <!--<item name="android:foreground">?selectableItemBackground</item>-->
+        <item name="cardCornerRadius">@dimen/app_corner_radius</item>
+        <item name="android:elevation">2dp</item>
+        <item name="cardMaxElevation">8dp</item>
+        <item name="android:stateListAnimator">@animator/article_list_card_lift_up</item>
+
+    </style>
 
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@color/color_detail_text</item>

@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.Constants;
+import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.enums.Gender;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
@@ -51,6 +52,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.Constants.RC_SIGN_IN;
 import static com.olamide.findartt.Constants.TYPE_STRING;
 
@@ -268,6 +270,10 @@ public class SignUpFragment extends Fragment {
                     UserResult userResult = arttResponse.getData();
                     storeAccessToken(userResult.getTokenInfo().getAccessToken());
                     UiUtils.showSuccessSnack("Successful Sign Up. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
+
+                    Intent intent = new Intent(getContext(), DashboardActivity.class);
+                    intent.putExtra(CURRENT_USER,userResult.getUser());
+                    startActivity(intent);
                 } else {
                     googleSignOut();
                     ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
@@ -315,6 +321,10 @@ public class SignUpFragment extends Fragment {
                     storeAccessToken(userResult.getTokenInfo().getAccessToken());
 
                     UiUtils.showSuccessSnack("Successful Sign Up. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
+
+                    Intent intent = new Intent(getContext(), DashboardActivity.class);
+                    intent.putExtra(CURRENT_USER,userResult.getUser());
+                    startActivity(intent);
                 } else {
                     ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
                 }

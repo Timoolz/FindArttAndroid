@@ -17,6 +17,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -52,16 +53,16 @@ public interface FindArttAPI {
     @POST("v1/art/update")
     Call<FindArttResponse<Artwork>> updateArt(@Header("Authorization") String auth, @Body Artwork artwork );
 
-    @POST("v1/art/delete/{id}")
+    @DELETE("v1/art/delete/{id}")
     Call<FindArttResponse> deleteArt(@Header("Authorization") String auth, @Path("id") int artworkId );
 
-    @POST("v1/art/find")
+    @GET("v1/art/find")
     Call<FindArttResponse<List<Artwork>>> findArt(@Header("Authorization") String auth );
 
-    @POST("v1/art/owner/find")
+    @GET("v1/art/owner/find")
     Call<FindArttResponse<List<Artwork>>> findMyArt(@Header("Authorization") String auth );
 
-    @POST("v1/art//find/{id}/summary")
+    @GET("v1/art//find/{id}/summary")
     Call<FindArttResponse<ArtworkSummary>> getArtSummary(@Header("Authorization") String auth, @Path("id") int artworkId );
 
     @POST("v1/art/buy")
