@@ -6,4 +6,103 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_art_name"
+            style="@style/AppTheme.TextView.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_art_name">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp">
+
+                        <ImageView
+                            android:id="@+id/iv_art"
+                            android:layout_width="match_parent"
+                            android:layout_height="450dp"
+                            android:scaleType="fitXY"
+                            android:transitionName="animated"
+                            android:background="@color/photo_placeholder" />
+
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/player_frame">
+                        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                            android:id="@+id/pv_art"
+                            android:layout_width="match_parent"
+                            android:layout_height="450dp"
+                            android:visibility="gone"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_date"
+                        style="@style/AppTheme.TextView.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_description"
+                        style="@style/AppTheme.TextView.Medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+
+
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detail_frame">
+
+                </FrameLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+
 </android.support.design.widget.CoordinatorLayout>

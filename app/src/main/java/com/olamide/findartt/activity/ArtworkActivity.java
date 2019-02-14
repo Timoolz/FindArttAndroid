@@ -4,7 +4,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.olamide.findartt.R;
 import com.olamide.findartt.enums.ConnectionStatus;
 import com.olamide.findartt.models.Artwork;
@@ -13,9 +17,13 @@ import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
+import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
+import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +49,39 @@ public class ArtworkActivity extends AppCompatActivity {
 
     @BindView(R.id.cl_root)
     CoordinatorLayout clRoot;
+
+    @BindView(R.id.tv_art_name)
+    TextView tvArtName;
+
+    @BindView(R.id.iv_art)
+    ImageView ivArt;
+
+    @BindView(R.id.pv_art)
+    SimpleExoPlayerView pvArt;
+
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+
+    @BindView(R.id.tv_description)
+    TextView tv_description;
+
+    @BindView(R.id.detail_frame)
+    FrameLayout detailFrame;
+
+    @BindView(R.id.player_frame)
+    FrameLayout playerFrame;
+
+    @BindView(R.id.exo_fullscreen_button)
+    FrameLayout exoFullscreenButton;
+
+    @BindView(R.id.exo_fullscreen_icon)
+    ImageView mFullScreenIcon;
+
+//    @BindView(R.id.cl_root)
+//    CoordinatorLayout clRoot;
+//
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +122,14 @@ public class ArtworkActivity extends AppCompatActivity {
 
                 if (response.body() != null) {
                     FindArttResponse<ArtworkSummary> arttResponse = response.body();
-                    ArtworkSummary artworkSummary = arttResponse.getData();
+                     artworkSummary = arttResponse.getData();
                     artworkSummary.getBids();
 
+                    displayUi();
 
                 } else {
                     ErrorUtils.handleApiError(response.errorBody(), getApplicationContext(), clRoot);
+                    finish();
                 }
 
             }
@@ -101,5 +144,27 @@ public class ArtworkActivity extends AppCompatActivity {
 
     }
 
+
+
+    void displayUi(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMMM-yyyy", Locale.ENGLISH);
+//        signup.setDateOfBirth(simpleDateFormat.format(new Date()));
+        tvArtName.setText(artworkSummary.getName());
+//        tvDate.setText(simpleDateFormat.format(artworkSummary.getCreatedDate()));
+        tv_description.setText(artworkSummary.getDescription());
+
+        Picasso.with(this)
+                .load(artworkSummary.getImageUrl())
+                .fit()
+                .placeholder(R.drawable.img_load)
+                .error(R.drawable.img_error)
+                .into(ivArt);
+
+        if(artworkSummary.getVideoUrl()!=null&& !artworkSummary.getVideoUrl().isEmpty()){
+            UiUtils.showSuccessSnack("this one has video",this,clRoot);
+        }
+
+
+    }
 
 }
