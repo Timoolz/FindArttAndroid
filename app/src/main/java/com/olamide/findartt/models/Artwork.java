@@ -108,6 +108,11 @@ public class Artwork extends AbstractEntity  implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+        dest.writeInt(getId());
+        dest.writeString(getCreatedDate());
+        dest.writeLong(getCreatedDateEpoch());
+        dest.writeString(getUpdatedDate());
+        dest.writeLong(getUpdatedDateEpoch());
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(imageUrl);
@@ -124,6 +129,12 @@ public class Artwork extends AbstractEntity  implements Parcelable {
         @Override
         public Artwork createFromParcel(Parcel in) {
             Artwork artwork = new Artwork();
+            artwork.setId( in.readInt());
+            artwork.setCreatedDate (in.readString());
+            artwork.setCreatedDateEpoch( in.readLong());
+            artwork.setUpdatedDate(in.readString());
+            artwork.setUpdatedDateEpoch( in.readLong());
+            
             artwork.name = in.readString();
             artwork.description = in.readString();
             artwork.imageUrl = in.readString();

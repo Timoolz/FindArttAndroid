@@ -3,12 +3,13 @@ package com.olamide.findartt.models;
 
 import android.os.Build;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
 
 import com.google.gson.annotations.SerializedName;
 
-public class Buy extends AbstractEntity {
+public class Buy extends AbstractEntity implements Parcelable {
 
     @SerializedName("artworkId")
     private Integer artworkId;
@@ -53,6 +54,12 @@ public class Buy extends AbstractEntity {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+
+        dest.writeInt(getId());
+        dest.writeString(getCreatedDate());
+        dest.writeLong(getCreatedDateEpoch());
+        dest.writeString(getUpdatedDate());
+        dest.writeLong(getUpdatedDateEpoch());
         dest.writeInt(artworkId);
         dest.writeDouble(amount);
         dest.writeInt(madeBy);
@@ -64,6 +71,13 @@ public class Buy extends AbstractEntity {
         @Override
         public Buy createFromParcel(Parcel in) {
             Buy buy = new Buy();
+
+            buy.setId( in.readInt());
+            buy.setCreatedDate (in.readString());
+            buy.setCreatedDateEpoch( in.readLong());
+            buy.setUpdatedDate(in.readString());
+            buy.setUpdatedDateEpoch( in.readLong());
+
             buy.artworkId = in.readInt();
             buy.amount = in.readDouble();
             buy.madeBy = in.readInt();

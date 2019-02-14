@@ -3,12 +3,13 @@ package com.olamide.findartt.models;
 
 import android.os.Build;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 
 import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.BidStatus;
 
-public class Bid extends AbstractEntity {
+public class Bid extends AbstractEntity implements Parcelable {
 
     @SerializedName("artworkId")
     private Integer artworkId;
@@ -64,6 +65,12 @@ public class Bid extends AbstractEntity {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+
+        dest.writeInt(getId());
+        dest.writeString(getCreatedDate());
+        dest.writeLong(getCreatedDateEpoch());
+        dest.writeString(getUpdatedDate());
+        dest.writeLong(getUpdatedDateEpoch());
         dest.writeInt(artworkId);
         dest.writeDouble(amount);
         dest.writeInt(madeBy);
@@ -77,6 +84,13 @@ public class Bid extends AbstractEntity {
         @Override
         public Bid createFromParcel(Parcel in) {
             Bid bid = new Bid();
+
+            bid.setId( in.readInt());
+            bid.setCreatedDate (in.readString());
+            bid.setCreatedDateEpoch( in.readLong());
+            bid.setUpdatedDate(in.readString());
+            bid.setUpdatedDateEpoch( in.readLong());
+
             bid.artworkId = in.readInt();
             bid.amount = in.readDouble();
             bid.madeBy = in.readInt();

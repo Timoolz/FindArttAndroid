@@ -1,5 +1,6 @@
 package com.olamide.findartt.activity;
 
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -36,12 +37,13 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
+import static com.olamide.findartt.Constants.ARTWORK_STRING;
+import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
 public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener{
 
     private String accessToken;
-
     private User user;
 
     @BindView(R.id.cl_root)
@@ -79,7 +81,6 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
-
         accessToken = TempStorageUtils.readSharedPreferenceString(getApplicationContext(), ACCESS_TOKEN_STRING);
 
         int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
@@ -96,6 +97,11 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
             artworkRv.setNestedScrollingEnabled(false);
             artworkRv.setAdapter(mAdapter);
+
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                user = extras.getParcelable(CURRENT_USER);
+            }
         }
 
 
@@ -162,5 +168,9 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     @Override
     public void onClickListener(Artwork artwork) {
 
+        Intent intent = new Intent(getApplicationContext(), ArtworkActivity.class);
+        intent.putExtra(ARTWORK_STRING,artwork);
+        intent.putExtra(CURRENT_USER,user);
+        startActivity(intent);
     }
 }

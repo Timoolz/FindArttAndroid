@@ -273,6 +273,7 @@ public class SignUpFragment extends Fragment {
 
                     Intent intent = new Intent(getContext(), DashboardActivity.class);
                     intent.putExtra(CURRENT_USER,userResult.getUser());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
                     googleSignOut();
@@ -324,6 +325,7 @@ public class SignUpFragment extends Fragment {
 
                     Intent intent = new Intent(getContext(), DashboardActivity.class);
                     intent.putExtra(CURRENT_USER,userResult.getUser());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
                     ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);

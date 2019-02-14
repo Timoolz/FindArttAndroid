@@ -11,7 +11,7 @@ import com.olamide.findartt.utils.Converters;
 
 
 
-public class AbstractEntity implements Parcelable {
+public class AbstractEntity /*implements Parcelable*/ {
 
 
     @SerializedName("id")
@@ -71,45 +71,45 @@ public class AbstractEntity implements Parcelable {
     }
 
 
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeInt(id);
-        dest.writeString((createdDate));
-        dest.writeLong(createdDateEpoch);
-        dest.writeString((updatedDate));
-        dest.writeLong(updatedDateEpoch);
-
-    }
-
-
-    public static final Creator<AbstractEntity> CREATOR = new Creator<AbstractEntity>() {
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        public AbstractEntity createFromParcel(Parcel in) {
-            AbstractEntity abstractEntity = new AbstractEntity();
-            abstractEntity.id = in.readInt();
-            abstractEntity.createdDate = (in.readString());
-            abstractEntity.createdDateEpoch = in.readLong();
-            abstractEntity.updatedDate = (in.readString());
-            abstractEntity.updatedDateEpoch = in.readLong();
-
-            return abstractEntity;
-        }
-
-        @Override
-        public AbstractEntity[] newArray(int size) {
-            return new AbstractEntity[size];
-        }
-    };
+//
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//
+//        dest.writeInt(getId());
+//        dest.writeString(getCreatedDate());
+//        dest.writeLong(getCreatedDateEpoch());
+//        dest.writeString(getUpdatedDate());
+//        dest.writeLong(getUpdatedDateEpoch());
+//
+//    }
+//
+//
+//    public static final Creator<AbstractEntity> CREATOR = new Creator<AbstractEntity>() {
+//        @RequiresApi(api = Build.VERSION_CODES.O)
+//        @Override
+//        public AbstractEntity createFromParcel(Parcel in) {
+//            AbstractEntity abstractEntity = new AbstractEntity();
+//            abstractEntity.id = in.readInt();
+//            abstractEntity.createdDate = (in.readString());
+//            abstractEntity.createdDateEpoch = in.readLong();
+//            abstractEntity.updatedDate = (in.readString());
+//            abstractEntity.updatedDateEpoch = in.readLong();
+//
+//            return abstractEntity;
+//        }
+//
+//        @Override
+//        public AbstractEntity[] newArray(int size) {
+//            return new AbstractEntity[size];
+//        }
+//    };
 
 
 }

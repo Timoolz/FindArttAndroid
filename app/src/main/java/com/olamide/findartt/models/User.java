@@ -188,6 +188,12 @@ public class User extends AbstractEntity implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+
+        dest.writeInt(getId());
+        dest.writeString(getCreatedDate());
+        dest.writeLong(getCreatedDateEpoch());
+        dest.writeString(getUpdatedDate());
+        dest.writeLong(getUpdatedDateEpoch());
         dest.writeString(email);
         dest.writeString(firstName);
         dest.writeString(lastName);
@@ -214,6 +220,13 @@ public class User extends AbstractEntity implements Parcelable {
         @Override
         public User createFromParcel(Parcel in) {
             User userdetails = new User();
+
+            userdetails.setId( in.readInt());
+            userdetails.setCreatedDate (in.readString());
+            userdetails.setCreatedDateEpoch( in.readLong());
+            userdetails.setUpdatedDate(in.readString());
+            userdetails.setUpdatedDateEpoch( in.readLong());
+
             userdetails.email = in.readString();
             userdetails.firstName = in.readString();
             userdetails.lastName = in.readString();
@@ -226,7 +239,9 @@ public class User extends AbstractEntity implements Parcelable {
             userdetails.socialSignUp = in.readByte()!=0;
             userdetails.address = in.readString();
             userdetails.country = in.readString();
-            userdetails.gender = Gender.valueOf(in.readString());
+            if(in.readString() != null && !in.readString().isEmpty()){
+                userdetails.gender = Gender.valueOf(in.readString());
+            }
             userdetails.socialId = in.readString();
             userdetails.verified = in.readByte()!=0;
 
