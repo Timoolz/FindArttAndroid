@@ -50,6 +50,8 @@
     <string name="buy_string">Buy Artwork </string>
     <string name="bid_string">Make a Bid </string>
 
+    <string name="bid_amount_string">Your Bid amount </string>
+
     <string name="buy_string_accepted">Artwork has been sold  </string>
     <string name="bid_string_accepted">A Bid has been accepted </string>
 

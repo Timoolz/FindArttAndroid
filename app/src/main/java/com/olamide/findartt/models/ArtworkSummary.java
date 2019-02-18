@@ -24,7 +24,7 @@ public class ArtworkSummary extends Artwork implements Parcelable {
     @SerializedName("acceptedBid")
     private Bid acceptedBid;
 
-    @SerializedName("Bids")
+    @SerializedName("bids")
     private List<Bid> bids;
 
     public Buy getCurrentBuy() {

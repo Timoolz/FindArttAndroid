@@ -94,7 +94,6 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
             mAdapter.setArtworkList(artworkList);
             artworkRv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
 
-
             artworkRv.setNestedScrollingEnabled(false);
             artworkRv.setAdapter(mAdapter);
 
