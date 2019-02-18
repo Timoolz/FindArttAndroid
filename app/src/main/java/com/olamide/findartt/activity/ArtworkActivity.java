@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -39,6 +40,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.olamide.findartt.R;
 import com.olamide.findartt.enums.ConnectionStatus;
+import com.olamide.findartt.enums.PurchaseType;
+import com.olamide.findartt.fragment.BidFragment;
+import com.olamide.findartt.fragment.BuyFragment;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.FindArttResponse;
@@ -68,6 +72,7 @@ import timber.log.Timber;
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.Constants.ARTWORK_STRING;
 import static com.olamide.findartt.Constants.CURRENT_USER;
+import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
 public class ArtworkActivity extends AppCompatActivity implements Player.EventListener {
@@ -135,7 +140,6 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 //
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +156,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         }
         getArtSummary();
 
-        if(savedInstanceState != null ){
+        if (savedInstanceState != null) {
             getSavedStartPosition(savedInstanceState);
         }
 
@@ -189,7 +193,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
                 if (response.body() != null) {
                     FindArttResponse<ArtworkSummary> arttResponse = response.body();
-                     artworkSummary = arttResponse.getData();
+                    artworkSummary = arttResponse.getData();
                     artworkSummary.getBids();
 
                     displayUi();
@@ -212,8 +216,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
 
-
-    void displayUi(){
+    void displayUi() {
         SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
         Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
         tvArtName.setText(artworkSummary.getName());
@@ -227,21 +230,40 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                 .error(R.drawable.img_error)
                 .into(ivArt);
 
-        if(artworkSummary.getVideoUrl()!=null&& !artworkSummary.getVideoUrl().isEmpty()){
-            UiUtils.showSuccessSnack("this one has video",this,clRoot);
+        if (artworkSummary.getVideoUrl() != null && !artworkSummary.getVideoUrl().isEmpty()) {
+            UiUtils.showSuccessSnack("this one has video", this, clRoot);
             loadVideo();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARTWORK_STRING, artworkSummary);
+        bundle.putParcelable(CURRENT_USER, user);
+        if (artworkSummary.getPurchaseType().equals(PurchaseType.BID)) {
+            BidFragment bidFragment = new BidFragment();
+            bidFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .add(R.id.detail_frame, bidFragment)
+                    .commit();
+        } else {
+            BuyFragment buyFragment = new BuyFragment();
+            buyFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .add(R.id.detail_frame, buyFragment)
+                    .commit();
         }
 
     }
 
 
-    void loadVideo(){
+    void loadVideo() {
         initFullscreenDialog();
         pvArt.setVisibility(View.VISIBLE);
         initializeMediaSession();
         videoUri = Uri.parse(artworkSummary.getVideoUrl());
         initializePlayer(videoUri);
-        if(!GeneralUtils.isTablet(getApplicationContext()) && GeneralUtils.isLand(getApplicationContext())){
+        if (!GeneralUtils.isTablet(getApplicationContext()) && GeneralUtils.isLand(getApplicationContext())) {
             openFullscreenDialog();
         }
     }
@@ -249,7 +271,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     private void initializeMediaSession() {
 
         // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(this,getLocalClassName().getClass().getSimpleName());
+        mMediaSession = new MediaSessionCompat(this, getLocalClassName().getClass().getSimpleName());
 
         // Enable callbacks from MediaButtons and TransportControls.
         mMediaSession.setFlags(
@@ -279,14 +301,13 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
 
-
     private void initializePlayer(Uri mediaUri) {
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             //LoadControl loadControl = new DefaultLoadControl();
             //mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this,trackSelector);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
             pvArt.setPlayer(mExoPlayer);
 
             // Set the ExoPlayer.EventListener to this activity.
@@ -302,7 +323,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                 mExoPlayer.seekTo(startWindow, startPosition);
             }
 
-            mExoPlayer.prepare(mediaSource,!haveStartPosition,false);
+            mExoPlayer.prepare(mediaSource, !haveStartPosition, false);
             mExoPlayer.setPlayWhenReady(startAutoPlay);
 
 
@@ -312,7 +333,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
     private void releasePlayer() {
         clearStartPosition();
-        if(mExoPlayer!=null){
+        if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
@@ -323,7 +344,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
     private void releasePlayerPartially() {
-        if(mExoPlayer!=null){
+        if (mExoPlayer != null) {
             mExoPlayer.release();
             mExoPlayer = null;
             updateStartPosition();
@@ -364,7 +385,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
     @OnClick(R.id.exo_fullscreen_button)
-    void processFullScreen(){
+    void processFullScreen() {
         if (!mExoPlayerFullscreen)
             openFullscreenDialog();
         else
@@ -373,24 +394,16 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
 
-
-
-
-
-
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
-        if(videoUri != null){
+        if (videoUri != null) {
             initializePlayer(videoUri);
 
         }
 
     }
-
-
 
 
     private void updateStartPosition() {
@@ -400,13 +413,14 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
             startPosition = Math.max(0, mExoPlayer.getContentPosition());
         }
     }
+
     private void clearStartPosition() {
         startAutoPlay = true;
         startWindow = C.INDEX_UNSET;
         startPosition = C.TIME_UNSET;
     }
 
-    private void getSavedStartPosition(Bundle savedInstanceState){
+    private void getSavedStartPosition(Bundle savedInstanceState) {
 
         //trackSelectorParameters = savedInstanceState.getParcelable(KEY_TRACK_SELECTOR_PARAMETERS);
         startAutoPlay = savedInstanceState.getBoolean(KEY_AUTO_PLAY);
@@ -433,10 +447,10 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mExoPlayer.getCurrentPosition(), 1f);
-        } else if((playbackState == ExoPlayer.STATE_READY)){
+        } else if ((playbackState == ExoPlayer.STATE_READY)) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
         }
@@ -469,7 +483,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
     @Override
-    public void onPositionDiscontinuity( @Player.DiscontinuityReason int reason) {
+    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
 
 //        if (mExoPlayer.get != null) {
 //            // The user has performed a seek whilst in the error state. Update the resume position so
@@ -504,7 +518,6 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
 
-
     private class MySessionCallback extends MediaSessionCompat.Callback {
         @Override
         public void onPlay() {
@@ -521,7 +534,6 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
             mExoPlayer.seekTo(0);
         }
     }
-
 
 
     public static class MediaReceiver extends BroadcastReceiver {
@@ -549,7 +561,6 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         }
         return false;
     }
-
 
 
 }

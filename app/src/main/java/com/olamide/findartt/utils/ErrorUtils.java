@@ -51,6 +51,7 @@ public class ErrorUtils {
                 TempStorageUtils.removeSharedPreference(context, Constants.ACCESS_TOKEN_STRING);
                 //re direct to sign in activity
                 Intent intent = new Intent(context, SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();

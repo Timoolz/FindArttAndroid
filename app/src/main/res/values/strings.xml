@@ -44,6 +44,15 @@
 
     <string name="remember">Remember me?</string>
 
+    <string name="amount">Amount: </string>
+    <string name="amount_min">Minimum Amount</string>
+
+    <string name="buy_string">Buy Artwork </string>
+    <string name="bid_string">Make a Bid </string>
+
+    <string name="buy_string_accepted">Artwork has been sold  </string>
+    <string name="bid_string_accepted">A Bid has been accepted </string>
+
     <string name="app_dummy_text_long">Test String that is very long. lonng but not as large as
         text. which is very long</string>
     <string name="app_dummy_text_medium"> Test String that is quite medium</string>
