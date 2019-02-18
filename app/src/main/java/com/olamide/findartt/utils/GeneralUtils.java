@@ -1,6 +1,9 @@
 package com.olamide.findartt.utils;
 
+import android.content.Context;
 import android.util.Base64;
+
+import com.olamide.findartt.R;
 
 public class GeneralUtils {
 
@@ -12,5 +15,13 @@ public class GeneralUtils {
 
     public static String decrypt(String input) {
         return new String(Base64.decode(input, Base64.DEFAULT));
+    }
+
+    public static boolean isTablet (Context context) {
+        return  context.getResources().getBoolean(R.bool.isTablet);
+    }
+
+    public static boolean isLand (Context context) {
+        return  context.getResources().getBoolean(R.bool.isLand);
     }
 }
