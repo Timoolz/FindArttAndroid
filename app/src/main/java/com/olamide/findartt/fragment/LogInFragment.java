@@ -32,6 +32,7 @@ import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
+import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
@@ -47,6 +48,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.Constants.RC_SIGN_IN;
 import static com.olamide.findartt.Constants.TYPE_STRING;
@@ -59,6 +61,8 @@ public class LogInFragment extends Fragment {
 
     FragmentDataPasser dataPasser;
     private Call<FindArttResponse<UserResult>> responseCall;
+
+    private Call<FindArttResponse<User>> loginResponseCall;
     private OnFragmentInteractionListener mListener;
 
     @BindView(R.id.cl_root)
@@ -86,6 +90,7 @@ public class LogInFragment extends Fragment {
     SignInButton signInButton;
 
 
+    private String accessToken;
     private UserLogin login = new UserLogin();
     private String userEmail;
     private String userPassword;
@@ -122,6 +127,11 @@ public class LogInFragment extends Fragment {
         if (savedInstanceState != null) {
             userEmail = savedInstanceState.getString(USEREMAIL_STRING);
             userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
+        }
+
+        accessToken = TempStorageUtils.readSharedPreferenceString(getContext(),ACCESS_TOKEN_STRING);
+        if(accessToken!=null && !accessToken.isEmpty()){
+            getUserFromToken(accessToken);
         }
 
         if (getArguments() != null) {
@@ -245,10 +255,7 @@ public class LogInFragment extends Fragment {
                     storeAccessToken(userResult.getTokenInfo().getAccessToken());
                     UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
 
-                    Intent intent = new Intent(getContext(), DashboardActivity.class);
-                    intent.putExtra(CURRENT_USER,userResult.getUser());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    goToDashboard(userResult.getUser());
                 } else {
                     googleSignOut();
                     ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
@@ -295,10 +302,7 @@ public class LogInFragment extends Fragment {
                     }
                     UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
 
-                    Intent intent = new Intent(getContext(), DashboardActivity.class);
-                    intent.putExtra(CURRENT_USER,userResult.getUser());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    goToDashboard(userResult.getUser());
                 } else {
                     removeUserCredentials();
                     ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
@@ -310,6 +314,46 @@ public class LogInFragment extends Fragment {
             public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
                 loadingPb.setVisibility(View.INVISIBLE);
                 loginBt.setVisibility(View.VISIBLE);
+                ErrorUtils.handleInternetError(getContext(), clRoot);
+                Timber.e(t);
+            }
+        });
+
+
+    }
+
+
+
+    void getUserFromToken(String accessToken) {
+
+        loadingPb.setVisibility(View.VISIBLE);
+        loginBt.setVisibility(View.INVISIBLE);
+        signInButton.setVisibility(View.INVISIBLE);
+        loginResponseCall = FindArttService.getUserFromToken(accessToken);
+        loginResponseCall.enqueue(new Callback<FindArttResponse<User>>() {
+
+            @Override
+            public void onResponse(Call<FindArttResponse<User>> call, Response<FindArttResponse<User>> response) {
+                loadingPb.setVisibility(View.INVISIBLE);
+                loginBt.setVisibility(View.VISIBLE);
+                signInButton.setVisibility(View.VISIBLE);
+
+                if (response.body() != null) {
+                    FindArttResponse<User> arttResponse = response.body();
+                    User user = arttResponse.getData();
+                    goToDashboard(user);
+                } else {
+                    TempStorageUtils.removeSharedPreference(getContext(),ACCESS_TOKEN_STRING);
+                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<FindArttResponse<User>> call, Throwable t) {
+                loadingPb.setVisibility(View.INVISIBLE);
+                loginBt.setVisibility(View.VISIBLE);
+                signInButton.setVisibility(View.VISIBLE);
                 ErrorUtils.handleInternetError(getContext(), clRoot);
                 Timber.e(t);
             }
@@ -335,6 +379,13 @@ public class LogInFragment extends Fragment {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+
+    void goToDashboard(User user){
+        Intent intent = new Intent(getContext(), DashboardActivity.class);
+        intent.putExtra(CURRENT_USER,user);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
     void updateLogin(boolean withUi) {
         if (withUi) {
             userEmail = emailText.getText().toString();

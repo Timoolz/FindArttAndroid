@@ -110,9 +110,9 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHo
         if (currentBid.getBidStatus().equals(BidStatus.ACCEPTED)){
             holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.success));
         }else if (currentBid.getBidStatus().equals(BidStatus.CURRENT)){
-            holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.failure));
-        }else{
             holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.color_accent));
+        }else{
+            holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.failure));
         }
 
 

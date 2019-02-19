@@ -39,6 +39,11 @@ public interface FindArttAPI {
     @POST("v1/auth/signup/google")
     Call<FindArttResponse<UserResult>> signUpGoogle(@Body TokenInfo tokenInfo);
 
+    @GET("v1/users")
+    Call<FindArttResponse<User>> getUserFromToken(@Header("Authorization") String auth );
+
+
+
     @POST("v1/auth/logout")
     Call<FindArttResponse> logout(@Header("Authorization") String auth);
 
@@ -62,7 +67,7 @@ public interface FindArttAPI {
     @GET("v1/art/owner/find")
     Call<FindArttResponse<List<Artwork>>> findMyArt(@Header("Authorization") String auth );
 
-    @GET("v1/art//find/{id}/summary")
+    @GET("v1/art/find/{id}/summary")
     Call<FindArttResponse<ArtworkSummary>> getArtSummary(@Header("Authorization") String auth, @Path("id") int artworkId );
 
     @POST("v1/art/buy")

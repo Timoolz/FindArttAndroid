@@ -45,6 +45,10 @@ public class FindArttService {
         return RetrofitBuilder.getFindArttApi().signUpGoogle(tokenInfo);
     }
 
+    public static Call<FindArttResponse<User>> getUserFromToken(String apiAccessToken) {
+        return RetrofitBuilder.getFindArttApi().getUserFromToken(apiAccessToken);
+    }
+
     public static Call<FindArttResponse> logout(String ApiAccessToken) {
         return RetrofitBuilder.getFindArttApi().logout(ApiAccessToken);
     }
