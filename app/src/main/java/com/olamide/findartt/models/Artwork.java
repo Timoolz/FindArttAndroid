@@ -1,6 +1,8 @@
 package com.olamide.findartt.models;
 
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,30 +12,46 @@ import com.google.gson.annotations.SerializedName;
 import com.olamide.findartt.enums.PurchaseType;
 import com.olamide.findartt.utils.Converters;
 
+import java.util.Date;
+
+@Entity(tableName = "artwork")
 public class Artwork extends AbstractEntity  implements Parcelable {
+
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     private String name;
 
+    @ColumnInfo(name = "description")
     @SerializedName("description")
     private String description;
 
+    @ColumnInfo(name = "image_url")
     @SerializedName("imageUrl")
     private String imageUrl;
 
+    @ColumnInfo(name = "video_url")
     @SerializedName("videoUrl")
     private String videoUrl;
 
+    @ColumnInfo(name = "purchase_type")
     @SerializedName("purchaseType")
     private PurchaseType purchaseType;
 
+    @ColumnInfo(name = "minimum_amount")
     @SerializedName("minimumAmount")
     private Double minimumAmount;
 
+    @ColumnInfo(name = "created_by")
     @SerializedName("createdBy")
     private Integer createdBy;
 
+    @ColumnInfo(name = "posted")
     @SerializedName("posted")
     private boolean posted;
+
+    //For Room Db
+    @ColumnInfo(name = "created_at")
+    private Date createdAt;
 
     public String getName() {
         return name;
@@ -99,6 +117,15 @@ public class Artwork extends AbstractEntity  implements Parcelable {
         this.posted = posted;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
 
     @Override
     public int describeContents() {
@@ -113,6 +140,7 @@ public class Artwork extends AbstractEntity  implements Parcelable {
         dest.writeLong(getCreatedDateEpoch());
         dest.writeString(getUpdatedDate());
         dest.writeLong(getUpdatedDateEpoch());
+
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(imageUrl);
@@ -121,6 +149,9 @@ public class Artwork extends AbstractEntity  implements Parcelable {
         dest.writeDouble(minimumAmount);
         dest.writeInt(createdBy);
         dest.writeByte((byte) (posted ? 1 : 0));
+        if(createdAt!=null){
+            dest.writeLong(Converters.toTimestamp(createdAt));
+        }
 
     }
 
@@ -143,6 +174,7 @@ public class Artwork extends AbstractEntity  implements Parcelable {
             artwork.minimumAmount = in.readDouble();
             artwork.createdBy = in.readInt();
             artwork.posted = in.readByte() !=0;
+//            artwork.createdAt = Converters.toDate(in.readLong());
 
             return artwork;
         }

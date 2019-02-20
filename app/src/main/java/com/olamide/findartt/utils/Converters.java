@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.olamide.findartt.enums.PurchaseType;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -59,6 +60,16 @@ public class Converters {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;
+    }
+
+    @TypeConverter
+    public static PurchaseType stringToPurchaseType(String value){
+        return (value!=null ||!value.isEmpty())? PurchaseType.valueOf(value): null;
+    }
+
+    @TypeConverter
+    public static String purchaseTypeToString(PurchaseType purchaseType){
+        return purchaseType.getName();
     }
 
 

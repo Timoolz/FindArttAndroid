@@ -132,12 +132,9 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                         showEmptyMessage();
                     } else {
 
-
                         mAdapter.setArtworkList(artworkList);
                         //UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
                     }
-
-
 
                 } else {
                     ErrorUtils.handleApiError(response.errorBody(), getApplicationContext(), clRoot);

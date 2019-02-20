@@ -1,10 +1,13 @@
 package com.olamide.findartt.activity;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -13,9 +16,11 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +44,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.olamide.findartt.R;
+import com.olamide.findartt.database.FindArttDatabase;
 import com.olamide.findartt.enums.ConnectionStatus;
 import com.olamide.findartt.enums.PurchaseType;
 import com.olamide.findartt.fragment.BidFragment;
@@ -47,12 +53,15 @@ import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.User;
+import com.olamide.findartt.utils.AppExecutors;
 import com.olamide.findartt.utils.Converters;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
+import com.olamide.findartt.viewmodels.ArtworkViewModel;
+import com.olamide.findartt.viewmodels.ArtworkViewModelFactory;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -81,6 +90,9 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     private User user;
     private Artwork artwork;
     private ArtworkSummary artworkSummary;
+
+    private boolean favouriteArt = false;
+    private FindArttDatabase mDb;
 
 
     private Call<FindArttResponse<ArtworkSummary>> responseCall;
@@ -135,9 +147,9 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     @BindView(R.id.exo_fullscreen_icon)
     ImageView mFullScreenIcon;
 
-//    @BindView(R.id.cl_root)
-//    CoordinatorLayout clRoot;
-//
+    @BindView(R.id.bt_favourite)
+    ImageButton btFavourite;
+
 
 
     @Override
@@ -148,6 +160,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
         accessToken = TempStorageUtils.readSharedPreferenceString(getApplicationContext(), ACCESS_TOKEN_STRING);
+        mDb = FindArttDatabase.getInstance(getApplicationContext());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -159,6 +172,85 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         if (savedInstanceState != null) {
             getSavedStartPosition(savedInstanceState);
         }
+
+
+    }
+
+
+    @OnClick(R.id.bt_favourite)
+    public void setFavourite() {
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                if (favouriteArt) {
+                    // Remove favourite
+                    mDb.artworkDao().deleteArtwork(artwork);
+                    Timber.e("Successfully removed this art from favourite  ");
+                    favouriteArt = false;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            btFavourite.setImageResource(R.drawable.favourite);
+                        }
+                    });
+
+                } else {
+                    // Add favourite
+                    artwork.setCreatedAt(new Date());
+                    mDb.artworkDao().insertArtwork(artwork);
+                    Timber.e("Successfully added this art to favourite  ");
+                    favouriteArt = true;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            btFavourite.setImageResource(R.drawable.not_favourite2);
+                        }
+                    });
+
+                }
+
+                //finish();
+            }
+        });
+
+
+    }
+
+
+    private void checkFavourite() {
+
+
+        ArtworkViewModelFactory factory = new ArtworkViewModelFactory(mDb, artwork.getId());
+
+        final ArtworkViewModel viewModel
+                = ViewModelProviders.of(this, factory).get(ArtworkViewModel.class);
+
+
+        viewModel.getArtworkLiveData().observe(this, new Observer<Artwork>() {
+            @Override
+            public void onChanged(@Nullable Artwork favArtwork) {
+                viewModel.getArtworkLiveData().removeObserver(this);
+
+                if (favArtwork != null) {
+                    favouriteArt = true;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            btFavourite.setImageResource(R.drawable.favourite);
+                        }
+                    });
+
+                } else {
+                    favouriteArt = false;
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            btFavourite.setImageResource(R.drawable.not_favourite2);
+                        }
+                    });
+
+                }
+
+            }
+        });
 
 
     }
@@ -194,6 +286,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                 if (response.body() != null) {
                     FindArttResponse<ArtworkSummary> arttResponse = response.body();
                     artworkSummary = arttResponse.getData();
+                    artwork = artworkSummary;
                     artworkSummary.getBids();
 
                     displayUi();
@@ -217,6 +310,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
 
     void displayUi() {
+        checkFavourite();
         SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
         Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
         tvArtName.setText(artworkSummary.getName());

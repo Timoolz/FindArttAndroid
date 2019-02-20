@@ -1,6 +1,8 @@
 package com.olamide.findartt.models;
 
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,19 +15,24 @@ import com.olamide.findartt.utils.Converters;
 
 public class AbstractEntity /*implements Parcelable*/ {
 
-
+@PrimaryKey()
+    @ColumnInfo(name = "id")
     @SerializedName("id")
     private Integer id;
 
+    @ColumnInfo(name = "created_date")
     @SerializedName("createdDate")
     private String createdDate;
 
+    @ColumnInfo(name = "created_date_epoch")
     @SerializedName("createdDateEpoch")
     private Long createdDateEpoch;
 
+    @ColumnInfo(name = "updated_date")
     @SerializedName("updatedDate")
     private String updatedDate;
 
+    @ColumnInfo(name = "updated_date_epoch")
     @SerializedName("updatedDateEpoch")
     private Long updatedDateEpoch;
 
