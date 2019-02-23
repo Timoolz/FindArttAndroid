@@ -191,7 +191,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                     favouriteArt = false;
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            btFavourite.setImageResource(R.drawable.favourite);
+                            btFavourite.setImageResource(R.drawable.not_favourite2);
                         }
                     });
 
@@ -203,7 +203,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                     favouriteArt = true;
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            btFavourite.setImageResource(R.drawable.not_favourite2);
+                            btFavourite.setImageResource(R.drawable.favourite);
                         }
                     });
 

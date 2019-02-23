@@ -1,14 +1,20 @@
 package com.olamide.findartt.activity;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +32,7 @@ import com.olamide.findartt.utils.RecyclerViewUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
+import com.olamide.findartt.viewmodels.MainViewModel;
 
 import java.util.List;
 
@@ -41,7 +48,7 @@ import static com.olamide.findartt.Constants.ARTWORK_STRING;
 import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
-public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener{
+public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
     private String accessToken;
     private User user;
@@ -74,7 +81,6 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     private Parcelable savedRecyclerLayoutState;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,13 +90,13 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         accessToken = TempStorageUtils.readSharedPreferenceString(getApplicationContext(), ACCESS_TOKEN_STRING);
 
         int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
-        layoutManager = new StaggeredGridLayoutManager( spanCount, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
 
         if (savedInstanceState == null) {
             loadArtWorks();
 
-            mAdapter = new ArtworkAdapter(artworkList,  getApplicationContext(), this);
+            mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
             mAdapter.setArtworkList(artworkList);
             artworkRv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
 
@@ -127,7 +133,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
                 if (response.body() != null) {
                     FindArttResponse<List<Artwork>> arttResponse = response.body();
-                    List<Artwork> artworkList = arttResponse.getData();
+                    artworkList = arttResponse.getData();
                     if (artworkList.size() <= 0) {
                         showEmptyMessage();
                     } else {
@@ -153,6 +159,25 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     }
 
+    private void getFavouriteArt() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getArtworks().observe(this, new Observer<List<Artwork>>() {
+            @Override
+            public void onChanged(@Nullable List<Artwork> favArt) {
+                Timber.d("Updating list of artworks from LiveData in ViewModel");
+                artworkList = favArt;
+
+                if (artworkList.size() <= 0) {
+                    showEmptyMessage();
+                } else {
+                    mAdapter.setArtworkList(favArt);
+                }
+
+
+            }
+        });
+    }
+
     void showEmptyMessage() {
         tvEmpty.setVisibility(View.VISIBLE);
         artworkRv.setVisibility(View.INVISIBLE);
@@ -165,8 +190,37 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     public void onClickListener(Artwork artwork) {
 
         Intent intent = new Intent(getApplicationContext(), ArtworkActivity.class);
-        intent.putExtra(ARTWORK_STRING,artwork);
-        intent.putExtra(CURRENT_USER,user);
+        intent.putExtra(ARTWORK_STRING, artwork);
+        intent.putExtra(CURRENT_USER, user);
         startActivity(intent);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        switch (itemId) {
+            case R.id.all:
+
+//                currentPage = 1;
+//                currentCategory = new SortType(SortType.TOP_RATED);
+
+                loadArtWorks();
+                return true;
+            case R.id.favourite:
+
+//                currentCategory = new SortType(SortType.FAVOURITE);
+                getFavouriteArt();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

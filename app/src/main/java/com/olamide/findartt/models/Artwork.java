@@ -149,9 +149,9 @@ public class Artwork extends AbstractEntity  implements Parcelable {
         dest.writeDouble(minimumAmount);
         dest.writeInt(createdBy);
         dest.writeByte((byte) (posted ? 1 : 0));
-        if(createdAt!=null){
-            dest.writeLong(Converters.toTimestamp(createdAt));
-        }
+//        if(createdAt!=null){
+//            dest.writeLong(Converters.toTimestamp(createdAt));
+//        }
 
     }
 

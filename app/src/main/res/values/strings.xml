@@ -78,6 +78,8 @@ If you have any problems submitting your project, please email us at **android-p
 
 Each Android ND project will be reviewed against the Common Project Requirements, in addition to its project-specific rubric.
     </string>
+    <string name="sort_all">All</string>
+    <string name="sort_favourite">Favourite</string>
 
 
 </resources>
