@@ -80,6 +80,8 @@ Each Android ND project will be reviewed against the Common Project Requirements
     </string>
     <string name="sort_all">All</string>
     <string name="sort_favourite">Favourite</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 
 </resources>

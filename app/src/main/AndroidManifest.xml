@@ -19,7 +19,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ArtworkActivity"></activity>
+        <receiver android:name=".widget.ArttWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/artt_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".widget.arttViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <service
+            android:name=".widget.ArttUpdateService"
+            android:exported="false">
+
+        </service>
+
+
+        <activity android:name=".activity.ArtworkActivity" />
         <activity android:name=".activity.DashboardActivity" />
         <activity android:name=".activity.SignInActivity">
             <intent-filter>

@@ -17,4 +17,7 @@ public class Constants {
     public static final String CURRENT_USER = "currentUser";
 
     public final static String ARTWORK_STRING = "artwork";
+
+    public static final String BUNDLE = "bundle";
+
 }

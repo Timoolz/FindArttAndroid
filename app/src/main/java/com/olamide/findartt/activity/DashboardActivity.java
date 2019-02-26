@@ -33,7 +33,9 @@ import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
 import com.olamide.findartt.viewmodels.MainViewModel;
+import com.olamide.findartt.widget.ArttUpdateService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +47,7 @@ import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.Constants.ARTWORK_STRING;
+import static com.olamide.findartt.Constants.BUNDLE;
 import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
@@ -173,7 +176,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                     mAdapter.setArtworkList(favArt);
                 }
 
-
+                startArttWidgetService();
             }
         });
     }
@@ -221,6 +224,15 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    void startArttWidgetService() {
+        Intent i = new Intent(getApplicationContext(), ArttUpdateService.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ARTWORK_STRING, (ArrayList<? extends Parcelable>) artworkList);
+        i.putExtra(BUNDLE, bundle);
+        i.setAction(ArttUpdateService.ACTION_UPDATE_ARTT_WIDGET);
+        startService(i);
     }
 
 }
