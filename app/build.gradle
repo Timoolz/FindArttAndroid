@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs{
+        config {
+            keyAlias 'findartt_key'
+            keyPassword 'findartt_key'
+            storeFile file('findartt_keystore.jks')
+            storePassword 'findartt_key'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.olamide.findartt"
@@ -19,6 +27,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.config
+
         }
     }
 }
@@ -38,7 +49,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
