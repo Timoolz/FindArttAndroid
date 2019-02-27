@@ -57,6 +57,7 @@
                 android:id="@+id/bt_buy"
                 android:text="@string/buy_string"
                 style="@style/AppTheme.Button"
+                android:contentDescription="@string/buy_string"
                 android:layout_gravity="end"/>
         </FrameLayout>
 

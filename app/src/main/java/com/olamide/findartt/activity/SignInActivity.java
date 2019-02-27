@@ -1,17 +1,13 @@
 package com.olamide.findartt.activity;
 
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.fragment.LogInFragment;
-import com.olamide.findartt.fragment.SignUpFragment;
 import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.utils.TempStorageUtils;
 

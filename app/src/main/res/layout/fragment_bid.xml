@@ -80,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/bt_bid"
                 android:text="@string/bid_string"
+                android:contentDescription="@string/bid_string"
                 style="@style/AppTheme.Button"
                 android:layout_gravity="end"/>
         </FrameLayout>

@@ -3,14 +3,8 @@ package com.olamide.findartt.models;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.PrimaryKey;
-import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.RequiresApi;
 
 import com.google.gson.annotations.SerializedName;
-import com.olamide.findartt.utils.Converters;
-
 
 
 public class AbstractEntity /*implements Parcelable*/ {

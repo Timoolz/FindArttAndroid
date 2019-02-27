@@ -4,22 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.olamide.findartt.R;
-import com.olamide.findartt.activity.ArtworkActivity;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.User;
-import com.olamide.findartt.models.UserResult;
-import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.network.FindArttService;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;

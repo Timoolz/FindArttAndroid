@@ -1,7 +1,6 @@
 package com.olamide.findartt.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,12 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.olamide.findartt.R;
-import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Buy;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.User;
-import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;

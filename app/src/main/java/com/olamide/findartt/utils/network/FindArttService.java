@@ -1,11 +1,5 @@
 package com.olamide.findartt.utils.network;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ShareCompat;
-
-import com.olamide.findartt.Constants;
-import com.olamide.findartt.activity.SignInActivity;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Bid;
@@ -21,10 +15,6 @@ import com.olamide.findartt.models.UserUpdate;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.Header;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 public class FindArttService {
 

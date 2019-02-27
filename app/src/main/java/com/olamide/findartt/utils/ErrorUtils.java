@@ -15,15 +15,11 @@ import com.olamide.findartt.R;
 import com.olamide.findartt.activity.SignInActivity;
 import com.olamide.findartt.enums.ErrorCode;
 import com.olamide.findartt.models.FindArttResponse;
-import com.olamide.findartt.models.UserLogin;
 
 import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import timber.log.Timber;
-
-import static com.olamide.findartt.Constants.USEREMAIL_STRING;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 
 public class ErrorUtils {
 

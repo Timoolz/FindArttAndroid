@@ -16,13 +16,16 @@
         android:orientation="horizontal">
 
         <ImageButton android:id="@id/exo_prev"
-            style="@style/ExoMediaButton.Previous"/>
+            style="@style/ExoMediaButton.Previous"
+            android:contentDescription="@string/desc_prev" />
 
         <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"/>
+            style="@style/ExoMediaButton.Play"
+            android:contentDescription="@string/desc_play" />
 
         <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"/>
+            style="@style/ExoMediaButton.Pause"
+            android:contentDescription="@string/desc_pause" />
 
     </LinearLayout>
 
@@ -74,7 +77,8 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_fullscreen_expand"/>
+                android:src="@drawable/ic_fullscreen_expand"
+                android:contentDescription="@string/desc_fullscreen" />
 
         </FrameLayout>
 

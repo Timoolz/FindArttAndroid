@@ -2,13 +2,10 @@ package com.olamide.findartt.models;
 
 
 
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.RequiresApi;
 
 import com.google.gson.annotations.SerializedName;
-import com.olamide.findartt.utils.Converters;
 
 import java.util.ArrayList;
 import java.util.List;

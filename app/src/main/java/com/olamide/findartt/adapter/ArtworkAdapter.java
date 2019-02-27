@@ -13,7 +13,6 @@ import com.olamide.findartt.R;
 import com.olamide.findartt.models.Artwork;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;

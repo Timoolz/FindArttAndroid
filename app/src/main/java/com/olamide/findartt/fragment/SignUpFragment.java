@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -32,7 +31,6 @@ import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
-import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.UserSignup;
 import com.olamide.findartt.utils.ErrorUtils;
@@ -41,8 +39,6 @@ import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.FindArttService;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +58,7 @@ import static com.olamide.findartt.Constants.TYPE_STRING;
  * Activities that contain this fragment must implement the
  * {@link SignUpFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SignUpFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class SignUpFragment extends Fragment {

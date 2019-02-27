@@ -3,7 +3,6 @@ package com.olamide.findartt.viewmodels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
 import com.olamide.findartt.database.FindArttDatabase;
 import com.olamide.findartt.models.Artwork;

@@ -16,7 +16,6 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -64,10 +63,8 @@ import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.viewmodels.ArtworkViewModelFactory;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -81,7 +78,6 @@ import timber.log.Timber;
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.Constants.ARTWORK_STRING;
 import static com.olamide.findartt.Constants.CURRENT_USER;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
 public class ArtworkActivity extends AppCompatActivity implements Player.EventListener {

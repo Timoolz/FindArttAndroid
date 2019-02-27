@@ -51,7 +51,8 @@
                             android:layout_height="450dp"
                             android:background="@color/photo_placeholder"
                             android:scaleType="fitXY"
-                            android:transitionName="animated" />
+                            android:transitionName="animated"
+                            android:contentDescription="@string/desc_art_image" />
 
                     </FrameLayout>
 

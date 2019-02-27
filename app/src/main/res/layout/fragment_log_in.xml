@@ -40,7 +40,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="110dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/findart11" />
+                            android:src="@drawable/findart11"
+                            android:contentDescription="@string/desc_logo" />
 
                     </FrameLayout>
 
@@ -81,6 +82,7 @@
                             android:id="@+id/btn_login"
                             style="@style/AppTheme.Button"
                             android:layout_width="match_parent"
+                            android:contentDescription="@string/login"
                             android:text="@string/login" />
 
                         <ProgressBar
@@ -125,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/signup_suggest"
+            android:contentDescription="@string/signup_suggest"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
