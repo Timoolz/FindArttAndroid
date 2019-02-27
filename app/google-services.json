@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "405378603130",
+    "firebase_url": "https://findartt.firebaseio.com",
+    "project_id": "findartt",
+    "storage_bucket": "findartt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405378603130:android:55ace565fd8b195b",
+        "android_client_info": {
+          "package_name": "com.olamide.findartt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405378603130-ofm1mine0itpeh5u3nbgo4ofetspevll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.olamide.findartt",
+            "certificate_hash": "a104f397dc5592a345160f8258e9422b7140a308"
+          }
+        },
+        {
+          "client_id": "405378603130-egj9155m73m63555r3k67o481ibp5tok.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.olamide.findartt",
+            "certificate_hash": "c499576b489dae1b47a5ca49fb224e4bbb98e06f"
+          }
+        },
+        {
+          "client_id": "405378603130-es1ogscm9md8isoe61fj2c413guub7ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5MDI-XJdWOEYNhUA06y7zVfT746WRMIE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405378603130-es1ogscm9md8isoe61fj2c413guub7ii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
