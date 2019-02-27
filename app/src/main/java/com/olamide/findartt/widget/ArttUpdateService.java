@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.olamide.findartt.Constants;
+import com.olamide.findartt.R;
 import com.olamide.findartt.models.Artwork;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class ArttUpdateService extends IntentService {
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, ArttWidget.class));
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv_artt);
             ArttWidget.updateAppWidget(this, appWidgetManager, appWidgetIds,mArtworks);
         }
     }

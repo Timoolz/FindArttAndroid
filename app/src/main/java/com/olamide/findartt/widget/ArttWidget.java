@@ -1,5 +1,6 @@
 package com.olamide.findartt.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.olamide.findartt.R;
+import com.olamide.findartt.activity.ArtworkActivity;
 import com.olamide.findartt.models.Artwork;
 
 import java.util.List;
@@ -25,9 +27,18 @@ public class ArttWidget extends AppWidgetProvider {
         mArtworks = artworks;
         for (int appWidgetId : appWidgetIds)
         {
-            Intent intent = new Intent(context, arttViewsService.class);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.artt_widget);
+
+            Intent intent = new Intent(context, arttViewsService.class);
             views.setRemoteAdapter(R.id.lv_artt, intent);
+
+
+            // Set the artworkACtivity intent to launch when clicked
+            Intent appIntent = new Intent(context, ArtworkActivity.class);
+            //appIntent.putExtra()
+            PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setPendingIntentTemplate(R.id.lv_artt, appPendingIntent);
+
             ComponentName component = new ComponentName(context, ArttWidget.class);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_artt);
             appWidgetManager.updateAppWidget(component, views);
