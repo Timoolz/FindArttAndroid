@@ -54,8 +54,9 @@ public class ErrorUtils {
                 showErrorSnack(findArttResponse.getMessage(),context,coordinatorLayout);
             }
             //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
+        } catch (Exception e) {
             // handle failure to read error
+            handleError(context,coordinatorLayout);
             Timber.e(e);
         }
 
