@@ -4,9 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.Constants;
+import com.olamide.findartt.models.TokenInfo;
+import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.models.UserResult;
 
+import java.io.IOException;
+
+import timber.log.Timber;
+
+import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
+import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.Constants.USEREMAIL_STRING;
 import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 
@@ -75,5 +86,42 @@ public class TempStorageUtils {
         TempStorageUtils.removeSharedPreference(context, USERPASSWORD_STRING);
 
     }
+
+
+    public static void storeActiveUser(Context context, UserResult userResult)  {
+
+        try {
+            writeSharedPreferenceString(context, Constants.CURRENT_USER, new ObjectMapper().writeValueAsString(userResult.getUser()));
+            writeSharedPreferenceString(context, Constants.ACCESS_TOKEN_STRING, userResult.getTokenInfo().getAccessToken());
+        }catch (Exception e){
+            Timber.e(e);
+        }
+
+    }
+
+    public static UserResult getActiveUser(Context context)  {
+try{
+        UserResult userResult = new UserResult();
+        String user = TempStorageUtils.readSharedPreferenceString(context, CURRENT_USER);
+        String accessToken = TempStorageUtils.readSharedPreferenceString(context, ACCESS_TOKEN_STRING);
+        userResult.setUser(new ObjectMapper().readValue(user, User.class));
+        userResult.setTokenInfo(new TokenInfo(accessToken));
+        return userResult;
+    }catch (Exception e){
+        Timber.e(e);
+    }
+    return null;
+    }
+
+    public static void removeActiveUser(Context context) {
+
+        TempStorageUtils.removeSharedPreference(context, CURRENT_USER);
+        TempStorageUtils.removeSharedPreference(context, ACCESS_TOKEN_STRING);
+
+    }
+
+
+
+
 
 }

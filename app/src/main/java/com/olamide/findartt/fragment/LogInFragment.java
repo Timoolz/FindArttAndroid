@@ -1,5 +1,7 @@
 package com.olamide.findartt.fragment;
 
+import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -24,8 +26,13 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.olamide.findartt.Constants;
-import com.olamide.findartt.activity.DashboardActivity;
+import com.olamide.findartt.FindArttApplication;
+import com.olamide.findartt.LoginViewModel;
+import com.olamide.findartt.MVResponse;
+import com.olamide.findartt.ViewModelFactory;
+//import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.FindArttResponse;
@@ -36,26 +43,27 @@ import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.FindArttService;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.CURRENT_USER;
 import static com.olamide.findartt.Constants.RC_SIGN_IN;
 import static com.olamide.findartt.Constants.TYPE_STRING;
 import static com.olamide.findartt.Constants.USEREMAIL_STRING;
 import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
 
 
-
 public class LogInFragment extends Fragment {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     FragmentDataPasser dataPasser;
     private Call<FindArttResponse<UserResult>> responseCall;
@@ -86,6 +94,11 @@ public class LogInFragment extends Fragment {
 
     @BindView(R.id.btn_login_google)
     SignInButton signInButton;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    LoginViewModel viewModel;
+
+    ProgressDialog progressDialog;
 
 
     private String accessToken;
@@ -105,13 +118,13 @@ public class LogInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        if (savedInstanceState != null) {
-            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
-            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
-
-        }
+//
+//
+//        if (savedInstanceState != null) {
+//            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
+//            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
+//
+//        }
 
 
     }
@@ -122,16 +135,19 @@ public class LogInFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
-        if (savedInstanceState != null) {
-            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
-            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
-        }
 
-        accessToken = TempStorageUtils.readSharedPreferenceString(getContext(),ACCESS_TOKEN_STRING);
-        if(accessToken!=null && !accessToken.isEmpty()){
-            getUserFromToken(accessToken);
-        }
+        progressDialog = UiUtils.getProgressDialog(getContext(), "Please wait...");
 
+        ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
+
+        viewModel.loginResponse().observe(this, this::consumeResponse);
+
+        accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
+        if (accessToken != null && !accessToken.isEmpty()) {
+            loginFromFromToken(accessToken);
+        }
         if (getArguments() != null) {
             userEmail = getArguments().getString(USEREMAIL_STRING);
             userPassword = getArguments().getString(USERPASSWORD_STRING);
@@ -195,14 +211,6 @@ public class LogInFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        updateLogin(true);
-        outState.putString(USEREMAIL_STRING, userEmail);
-        outState.putString(USERPASSWORD_STRING, userPassword);
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -231,45 +239,61 @@ public class LogInFragment extends Fragment {
         }
     }
 
-    void loginGoogle(GoogleSignInAccount account) {
-        account.getIdToken();
-        loadingPbGoogle.setIndeterminate(true);
-        loadingPbGoogle.getIndeterminateDrawable().setColorFilter(getContext().getColor(R.color.color_primary), android.graphics.PorterDuff.Mode.MULTIPLY);
-        loadingPbGoogle.setVisibility(View.VISIBLE);
-        signInButton.setVisibility(View.INVISIBLE);
 
-        String idToken = account.getIdToken();
-        responseCall = FindArttService.loginGoogle(new TokenInfo(idToken));
-        responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
+    /*
+     * method to handle response
+     * */
+    private void consumeResponse(MVResponse mVResponse) {
 
-            @Override
-            public void onResponse(Call<FindArttResponse<UserResult>> call, Response<FindArttResponse<UserResult>> response) {
-                loadingPbGoogle.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
+        switch (mVResponse.status) {
 
-                if (response.body() != null) {
-                    FindArttResponse<UserResult> arttResponse = response.body();
-                    UserResult userResult = arttResponse.getData();
-                    storeAccessToken(userResult.getTokenInfo().getAccessToken());
+            case LOADING:
+
+                progressDialog.show();
+                break;
+
+            case SUCCESS:
+
+                progressDialog.dismiss();
+                FindArttResponse arttResponse = new FindArttResponse();
+                try {
+                    arttResponse = objectMapper.convertValue(mVResponse.data, FindArttResponse.class);
+                    UserResult userResult = objectMapper.convertValue(arttResponse.getData(), UserResult.class);
+                    storeUserCredentials(userResult, login, remember);
                     UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
+                } catch (Exception e) {
+                    try {
+                        //User is already logged in
+                        arttResponse = objectMapper.convertValue(mVResponse.data, FindArttResponse.class);
+                        User user = objectMapper.convertValue(arttResponse.getData(), User.class);
 
-                    goToDashboard(userResult.getUser());
-                } else {
-                    googleSignOut();
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
+                        UiUtils.showSuccessSnack(" Welcome " + user.getName(), getContext(), clRoot);
+                    } catch (Exception ee) {
+                        Timber.e(e);
+                        ErrorUtils.handleError(getContext(), clRoot);
+                    }
+
                 }
+                //renderSuccessResponse(apiMVResponse.data);
+                break;
 
-            }
+            case ERROR:
 
-            @Override
-            public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
-                loadingPbGoogle.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
+                progressDialog.dismiss();
+                removeUserCredentials();
+                googleSignOut();
+                ErrorUtils.handleThrowable(mVResponse.error, getContext(), clRoot);
+                break;
 
+            default:
+                break;
+        }
+    }
+
+
+    void loginGoogle(GoogleSignInAccount account) {
+        String idToken = account.getIdToken();
+        viewModel.hitGoogleLogin(new TokenInfo(idToken));
 
     }
 
@@ -281,95 +305,30 @@ public class LogInFragment extends Fragment {
 
     void login(final UserLogin logins) {
         login = logins;
-        loadingPb.setVisibility(View.VISIBLE);
-        loginBt.setVisibility(View.INVISIBLE);
-        responseCall = FindArttService.login(logins);
-        responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<UserResult>> call, Response<FindArttResponse<UserResult>> response) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                loginBt.setVisibility(View.VISIBLE);
-
-                if (response.body() != null) {
-                    FindArttResponse<UserResult> arttResponse = response.body();
-                    UserResult userResult = arttResponse.getData();
-                    storeAccessToken(userResult.getTokenInfo().getAccessToken());
-                    if (remember) {
-                        storeUserCredentials(logins);
-                    }
-                    UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
-
-                    goToDashboard(userResult.getUser());
-                } else {
-                    removeUserCredentials();
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                loginBt.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
+        if (loginValid()) {
+            viewModel.hitLogin(login);
+        } else {
+            ErrorUtils.handleUserError("Email or phone number Cannot be empty", getContext(), clRoot);
+        }
 
 
     }
 
 
-
-    void getUserFromToken(String accessToken) {
-
-        loadingPb.setVisibility(View.VISIBLE);
-        loginBt.setVisibility(View.INVISIBLE);
-        signInButton.setVisibility(View.INVISIBLE);
-        loginResponseCall = FindArttService.getUserFromToken(accessToken);
-        loginResponseCall.enqueue(new Callback<FindArttResponse<User>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<User>> call, Response<FindArttResponse<User>> response) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                loginBt.setVisibility(View.VISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-
-                if (response.body() != null) {
-                    FindArttResponse<User> arttResponse = response.body();
-                    User user = arttResponse.getData();
-                    goToDashboard(user);
-                } else {
-                    TempStorageUtils.removeSharedPreference(getContext(),ACCESS_TOKEN_STRING);
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<FindArttResponse<User>> call, Throwable t) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                loginBt.setVisibility(View.VISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
-
-
+    void loginFromFromToken(String accessToken) {
+        viewModel.getUserFromToken(accessToken);
     }
 
 
-    @OnClick(R.id.sign_up_sug)
-    void loadSignUp() {
-        FragmentManager fragmentManager = getFragmentManager();
-        SignUpFragment signUpFragment = new SignUpFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.sign_in_frame, signUpFragment)
-                .commit();
-
-    }
+//    @OnClick(R.id.sign_up_sug)
+//    void loadSignUp() {
+//        FragmentManager fragmentManager = getFragmentManager();
+//        SignUpFragment signUpFragment = new SignUpFragment();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.sign_in_frame, signUpFragment)
+//                .commit();
+//
+//    }
 
     @OnClick(R.id.btn_login_google)
     void requestGoogleToken() {
@@ -378,12 +337,12 @@ public class LogInFragment extends Fragment {
     }
 
 
-    void goToDashboard(User user){
-        Intent intent = new Intent(getContext(), DashboardActivity.class);
-        intent.putExtra(CURRENT_USER,user);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
+    //    void goToDashboard(User user){
+//        Intent intent = new Intent(getContext(), DashboardActivity.class);
+//        intent.putExtra(CURRENT_USER,user);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+//    }
     void updateLogin(boolean withUi) {
         if (withUi) {
             userEmail = emailText.getText().toString();
@@ -394,16 +353,25 @@ public class LogInFragment extends Fragment {
         login.setPassword(userPassword);
     }
 
-    void storeAccessToken(String accessToken) {
-        TempStorageUtils.writeSharedPreferenceString(getContext(), Constants.ACCESS_TOKEN_STRING, accessToken);
+
+    void storeUserCredentials(UserResult userResult, UserLogin userLogin) {
+        storeUserCredentials(userResult, userLogin, false);
     }
 
-    void storeUserCredentials(UserLogin userLogin) {
-        TempStorageUtils.storeUserLogin(getContext(), userLogin);
+    void storeUserCredentials(UserResult userResult, UserLogin userLogin, boolean remember) {
+        TempStorageUtils.storeActiveUser(getContext(), userResult);
+        if (remember) {
+            TempStorageUtils.storeUserLogin(getContext(), userLogin);
+        }
+    }
+
+    void removeUserCredentials() {
+        TempStorageUtils.removeActiveUser(getContext());
+        TempStorageUtils.removeUserLogin(getContext());
     }
 
 
-    private void googleSignOut (){
+    private void googleSignOut() {
         signOut();
         revokeAccess();
     }
@@ -417,6 +385,7 @@ public class LogInFragment extends Fragment {
                     }
                 });
     }
+
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
@@ -428,8 +397,13 @@ public class LogInFragment extends Fragment {
     }
 
 
+    private boolean loginValid() {
 
-    void removeUserCredentials() {
-        TempStorageUtils.removeUserLogin(getContext());
+        if (userEmail.trim().isEmpty()) {
+            return false;
+        } else if (userPassword.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
