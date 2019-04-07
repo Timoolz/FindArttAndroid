@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.olamide.findartt.Constants;
+import com.olamide.findartt.SchedulersFactory;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.utils.network.FindArttAPI;
 import com.olamide.findartt.utils.network.FindArttRepository;
@@ -81,8 +82,8 @@ public class BuilderModule {
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory getViewModelFactory(FindArttRepository myRepository) {
-        return new ViewModelFactory(myRepository);
+    ViewModelProvider.Factory getViewModelFactory(FindArttRepository myRepository, SchedulersFactory schedulersFactory) {
+        return new ViewModelFactory(myRepository,schedulersFactory);
     }
 
 

@@ -16,10 +16,12 @@ public class LoginViewModel extends ViewModel {
     private FindArttRepository findArttRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<MVResponse> responseLiveData = new MutableLiveData<>();
+    private  SchedulersFactory schedulersFactory;
 
 
-    public LoginViewModel(FindArttRepository findArttRepository) {
+    public LoginViewModel(FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
         this.findArttRepository = findArttRepository;
+        this.schedulersFactory = schedulersFactory;
     }
 
     public MutableLiveData<MVResponse> loginResponse() {
@@ -32,8 +34,8 @@ public class LoginViewModel extends ViewModel {
     public void hitLogin(UserLogin userLogin) {
 
         disposables.add(findArttRepository.login(userLogin)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
                 .subscribe(
                         result -> responseLiveData.setValue(MVResponse.success(result)),
@@ -45,8 +47,8 @@ public class LoginViewModel extends ViewModel {
     public void hitGoogleLogin(TokenInfo tokenInfo) {
 
         disposables.add(findArttRepository.loginGoogle(tokenInfo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
                 .subscribe(
                         result -> responseLiveData.setValue(MVResponse.success(result)),
@@ -58,8 +60,8 @@ public class LoginViewModel extends ViewModel {
     public void getUserFromToken(String accessToken) {
 
         disposables.add(findArttRepository.getUserFromToken(accessToken)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
                 .subscribe(
                         result -> responseLiveData.setValue(MVResponse.success(result)),
