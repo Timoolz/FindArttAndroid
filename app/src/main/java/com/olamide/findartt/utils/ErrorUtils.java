@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import timber.log.Timber;
 
+
 public class ErrorUtils {
 
 
@@ -31,34 +34,28 @@ public class ErrorUtils {
     private static final int INTERNAL_SERVER_ERROR = 500;
 
 
-    public static void showErrorSnack(String message, Context context, View view){
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(ContextCompat.getColor(context,R.color.failure));
-        //make snackbar appear at the top
-        view = snackbar.getView();
-        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
-        params.gravity = Gravity.TOP;
-        view.setLayoutParams(params);
-        snackbar.show();
+    public static void showErrorSnack(String message, Context context, ViewGroup viewGroup){
+        int color = ContextCompat.getColor(context, R.color.failure);
+        UiUtils.displaySnackBar(message,viewGroup,color,Snackbar.LENGTH_LONG, true);
     }
 
 
-    public static void handleError( Context context, View view){
+    public static void handleError( Context context, ViewGroup viewGroup){
         String error = context.getString(R.string.error);
 
-        showErrorSnack(error,context,view);
+        showErrorSnack(error,context,viewGroup);
     }
 
-    public static void handleApiError(ResponseBody responseBody, Context context, View view){
+    public static void handleApiError(ResponseBody responseBody, Context context, ViewGroup viewGroup){
         Gson gson = new GsonBuilder().create();
         FindArttResponse findArttResponse = new FindArttResponse();
         try {
             findArttResponse= gson.fromJson(responseBody.string(),FindArttResponse.class);
 
             if(findArttResponse.getCode()==INTERNAL_SERVER_ERROR){
-                handleError(context, view);
+                handleError(context, viewGroup);
             }else if(findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)){
-                handleError(context, view);
+                handleError(context, viewGroup);
                 //remove current Active User
                 TempStorageUtils.removeActiveUser(context);
                 //re direct to sign in activity
@@ -67,53 +64,53 @@ public class ErrorUtils {
                 context.startActivity(intent);
             }else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
-                showErrorSnack(findArttResponse.getMessage(),context,view);
+                showErrorSnack(findArttResponse.getMessage(),context,viewGroup);
             }
             //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             // handle failure to read error
-            handleError(context,view);
+            handleError(context,viewGroup);
             Timber.e(e);
         }
 
     }
 
-    public static void handleUserError(String message, Context context, View view){
+    public static void handleUserError(String message, Context context, ViewGroup viewGroup){
         String error = context.getString(R.string.error);
         //Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        showErrorSnack(message,context,view);
+        showErrorSnack(message,context,viewGroup);
     }
 
 
 
-    public static void handleInternetError( Context context, View view){
+    public static void handleInternetError( Context context, ViewGroup viewGroup){
         String error = context.getString(R.string.internet_error);
         //Toast.makeText(context, error, Toast.LENGTH_LONG).show();
 
-        showErrorSnack(error,context,view);
+        showErrorSnack(error,context,viewGroup);
     }
 
 
 
-    public static void handleThrowable(Throwable throwable, Context context, View view){
+    public static void handleThrowable(Throwable throwable, Context context, ViewGroup viewGroup){
 
         try {
 
             if(throwable instanceof HttpException){
                 HttpException exception = objectMapper.convertValue(throwable,HttpException.class);
                 ResponseBody responseBody = exception.response().errorBody();
-                ErrorUtils.handleApiError(responseBody,context, view);
+                ErrorUtils.handleApiError(responseBody,context, viewGroup);
             }else if(throwable instanceof retrofit2.HttpException){
                 retrofit2.HttpException exception = objectMapper.convertValue(throwable,retrofit2.HttpException.class);
                 ResponseBody responseBody = exception.response().errorBody();
-                ErrorUtils.handleApiError(responseBody,context, view);
+                ErrorUtils.handleApiError(responseBody,context, viewGroup);
             }else{
-                ErrorUtils.handleError(context, view);
+                ErrorUtils.handleError(context, viewGroup);
             }
 
         }catch (Exception e){
             Timber.e(e);
-            ErrorUtils.handleError(context, view);
+            ErrorUtils.handleError(context, viewGroup);
         }
 
 

@@ -99,6 +99,7 @@ public class LogInFragment extends Fragment {
     LoginViewModel viewModel;
 
     ProgressDialog progressDialog;
+    ViewGroup dummyFrame;
 
 
     private String accessToken;
@@ -136,7 +137,8 @@ public class LogInFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
-        progressDialog = UiUtils.getProgressDialog(getContext(), "Please wait...");
+        progressDialog = UiUtils.getProgressDialog(getContext(), "Please wait...",true);
+        dummyFrame = UiUtils.getDummyFrame(getActivity());
 
         ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
@@ -308,7 +310,7 @@ public class LogInFragment extends Fragment {
         if (loginValid()) {
             viewModel.hitLogin(login);
         } else {
-            ErrorUtils.handleUserError("Email or phone number Cannot be empty", getContext(), clRoot);
+            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), getContext(), dummyFrame);
         }
 
 
