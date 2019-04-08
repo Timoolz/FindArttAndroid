@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
 import javax.inject.Inject;

@@ -20,7 +20,7 @@
 //import com.olamide.findartt.adapter.ArtworkAdapter;
 //import com.olamide.findartt.enums.ConnectionStatus;
 //import com.olamide.findartt.models.Artwork;
-//import com.olamide.findartt.models.FindArttResponse;
+//import com.olamide.findartt.models.api.FindArttResponse;
 //import com.olamide.findartt.models.User;
 //import com.olamide.findartt.utils.ErrorUtils;
 //import com.olamide.findartt.utils.RecyclerViewUtils;

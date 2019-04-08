@@ -21,7 +21,7 @@
 //import com.olamide.findartt.adapter.BidAdapter;
 //import com.olamide.findartt.models.ArtworkSummary;
 //import com.olamide.findartt.models.Bid;
-//import com.olamide.findartt.models.FindArttResponse;
+//import com.olamide.findartt.models.api.FindArttResponse;
 //import com.olamide.findartt.models.User;
 //import com.olamide.findartt.utils.ErrorUtils;
 //import com.olamide.findartt.utils.TempStorageUtils;

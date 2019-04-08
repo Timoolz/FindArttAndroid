@@ -1,10 +1,10 @@
-package com.olamide.findartt;
+package com.olamide.findartt.models.mvvm;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
-import static com.olamide.findartt.Status.*;
+import static com.olamide.findartt.models.mvvm.Status.*;
 
 /**
  * MVResponse holder provided to the UI

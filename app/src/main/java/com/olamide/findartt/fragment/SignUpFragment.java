@@ -29,7 +29,7 @@
 //import com.olamide.findartt.enums.Gender;
 //import com.olamide.findartt.interfaces.FragmentDataPasser;
 //import com.olamide.findartt.R;
-//import com.olamide.findartt.models.FindArttResponse;
+//import com.olamide.findartt.models.api.FindArttResponse;
 //import com.olamide.findartt.models.TokenInfo;
 //import com.olamide.findartt.models.UserResult;
 //import com.olamide.findartt.models.UserSignup;

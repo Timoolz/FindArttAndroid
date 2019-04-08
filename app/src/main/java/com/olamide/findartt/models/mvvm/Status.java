@@ -1,4 +1,4 @@
-package com.olamide.findartt;
+package com.olamide.findartt.models.mvvm;
 
 /**
  * Possible status types of a response provided to the UI

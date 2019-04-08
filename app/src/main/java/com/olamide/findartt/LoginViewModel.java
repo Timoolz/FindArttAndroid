@@ -3,13 +3,13 @@ package com.olamide.findartt;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class LoginViewModel extends ViewModel {
 

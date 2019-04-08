@@ -30,12 +30,12 @@ import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.Constants;
 import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.LoginViewModel;
-import com.olamide.findartt.MVResponse;
+import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;
 //import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
-import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserLogin;
@@ -307,7 +307,7 @@ public class LogInFragment extends Fragment {
 
     void login(final UserLogin logins) {
         login = logins;
-        if (loginValid()) {
+        if (loginValid(login)) {
             viewModel.hitLogin(login);
         } else {
             ErrorUtils.handleUserError(getString(R.string.generic_form_validation), getContext(), dummyFrame);
@@ -362,7 +362,7 @@ public class LogInFragment extends Fragment {
 
     void storeUserCredentials(UserResult userResult, UserLogin userLogin, boolean remember) {
         TempStorageUtils.storeActiveUser(getContext(), userResult);
-        if (remember) {
+        if (remember && loginValid(login)) {
             TempStorageUtils.storeUserLogin(getContext(), userLogin);
         }
     }
@@ -399,11 +399,11 @@ public class LogInFragment extends Fragment {
     }
 
 
-    private boolean loginValid() {
+    private boolean loginValid(UserLogin logins) {
 
-        if (userEmail.trim().isEmpty()) {
+        if (logins.getEmail().trim().isEmpty()) {
             return false;
-        } else if (userPassword.trim().isEmpty()) {
+        } else if (logins.getPassword().trim().isEmpty()) {
             return false;
         }
         return true;

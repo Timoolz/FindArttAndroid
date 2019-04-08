@@ -2,25 +2,18 @@ package com.olamide.findartt.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
-import com.olamide.findartt.Constants;
 import com.olamide.findartt.R;
 import com.olamide.findartt.activity.SignInActivity;
 import com.olamide.findartt.enums.ErrorCode;
-import com.olamide.findartt.models.FindArttResponse;
-
-import java.io.IOException;
+import com.olamide.findartt.models.api.FindArttResponse;
 
 import okhttp3.ResponseBody;
 import timber.log.Timber;

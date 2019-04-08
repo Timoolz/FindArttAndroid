@@ -2,12 +2,11 @@ package com.olamide.findartt.di;
 
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.olamide.findartt.Constants;
-import com.olamide.findartt.SchedulersFactory;
+import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.utils.network.FindArttAPI;
 import com.olamide.findartt.utils.network.FindArttRepository;

@@ -4,7 +4,7 @@ import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Bid;
 import com.olamide.findartt.models.Buy;
-import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserLogin;
