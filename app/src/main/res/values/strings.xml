@@ -44,6 +44,7 @@
     <string name="confirm_password">Confirm Password</string>
 
     <string name="generic_form_validation">Complete required fields </string>
+    <string name="password_form_validation">Passwords do not match </string>
 
     <string name="remember">Remember me?</string>
 

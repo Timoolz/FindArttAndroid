@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
 
 import timber.log.Timber;
 
@@ -66,9 +66,7 @@ public class LogInFragment extends Fragment {
     ViewModelFactory viewModelFactory;
 
     FragmentDataPasser dataPasser;
-    private Call<FindArttResponse<UserResult>> responseCall;
 
-    private Call<FindArttResponse<User>> loginResponseCall;
     private OnFragmentInteractionListener mListener;
 
     @BindView(R.id.cl_root)
@@ -96,7 +94,7 @@ public class LogInFragment extends Fragment {
     SignInButton signInButton;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    LoginViewModel viewModel;
+    LoginViewModel loginViewModel;
 
     ProgressDialog progressDialog;
     ViewGroup dummyFrame;
@@ -119,14 +117,6 @@ public class LogInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//
-//
-//        if (savedInstanceState != null) {
-//            userEmail = savedInstanceState.getString(USEREMAIL_STRING);
-//            userPassword = savedInstanceState.getString(USERPASSWORD_STRING);
-//
-//        }
-
 
     }
 
@@ -137,14 +127,13 @@ public class LogInFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.large_text),false);
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
         dummyFrame = UiUtils.getDummyFrame(getActivity());
 
         ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
-
-        viewModel.loginResponse().observe(this, this::consumeResponse);
+        loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
+        loginViewModel.getLoginResponse().observe(this, this::consumeResponse);
 
         accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
         if (accessToken != null && !accessToken.isEmpty()) {
@@ -295,7 +284,7 @@ public class LogInFragment extends Fragment {
 
     void loginGoogle(GoogleSignInAccount account) {
         String idToken = account.getIdToken();
-        viewModel.hitGoogleLogin(new TokenInfo(idToken));
+        loginViewModel.hitGoogleLogin(new TokenInfo(idToken));
 
     }
 
@@ -308,7 +297,7 @@ public class LogInFragment extends Fragment {
     void login(final UserLogin logins) {
         login = logins;
         if (loginValid(login)) {
-            viewModel.hitLogin(login);
+            loginViewModel.hitLogin(login);
         } else {
             ErrorUtils.handleUserError(getString(R.string.generic_form_validation), getContext(), dummyFrame);
         }
@@ -318,19 +307,19 @@ public class LogInFragment extends Fragment {
 
 
     void loginFromFromToken(String accessToken) {
-        viewModel.getUserFromToken(accessToken);
+        loginViewModel.getUserFromToken(accessToken);
     }
 
 
-//    @OnClick(R.id.sign_up_sug)
-//    void loadSignUp() {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        SignUpFragment signUpFragment = new SignUpFragment();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.sign_in_frame, signUpFragment)
-//                .commit();
-//
-//    }
+    @OnClick(R.id.sign_up_sug)
+    void loadSignUp() {
+        FragmentManager fragmentManager = getFragmentManager();
+        SignUpFragment signUpFragment = new SignUpFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.sign_in_frame, signUpFragment)
+                .commit();
+
+    }
 
     @OnClick(R.id.btn_login_google)
     void requestGoogleToken() {
@@ -401,9 +390,7 @@ public class LogInFragment extends Fragment {
 
     private boolean loginValid(UserLogin logins) {
 
-        if (logins.getEmail().trim().isEmpty()) {
-            return false;
-        } else if (logins.getPassword().trim().isEmpty()) {
+        if (logins.getEmail().trim().isEmpty()||logins.getPassword().trim().isEmpty()) {
             return false;
         }
         return true;

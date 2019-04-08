@@ -32,7 +32,6 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
-        Timber.plant(new Timber.DebugTree());
 
         if (savedInstanceState != null) {
             typeString = savedInstanceState.getString(TYPE_STRING);
