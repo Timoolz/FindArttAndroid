@@ -137,7 +137,7 @@ public class LogInFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
-        progressDialog = UiUtils.getProgressDialog(getContext(), "Please wait...",true);
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.large_text),false);
         dummyFrame = UiUtils.getDummyFrame(getActivity());
 
         ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);

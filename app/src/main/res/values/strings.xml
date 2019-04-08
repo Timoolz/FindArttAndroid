@@ -19,6 +19,7 @@
     <string name="app_dummy_number">04</string>
     <string name="refresh">Refresh</string>
     <string name="retry">Retry</string>
+    <string name="loading">Please wait…</string>
     <string name="empty_art">No Artwork found at the moment Try again later </string>
     <string name="internet_error">Unable to complete action.  Check Internet connection and try Again </string>
     <string name="error">Unable to complete action, System error. </string>
