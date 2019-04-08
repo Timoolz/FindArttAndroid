@@ -66,7 +66,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
     @Override
     public void onDataPass(Bundle bundle) {
         if (bundle != null) {
-            Timber.e("hello " + bundle.getString(TYPE_STRING));
+            Timber.e("hello %s", bundle.getString(TYPE_STRING));
             typeString = bundle.getString(TYPE_STRING);
         }
 

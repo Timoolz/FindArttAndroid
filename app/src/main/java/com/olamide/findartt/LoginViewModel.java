@@ -16,7 +16,6 @@ public class LoginViewModel extends ViewModel {
     private FindArttRepository findArttRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<MVResponse> responseLiveData = new MutableLiveData<>();
-    private final MutableLiveData<MVResponse> responseLiveDataToken = new MutableLiveData<>();
     private  SchedulersFactory schedulersFactory;
 
 
