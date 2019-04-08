@@ -45,6 +45,7 @@ import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -150,14 +151,14 @@ public class SignUpFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
 
         progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
-        dummyFrame = UiUtils.getDummyFrame(getActivity());
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
 
         ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
@@ -229,7 +230,7 @@ public class SignUpFragment extends Fragment {
     void loadLogin() {
         FragmentManager fragmentManager = getFragmentManager();
         LogInFragment logInFragment = new LogInFragment();
-        fragmentManager.beginTransaction()
+        Objects.requireNonNull(fragmentManager).beginTransaction()
                 .replace(R.id.sign_in_frame, logInFragment)
                 .commit();
 
@@ -259,7 +260,7 @@ public class SignUpFragment extends Fragment {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Timber.w("signInResult:failed code=%s", e.getStatusCode());
-            ErrorUtils.handleError(getContext(), clRoot);
+            ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
         }
     }
 
@@ -285,7 +286,7 @@ public class SignUpFragment extends Fragment {
                     UiUtils.showSuccessSnack("Successful SignUp. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
                 } catch (Exception e) {
                     Timber.e(e);
-                    ErrorUtils.handleError(getContext(), clRoot);
+                    ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
 
                 }
                 //renderSuccessResponse(apiMVResponse.data);
@@ -320,9 +321,9 @@ public class SignUpFragment extends Fragment {
     void signUp() {
         updateSignUp(true);
         if ((!signUpValid(signup, confirmUserPassword))) {
-            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), getContext(), dummyFrame);
+            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }else if(!passwordValidated(signup.getPassword(), confirmUserPassword)){
-            ErrorUtils.handleUserError(getString(R.string.password_form_validation), getContext(), dummyFrame);
+            ErrorUtils.handleUserError(getString(R.string.password_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }
         else {
             signUpViewModel.signUp(signup);
@@ -388,7 +389,7 @@ public class SignUpFragment extends Fragment {
 
     private void signOut() {
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
@@ -398,7 +399,7 @@ public class SignUpFragment extends Fragment {
 
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...

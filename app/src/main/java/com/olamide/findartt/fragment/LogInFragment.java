@@ -45,6 +45,8 @@ import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -121,14 +123,14 @@ public class LogInFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
         progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
-        dummyFrame = UiUtils.getDummyFrame(getActivity());
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
 
         ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
@@ -225,8 +227,8 @@ public class LogInFragment extends Fragment {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Timber.w("signInResult:failed code=" + e.getStatusCode());
-            ErrorUtils.handleError(getContext(), clRoot);
+            Timber.w("signInResult:failed code=%s", e.getStatusCode());
+            ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
         }
     }
 
@@ -261,7 +263,7 @@ public class LogInFragment extends Fragment {
                         UiUtils.showSuccessSnack(" Welcome " + user.getName(), getContext(), clRoot);
                     } catch (Exception ee) {
                         Timber.e(e);
-                        ErrorUtils.handleError(getContext(), clRoot);
+                        ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
                     }
 
                 }
@@ -299,7 +301,7 @@ public class LogInFragment extends Fragment {
         if (loginValid(login)) {
             loginViewModel.hitLogin(login);
         } else {
-            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), getContext(), dummyFrame);
+            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }
 
 
@@ -315,7 +317,7 @@ public class LogInFragment extends Fragment {
     void loadSignUp() {
         FragmentManager fragmentManager = getFragmentManager();
         SignUpFragment signUpFragment = new SignUpFragment();
-        fragmentManager.beginTransaction()
+        Objects.requireNonNull(fragmentManager).beginTransaction()
                 .replace(R.id.sign_in_frame, signUpFragment)
                 .commit();
 
@@ -369,7 +371,7 @@ public class LogInFragment extends Fragment {
 
     private void signOut() {
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
@@ -379,7 +381,7 @@ public class LogInFragment extends Fragment {
 
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
