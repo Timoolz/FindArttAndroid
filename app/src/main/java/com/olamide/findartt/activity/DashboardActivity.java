@@ -1,10 +1,7 @@
 package com.olamide.findartt.activity;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,22 +20,15 @@ import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
-import com.olamide.findartt.enums.ConnectionStatus;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
-import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.mvvm.MVResponse;
-import com.olamide.findartt.utils.AuthUtil;
+import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
-import com.olamide.findartt.utils.TempStorageUtils;
-import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.FindArttRepository;
-import com.olamide.findartt.viewmodels.MainViewModel;
 //import com.olamide.findartt.widget.ArttUpdateService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,16 +36,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
 //import retrofit2.MVResponse;
 import timber.log.Timber;
-
-import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.ARTWORK_STRING;
-import static com.olamide.findartt.Constants.BUNDLE;
-import static com.olamide.findartt.Constants.CURRENT_USER;
-import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
 public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
@@ -64,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     ViewModelFactory viewModelFactory;
 
 
-    AuthUtil authUtil;
+    AppAuthUtil appAuthUtil;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -102,10 +84,10 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         ButterKnife.bind(this);
 
         ((FindArttApplication) getApplication()).getAppComponent().doInjection(this);
-        authUtil = new AuthUtil(this);
-        userResult = authUtil.authorize();
+        appAuthUtil = new AppAuthUtil(this);
+        userResult = appAuthUtil.authorize();
         if (userResult == null) {
-            authUtil.logout();
+            appAuthUtil.logout();
             return;
         }
 

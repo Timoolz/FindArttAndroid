@@ -2,7 +2,6 @@ package com.olamide.findartt.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 import com.olamide.findartt.R;
-import com.olamide.findartt.activity.SignInActivity;
 import com.olamide.findartt.enums.ErrorCode;
 import com.olamide.findartt.models.api.FindArttResponse;
 
@@ -41,7 +39,7 @@ public class ErrorUtils {
                 handleError(context, viewGroup);
             } else if (findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)) {
                 handleError(context, viewGroup);
-                new AuthUtil(context).logout();
+                new AppAuthUtil(context).logout();
             } else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
                 UiUtils.showErrorSnack(findArttResponse.getMessage(), context, viewGroup);

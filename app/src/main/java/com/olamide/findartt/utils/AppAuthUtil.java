@@ -12,17 +12,18 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.Nullable;
 
-public class AuthUtil {
+public class AppAuthUtil {
 
     private Context context;
 
 
-    public AuthUtil(Context context) {
+    public AppAuthUtil(Context context) {
         this.context = context;
     }
 
     public @Nullable UserResult authorize(){
         UserResult userResult = TempStorageUtils.getActiveUser(context);
+
 
         return userResult;
     }
