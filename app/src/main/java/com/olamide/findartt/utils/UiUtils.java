@@ -52,7 +52,7 @@ public class UiUtils {
             if (viewGroup instanceof FrameLayout) {
                 View view = snackbar.getView();
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-                params.gravity = Gravity.TOP;
+                params.gravity = Gravity.BOTTOM;
                 view.setLayoutParams(params);
             }
             if (viewGroup instanceof CoordinatorLayout) {

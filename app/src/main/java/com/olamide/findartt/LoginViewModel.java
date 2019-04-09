@@ -1,15 +1,23 @@
 package com.olamide.findartt;
 
+import android.app.Activity;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
+import com.olamide.findartt.enums.ConnectionStatus;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.models.mvvm.MVResponse;
+import com.olamide.findartt.utils.ErrorUtils;
+import com.olamide.findartt.utils.UiUtils;
+import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;
+
+import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
 
 public class LoginViewModel extends ViewModel {
 
@@ -31,7 +39,8 @@ public class LoginViewModel extends ViewModel {
     /*
      * method to call normal login api with $(email + password)
      * */
-    public void hitLogin(UserLogin userLogin) {
+    public void hitLogin(UserLogin userLogin, Activity activity) {
+        if(!ConnectionUtils.handleNoInternet(activity)) return;
 
         disposables.add(findArttRepository.login(userLogin)
                 .subscribeOn(schedulersFactory.io())
@@ -44,7 +53,8 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void hitGoogleLogin(TokenInfo tokenInfo) {
+    public void hitGoogleLogin(TokenInfo tokenInfo, Activity activity) {
+        if(!ConnectionUtils.handleNoInternet(activity)) return;
 
         disposables.add(findArttRepository.loginGoogle(tokenInfo)
                 .subscribeOn(schedulersFactory.io())
@@ -57,7 +67,8 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void getUserFromToken(String accessToken) {
+    public void getUserFromToken(String accessToken, Activity activity) {
+        if(!ConnectionUtils.handleNoInternet(activity)) return;
 
         disposables.add(findArttRepository.getUserFromToken(accessToken)
                 .subscribeOn(schedulersFactory.io())

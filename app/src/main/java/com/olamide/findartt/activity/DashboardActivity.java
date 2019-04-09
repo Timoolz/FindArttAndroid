@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.DashboardViewModel;
 import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.R;
-import com.olamide.findartt.SignUpViewModel;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
 import com.olamide.findartt.enums.ConnectionStatus;
@@ -71,7 +70,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     DashboardViewModel dashboardViewModel;
 
-    private  UserResult userResult;
+    private UserResult userResult;
 
     @BindView(R.id.cl_root)
     CoordinatorLayout clRoot;
@@ -105,7 +104,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         ((FindArttApplication) getApplication()).getAppComponent().doInjection(this);
         authUtil = new AuthUtil(this);
         userResult = authUtil.authorize();
-        if(userResult==null){
+        if (userResult == null) {
             authUtil.logout();
             return;
         }
@@ -117,15 +116,17 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
 
-        if (savedInstanceState == null) {
-            mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
-            mAdapter.setArtworkList(artworkList);
-            Objects.requireNonNull(artworkRv.getLayoutManager()).onRestoreInstanceState(savedRecyclerLayoutState);
-            artworkRv.setNestedScrollingEnabled(false);
-            artworkRv.setAdapter(mAdapter);
 
+        mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
+        mAdapter.setArtworkList(artworkList);
+        Objects.requireNonNull(artworkRv.getLayoutManager()).onRestoreInstanceState(savedRecyclerLayoutState);
+        artworkRv.setNestedScrollingEnabled(false);
+        artworkRv.setAdapter(mAdapter);
+
+
+        if (savedInstanceState == null) {
+            loadArtWorks();
         }
-        loadArtWorks();
 
 
     }
@@ -142,8 +143,8 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                 FindArttResponse arttResponse = new FindArttResponse();
                 try {
                     arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
-                     artworkList = objectMapper.convertValue(arttResponse.getData(), new TypeReference<List<Artwork>>() {
-                     });
+                    artworkList = objectMapper.convertValue(arttResponse.getData(), new TypeReference<List<Artwork>>() {
+                    });
                     if (artworkList.size() <= 0) {
                         showEmptyMessage();
                     } else {
@@ -170,13 +171,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
 
     void loadArtWorks() {
-        ConnectionStatus connectionStatus = getConnectionStatus(getApplicationContext());
-        if (connectionStatus.connectionStatus.equals(ConnectionStatus.NONE)) {
-            ErrorUtils.handleInternetError(this, clRoot);
-            return;
-        }
-        dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken());
-
+        dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken(), this);
     }
 
 //    private void getFavouriteArt() {

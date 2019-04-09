@@ -1,5 +1,6 @@
 package com.olamide.findartt.utils.network;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -7,6 +8,8 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 
 import com.olamide.findartt.enums.ConnectionStatus;
+import com.olamide.findartt.utils.ErrorUtils;
+import com.olamide.findartt.utils.UiUtils;
 
 import timber.log.Timber;
 
@@ -56,7 +59,15 @@ public final class ConnectionUtils {
         }
         return new ConnectionStatus(ConnectionStatus.NONE);
 
+    }
 
+    public static boolean handleNoInternet(Activity activity){
+        ConnectionStatus connectionStatus = getConnectionStatus(activity);
+        if (connectionStatus.connectionStatus.equals(ConnectionStatus.NONE)) {
+            ErrorUtils.handleInternetError(activity, UiUtils.getDummyFrame(activity));
+            return false;
+        }
+        return true;
     }
 
 

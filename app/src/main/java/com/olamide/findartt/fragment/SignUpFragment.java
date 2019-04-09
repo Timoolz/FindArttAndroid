@@ -313,7 +313,7 @@ public class SignUpFragment extends Fragment {
 
     void signUpGoogle(GoogleSignInAccount account) {
         String idToken = account.getIdToken();
-        signUpViewModel.signUpGoogle(new TokenInfo(idToken));
+        signUpViewModel.signUpGoogle(new TokenInfo(idToken), getActivity());
     }
 
 
@@ -333,7 +333,7 @@ public class SignUpFragment extends Fragment {
             ErrorUtils.handleUserError(getString(R.string.password_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }
         else {
-            signUpViewModel.signUp(signup);
+            signUpViewModel.signUp(signup, getActivity());
         }
 
 

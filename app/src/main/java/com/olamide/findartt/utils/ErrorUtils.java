@@ -1,5 +1,6 @@
 package com.olamide.findartt.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
@@ -61,11 +62,11 @@ public class ErrorUtils {
     }
 
 
-    public static void handleInternetError(Context context, ViewGroup viewGroup) {
-        String error = context.getString(R.string.internet_error);
+    public static void handleInternetError(Activity activity, ViewGroup viewGroup) {
+        String error = activity.getString(R.string.internet_error);
         //Toast.makeText(context, error, Toast.LENGTH_LONG).show();
 
-        UiUtils.showErrorSnack(error, context, viewGroup);
+        UiUtils.showErrorSnack(error, activity, viewGroup);
     }
 
 

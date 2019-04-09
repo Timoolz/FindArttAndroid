@@ -141,12 +141,14 @@ public class LogInFragment extends Fragment {
         accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
         if (accessToken != null && !accessToken.isEmpty()) {
             loginFromFromToken(accessToken);
+            return rootView;
         }
         if (getArguments() != null) {
             userEmail = getArguments().getString(USEREMAIL_STRING);
             userPassword = getArguments().getString(USERPASSWORD_STRING);
             updateLogin(false);
             login(login);
+            return rootView;
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -167,6 +169,7 @@ public class LogInFragment extends Fragment {
         if (account != null) {
             //call api google login
             loginGoogle(account);
+            return rootView;
         }
 
         return rootView;
@@ -287,7 +290,7 @@ public class LogInFragment extends Fragment {
 
     void loginGoogle(GoogleSignInAccount account) {
         String idToken = account.getIdToken();
-        loginViewModel.hitGoogleLogin(new TokenInfo(idToken));
+        loginViewModel.hitGoogleLogin(new TokenInfo(idToken), getActivity());
 
     }
 
@@ -300,7 +303,7 @@ public class LogInFragment extends Fragment {
     void login(final UserLogin logins) {
         login = logins;
         if (loginValid(login)) {
-            loginViewModel.hitLogin(login);
+            loginViewModel.hitLogin(login, getActivity());
         } else {
             ErrorUtils.handleUserError(getString(R.string.generic_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }
@@ -310,7 +313,7 @@ public class LogInFragment extends Fragment {
 
 
     void loginFromFromToken(String accessToken) {
-        loginViewModel.getUserFromToken(accessToken);
+        loginViewModel.getUserFromToken(accessToken, getActivity());
     }
 
 
