@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.olamide.findartt.Constants;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.User;
@@ -28,6 +30,9 @@ public class TempStorageUtils {
     protected final static String DEFAULT_STRING = "";
     static int tempInt = 0;
     static String tempString = "";
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Gson gson = new GsonBuilder().create();
 
     public static int readSharedPreferenceInt(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -88,40 +93,38 @@ public class TempStorageUtils {
     }
 
 
-    public static void storeActiveUser(Context context, UserResult userResult)  {
+    public static void storeActiveUser(Context context, UserResult userResult) {
 
+        Gson gson = new GsonBuilder().create();
         try {
-            writeSharedPreferenceString(context, Constants.CURRENT_USER, new ObjectMapper().writeValueAsString(userResult.getUser()));
+            writeSharedPreferenceString(context, Constants.CURRENT_USER, new GsonBuilder().create().toJson(userResult.getUser()));
             writeSharedPreferenceString(context, Constants.ACCESS_TOKEN_STRING, userResult.getTokenInfo().getAccessToken());
-        }catch (Exception e){
+        } catch (Exception e) {
             Timber.e(e);
         }
 
     }
 
-    public static UserResult getActiveUser(Context context)  {
-try{
-        UserResult userResult = new UserResult();
-        String user = TempStorageUtils.readSharedPreferenceString(context, CURRENT_USER);
-        String accessToken = TempStorageUtils.readSharedPreferenceString(context, ACCESS_TOKEN_STRING);
-        userResult.setUser(new ObjectMapper().readValue(user, User.class));
-        userResult.setTokenInfo(new TokenInfo(accessToken));
-        return userResult;
-    }catch (Exception e){
-        Timber.e(e);
-    }
-    return null;
+    public static UserResult getActiveUser(Context context) {
+        try {
+            UserResult userResult = new UserResult();
+            String user = readSharedPreferenceString(context, CURRENT_USER);
+            String accessToken = readSharedPreferenceString(context, ACCESS_TOKEN_STRING);
+            userResult.setUser(new GsonBuilder().create().fromJson(user, User.class));
+            userResult.setTokenInfo(new TokenInfo(accessToken));
+            return userResult;
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return null;
     }
 
     public static void removeActiveUser(Context context) {
 
-        TempStorageUtils.removeSharedPreference(context, CURRENT_USER);
-        TempStorageUtils.removeSharedPreference(context, ACCESS_TOKEN_STRING);
+        removeSharedPreference(context, CURRENT_USER);
+        removeSharedPreference(context, ACCESS_TOKEN_STRING);
 
     }
-
-
-
 
 
 }

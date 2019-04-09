@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.Constants;
 import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.LoginViewModel;
+import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;
 //import com.olamide.findartt.activity.DashboardActivity;
@@ -267,7 +268,7 @@ public class LogInFragment extends Fragment {
                     }
 
                 }
-                //renderSuccessResponse(apiMVResponse.data);
+                goToDashboard();
                 break;
 
             case ERROR:
@@ -330,12 +331,11 @@ public class LogInFragment extends Fragment {
     }
 
 
-    //    void goToDashboard(User user){
-//        Intent intent = new Intent(getContext(), DashboardActivity.class);
-//        intent.putExtra(CURRENT_USER,user);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
-//    }
+        void goToDashboard(){
+        Intent intent = new Intent(getContext(), DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
     void updateLogin(boolean withUi) {
         if (withUi) {
             userEmail = emailText.getText().toString();

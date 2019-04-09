@@ -40,12 +40,7 @@ public class ErrorUtils {
                 handleError(context, viewGroup);
             } else if (findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)) {
                 handleError(context, viewGroup);
-                //remove current Active User
-                TempStorageUtils.removeActiveUser(context);
-                //re direct to sign in activity
-                Intent intent = new Intent(context, SignInActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                new AuthUtil(context).logout();
             } else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
                 UiUtils.showErrorSnack(findArttResponse.getMessage(), context, viewGroup);

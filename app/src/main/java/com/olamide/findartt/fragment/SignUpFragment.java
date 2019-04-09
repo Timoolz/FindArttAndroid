@@ -32,6 +32,7 @@ import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.SignUpViewModel;
 import com.olamide.findartt.ViewModelFactory;
 
+import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.enums.Gender;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
@@ -156,11 +157,11 @@ public class SignUpFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
+        ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
         progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
         dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
 
-        ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
 
         signUpViewModel = ViewModelProviders.of(this, viewModelFactory).get(SignUpViewModel.class);
         signUpViewModel.getSignupResponse().observe(this, this::consumeResponse);
@@ -289,7 +290,7 @@ public class SignUpFragment extends Fragment {
                     ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
 
                 }
-                //renderSuccessResponse(apiMVResponse.data);
+                goToDashboard();
                 break;
 
             case ERROR:
@@ -301,6 +302,12 @@ public class SignUpFragment extends Fragment {
             default:
                 break;
         }
+    }
+
+    void goToDashboard(){
+        Intent intent = new Intent(getContext(), DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 
