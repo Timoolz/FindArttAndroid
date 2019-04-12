@@ -1,5 +1,6 @@
 package com.olamide.findartt.utils.network;
 
+import com.olamide.findartt.database.ArtworkDao;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Bid;
@@ -20,9 +21,11 @@ import io.reactivex.Observable;
 public class FindArttRepository {
 
     private FindArttAPI findArttAPI;
+    private ArtworkDao artworkDao;
 
-    public FindArttRepository(FindArttAPI findArttAPI) {
+    public FindArttRepository(FindArttAPI findArttAPI, ArtworkDao artworkDao) {
         this.findArttAPI = findArttAPI;
+        this.artworkDao = artworkDao;
     }
 
 

@@ -13,6 +13,7 @@ import com.olamide.findartt.utils.TempStorageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.TYPE_STRING;
@@ -29,6 +30,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);

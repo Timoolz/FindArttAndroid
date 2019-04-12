@@ -39,7 +39,7 @@ public class ErrorUtils {
                 handleError(context, viewGroup);
             } else if (findArttResponse.getErrorCode().equals(ErrorCode.TOKEN_NOT_FOUND)) {
                 handleError(context, viewGroup);
-                new AppAuthUtil(context).logout();
+                //new AppAuthUtil(context).logout();
             } else {
                 //Toast.makeText(context, findArttResponse.getMessage(), Toast.LENGTH_LONG).show();
                 UiUtils.showErrorSnack(findArttResponse.getMessage(), context, viewGroup);

@@ -54,6 +54,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.RC_SIGN_IN;
@@ -147,6 +149,7 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
     }
@@ -157,7 +160,7 @@ public class SignUpFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
-        ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
+
 
         progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
         dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
@@ -200,6 +203,7 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         dataPasser = (FragmentDataPasser) context;
         Bundle bundle = new Bundle();

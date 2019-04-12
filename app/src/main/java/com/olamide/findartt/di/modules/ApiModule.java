@@ -1,15 +1,12 @@
-package com.olamide.findartt.di;
-
-import android.arch.lifecycle.ViewModelProvider;
+package com.olamide.findartt.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.olamide.findartt.Constants;
-import com.olamide.findartt.di.rx.SchedulersFactory;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.utils.network.FindArttAPI;
-import com.olamide.findartt.utils.network.FindArttRepository;
+import com.squareup.moshi.JsonReader;
+import com.squareup.moshi.Moshi;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,9 +18,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 @Module
-public class BuilderModule {
+public class ApiModule {
+    private String baseUrl;
+
+    public ApiModule(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+
     @Provides
     @Singleton
     Gson provideGson() {
@@ -33,33 +38,37 @@ public class BuilderModule {
         return builder.setLenient().create();
     }
 
+    @Provides
+    @Singleton
+    Moshi provideMoshi() {
+        return new Moshi.Builder().build();
+    }
+
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    Retrofit provideRetrofit(Gson gson,Moshi moshi, OkHttpClient okHttpClient) {
 
         return new Retrofit.Builder()
-                .baseUrl(Constants.FINDARTT_BASE_URL)
+                .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build();
     }
 
 
-
     @Provides
     @Singleton
-    FindArttAPI getFindArttAPI(Retrofit retrofit) {
+    FindArttAPI providesFindArttAPI(Retrofit retrofit) {
         return retrofit.create(FindArttAPI.class);
     }
 
     @Provides
     @Singleton
-    OkHttpClient getRequestHeader() {
-
+    OkHttpClient providesOkHttpClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-
         httpClient.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
@@ -72,20 +81,5 @@ public class BuilderModule {
 
         return httpClient.build();
     }
-
-    @Provides
-    @Singleton
-    FindArttRepository getRepository(FindArttAPI findArttAPI) {
-        return new FindArttRepository(findArttAPI);
-    }
-
-    @Provides
-    @Singleton
-    ViewModelProvider.Factory getViewModelFactory(FindArttRepository myRepository, SchedulersFactory schedulersFactory) {
-        return new ViewModelFactory(myRepository,schedulersFactory);
-    }
-
-
-
 
 }

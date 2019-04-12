@@ -54,6 +54,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
@@ -119,6 +121,7 @@ public class LogInFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
     }
@@ -127,13 +130,14 @@ public class LogInFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
         progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
         dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
 
-        ((FindArttApplication) getActivity().getApplication()).getAppComponent().doInjection(this);
+
 
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
         loginViewModel.getLoginResponse().observe(this, this::consumeResponse);
@@ -183,6 +187,7 @@ public class LogInFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
         dataPasser = (FragmentDataPasser) context;

@@ -1,18 +1,34 @@
 package com.olamide.findartt;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
-import com.olamide.findartt.di.AppComponent;
-import com.olamide.findartt.di.AppModule;
-import com.olamide.findartt.di.BuilderModule;
-import com.olamide.findartt.di.DaggerAppComponent;
 
+import com.olamide.findartt.di.component.AppComponent;
+import com.olamide.findartt.di.component.DaggerAppComponent;
+import com.olamide.findartt.di.modules.ApiModule;
+import com.olamide.findartt.di.modules.AppModule;
+
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+
+import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
-public class FindArttApplication extends Application {
-    AppComponent appComponent;
-    Context context;
+public class FindArttApplication extends Application implements HasActivityInjector, HasSupportFragmentInjector {
+    @Inject
+    DispatchingAndroidInjector<Activity> activityInjector;
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
+
+
 
     @Override
     public void onCreate() {
@@ -21,16 +37,22 @@ public class FindArttApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        context = this;
-        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).builderModule(new BuilderModule()).build();
+         DaggerAppComponent
+                 .builder()
+                 .appModule( new AppModule(this))
+                 .apiModule( new ApiModule(Constants.FINDARTT_BASE_URL))
+                 .build().inject(this);
     }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
+
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return activityInjector;
     }
 
     @Override
-    protected void attachBaseContext(Context context) {
-        super.attachBaseContext(context);
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 }

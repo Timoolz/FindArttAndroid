@@ -2,6 +2,7 @@ package com.olamide.findartt;
 
 public class Constants {
     public static final String FINDARTT_BASE_URL = "https://findartt.appspot.com/api/";
+    public static final String DATABASE_NAME = "FindArtt";
 
     public static final String GOOGLE_WEB_CLIENT_ID = BuildConfig.GOOGLE_WEB_CLIENT_ID;
     public static final String GOOGLE_SERVER_CLIENT_ID = BuildConfig.GOOGLE_SERVER_CLIENT_ID;

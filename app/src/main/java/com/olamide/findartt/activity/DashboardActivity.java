@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 //import retrofit2.MVResponse;
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
@@ -45,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     @Inject
     ViewModelFactory viewModelFactory;
 
-
+    @Inject
     AppAuthUtil appAuthUtil;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -79,12 +80,12 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
 
-        ((FindArttApplication) getApplication()).getAppComponent().doInjection(this);
-        appAuthUtil = new AppAuthUtil(this);
+
         userResult = appAuthUtil.authorize();
         if (userResult == null) {
             appAuthUtil.logout();
