@@ -29,10 +29,22 @@ public class DashboardViewModel extends ViewModel {
     }
 
 
-    public void findArtworks(String accessToken, Activity activity) {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void findArtworks(String accessToken) {
 
         disposables.add(findArttRepository.findArt(accessToken)
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
+                .doOnSubscribe((d) -> artworkLiveData.setValue(MVResponse.loading()))
+                .subscribe(
+                        result -> artworkLiveData.setValue(MVResponse.success(result)),
+                        throwable -> artworkLiveData.setValue(MVResponse.error(throwable))
+                ));
+
+    }
+
+    public void findFavouriteArtworks() {
+
+        disposables.add(findArttRepository.findFavouriteArt()
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> artworkLiveData.setValue(MVResponse.loading()))

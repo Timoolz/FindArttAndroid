@@ -2,11 +2,9 @@ package com.olamide.findartt;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 
 
-import com.olamide.findartt.di.component.AppComponent;
 import com.olamide.findartt.di.component.DaggerAppComponent;
 import com.olamide.findartt.di.modules.ApiModule;
 import com.olamide.findartt.di.modules.AppModule;
@@ -40,7 +38,7 @@ public class FindArttApplication extends Application implements HasActivityInjec
          DaggerAppComponent
                  .builder()
                  .appModule( new AppModule(this))
-                 .apiModule( new ApiModule(Constants.FINDARTT_BASE_URL))
+                 .apiModule( new ApiModule(AppConstants.FINDARTT_BASE_URL))
                  .build().inject(this);
     }
 

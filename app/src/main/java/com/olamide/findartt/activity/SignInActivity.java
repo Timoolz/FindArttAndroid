@@ -16,9 +16,9 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.TYPE_STRING;
-import static com.olamide.findartt.Constants.USEREMAIL_STRING;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+import static com.olamide.findartt.AppConstants.TYPE_STRING;
+import static com.olamide.findartt.AppConstants.USEREMAIL_STRING;
+import static com.olamide.findartt.AppConstants.USERPASSWORD_STRING;
 
 public class SignInActivity extends AppCompatActivity implements FragmentDataPasser {
 
@@ -46,7 +46,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
             if (!userLogin.getEmail().isEmpty() && !userLogin.getPassword().isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putString(USEREMAIL_STRING, userLogin.getEmail());
-                bundle.putString(USERPASSWORD_STRING,userLogin.getPassword());
+                bundle.putString(USERPASSWORD_STRING, userLogin.getPassword());
                 logInFragment.setArguments(bundle);
             }
 

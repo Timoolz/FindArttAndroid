@@ -27,6 +27,7 @@ import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
+import com.olamide.findartt.utils.network.ConnectionUtils;
 //import com.olamide.findartt.widget.ArttUpdateService;
 
 import java.util.List;
@@ -48,6 +49,8 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     @Inject
     AppAuthUtil appAuthUtil;
+    @Inject
+    ConnectionUtils connectionUtils;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -84,13 +87,8 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
-
-
         userResult = appAuthUtil.authorize();
-        if (userResult == null) {
-            appAuthUtil.logout();
-            return;
-        }
+
 
         dashboardViewModel = ViewModelProviders.of(this, viewModelFactory).get(DashboardViewModel.class);
         dashboardViewModel.getArtWorkResponse().observe(this, this::displayUi);
@@ -122,7 +120,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                 loadingPb.setVisibility(View.VISIBLE);
                 break;
             case SUCCESS:
-                loadingPb.setVisibility(View.INVISIBLE);
+                displayUi();
                 FindArttResponse arttResponse = new FindArttResponse();
                 try {
                     arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
@@ -135,8 +133,20 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                     }
 
                 } catch (Exception e) {
-                    Timber.e(e);
-                    ErrorUtils.handleError((this), clRoot);
+                    try{
+                        //Local data doesn't come in Api Response
+                        artworkList = objectMapper.convertValue(mvResponse.data, new TypeReference<List<Artwork>>() {
+                        });
+                        if (artworkList.size() <= 0) {
+                            showEmptyMessage();
+                        } else {
+                            mAdapter.setArtworkList(artworkList);
+                        }
+                    }catch (Exception ee){
+                        Timber.e(ee);
+                        ErrorUtils.handleError((this), clRoot);
+                    }
+
 
                 }
                 break;
@@ -154,27 +164,16 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
 
     void loadArtWorks() {
-        dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken(), this);
+        if(connectionUtils.handleNoInternet(this)){
+            dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken());
+        }
+
     }
 
-//    private void getFavouriteArt() {
-//        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-//        viewModel.getArtworks().observe(this, new Observer<List<Artwork>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Artwork> favArt) {
-//                Timber.d("Updating list of artworks from LiveData in ViewModel");
-//                artworkList = favArt;
-//
-//                if (artworkList.size() <= 0) {
-//                    showEmptyMessage();
-//                } else {
-//                    mAdapter.setArtworkList(favArt);
-//                }
-//
-//                startArttWidgetService();
-//            }
-//        });
-//    }
+    private void getFavouriteArt() {
+        dashboardViewModel.findFavouriteArtworks();
+    }
+
 
     void showEmptyMessage() {
         tvEmpty.setVisibility(View.VISIBLE);
@@ -182,6 +181,13 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         loadingPb.setVisibility(View.INVISIBLE);
 
     }
+    void displayUi() {
+        tvEmpty.setVisibility(View.INVISIBLE);
+        artworkRv.setVisibility(View.VISIBLE);
+        loadingPb.setVisibility(View.INVISIBLE);
+
+    }
+
 
 
     @Override
@@ -215,7 +221,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
             case R.id.favourite:
 
 //                currentCategory = new SortType(SortType.FAVOURITE);
-//                getFavouriteArt();
+                getFavouriteArt();
                 return true;
         }
         return super.onOptionsItemSelected(item);

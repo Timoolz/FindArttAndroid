@@ -16,6 +16,7 @@ import com.olamide.findartt.models.UserUpdate;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 
 public class FindArttRepository {
@@ -29,6 +30,9 @@ public class FindArttRepository {
     }
 
 
+    //********
+    // API METHODS(RETROFIT)
+    //********
     public  Observable<FindArttResponse<UserResult>> login(UserLogin userLogin) {
         return findArttAPI.login(userLogin);
     }
@@ -94,6 +98,16 @@ public class FindArttRepository {
     public      Observable<FindArttResponse<Bid>> acceptBid(String ApiAccessToken,  Bid bid){
         return  findArttAPI.acceptBid(ApiAccessToken, bid);
     }
+    //********
+    // LOCAL METHODS(ROOM)
+    //********
 
+    public Single<List<Artwork>> findFavouriteArt(){
+        return  artworkDao.loadAllArtworks();
+    }
+
+    public      Single<Artwork> loadArtworkById(int id){
+        return  artworkDao.loadArtworkById(id);
+    }
 
 }

@@ -28,8 +28,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import com.olamide.findartt.Constants;
-import com.olamide.findartt.FindArttApplication;
+import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.LoginViewModel;
 import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
@@ -45,6 +44,7 @@ import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
+import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import java.util.Objects;
 
@@ -54,15 +54,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import dagger.android.AndroidInjection;
 import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.RC_SIGN_IN;
-import static com.olamide.findartt.Constants.TYPE_STRING;
-import static com.olamide.findartt.Constants.USEREMAIL_STRING;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
+import static com.olamide.findartt.AppConstants.RC_SIGN_IN;
+import static com.olamide.findartt.AppConstants.TYPE_STRING;
+import static com.olamide.findartt.AppConstants.USEREMAIL_STRING;
+import static com.olamide.findartt.AppConstants.USERPASSWORD_STRING;
 
 
 public class LogInFragment extends Fragment {
@@ -70,6 +69,8 @@ public class LogInFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    @Inject
+    ConnectionUtils connectionUtils;
     FragmentDataPasser dataPasser;
 
     private OnFragmentInteractionListener mListener;
@@ -144,14 +145,18 @@ public class LogInFragment extends Fragment {
 
         accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
         if (accessToken != null && !accessToken.isEmpty()) {
-            loginFromFromToken(accessToken);
+            if(connectionUtils.handleNoInternet(getActivity())){
+                loginFromFromToken(accessToken);
+            }
             return rootView;
         }
         if (getArguments() != null) {
             userEmail = getArguments().getString(USEREMAIL_STRING);
             userPassword = getArguments().getString(USERPASSWORD_STRING);
             updateLogin(false);
-            login(login);
+            if(connectionUtils.handleNoInternet(getActivity())){
+                login(login);
+            }
             return rootView;
         }
 
@@ -159,7 +164,7 @@ public class LogInFragment extends Fragment {
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestIdToken(Constants.GOOGLE_WEB_CLIENT_ID)
+                .requestIdToken(AppConstants.GOOGLE_WEB_CLIENT_ID)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -295,7 +300,9 @@ public class LogInFragment extends Fragment {
 
     void loginGoogle(GoogleSignInAccount account) {
         String idToken = account.getIdToken();
-        loginViewModel.hitGoogleLogin(new TokenInfo(idToken), getActivity());
+        if(connectionUtils.handleNoInternet(getActivity())){
+            loginViewModel.hitGoogleLogin(new TokenInfo(idToken));
+        }
 
     }
 
@@ -308,7 +315,9 @@ public class LogInFragment extends Fragment {
     void login(final UserLogin logins) {
         login = logins;
         if (loginValid(login)) {
-            loginViewModel.hitLogin(login, getActivity());
+            if(connectionUtils.handleNoInternet(getActivity())){
+                loginViewModel.hitLogin(login);
+            }
         } else {
             ErrorUtils.handleUserError(getString(R.string.generic_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
         }
@@ -318,7 +327,7 @@ public class LogInFragment extends Fragment {
 
 
     void loginFromFromToken(String accessToken) {
-        loginViewModel.getUserFromToken(accessToken, getActivity());
+        loginViewModel.getUserFromToken(accessToken);
     }
 
 

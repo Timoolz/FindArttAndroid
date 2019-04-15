@@ -17,7 +17,7 @@ import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
+
 
 public class LoginViewModel extends ViewModel {
 
@@ -39,8 +39,7 @@ public class LoginViewModel extends ViewModel {
     /*
      * method to call normal login api with $(email + password)
      * */
-    public void hitLogin(UserLogin userLogin, Activity activity) {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void hitLogin(UserLogin userLogin) {
 
         disposables.add(findArttRepository.login(userLogin)
                 .subscribeOn(schedulersFactory.io())
@@ -53,8 +52,7 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void hitGoogleLogin(TokenInfo tokenInfo, Activity activity) {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void hitGoogleLogin(TokenInfo tokenInfo) {
 
         disposables.add(findArttRepository.loginGoogle(tokenInfo)
                 .subscribeOn(schedulersFactory.io())
@@ -67,8 +65,7 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void getUserFromToken(String accessToken, Activity activity) {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void getUserFromToken(String accessToken) {
 
         disposables.add(findArttRepository.getUserFromToken(accessToken)
                 .subscribeOn(schedulersFactory.io())

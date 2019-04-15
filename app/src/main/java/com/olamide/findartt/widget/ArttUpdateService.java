@@ -6,7 +6,7 @@
 //import android.content.Intent;
 //import android.os.Bundle;
 //
-//import com.olamide.findartt.Constants;
+//import com.olamide.findartt.AppConstants;
 //import com.olamide.findartt.R;
 //import com.olamide.findartt.models.Artwork;
 //
@@ -37,8 +37,8 @@
 //    protected void onHandleIntent(Intent intent) {
 //        if (intent != null && intent.getAction().equals(ACTION_UPDATE_ARTT_WIDGET))
 //        {
-//            Bundle bundle = intent.getBundleExtra(Constants.BUNDLE);
-//            mArtworks = bundle.getParcelableArrayList(Constants.ARTWORK_STRING);
+//            Bundle bundle = intent.getBundleExtra(AppConstants.BUNDLE);
+//            mArtworks = bundle.getParcelableArrayList(AppConstants.ARTWORK_STRING);
 //
 //
 //            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);

@@ -1,7 +1,9 @@
 package com.olamide.findartt;
 
-public class Constants {
-    public static final String FINDARTT_BASE_URL = "https://findartt.appspot.com/api/";
+public class AppConstants {
+    //GOOGLE APP ENGINE IS EXPENSIVE FOR NOW!!!!
+    //public static final String FINDARTT_BASE_URL = "https://findartt.appspot.com/api/";
+    public static final String FINDARTT_BASE_URL = "https://findartt.herokuapp.com/api/";
     public static final String DATABASE_NAME = "FindArtt";
 
     public static final String GOOGLE_WEB_CLIENT_ID = BuildConfig.GOOGLE_WEB_CLIENT_ID;

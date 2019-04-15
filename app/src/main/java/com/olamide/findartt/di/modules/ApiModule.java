@@ -3,9 +3,7 @@ package com.olamide.findartt.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.olamide.findartt.Constants;
 import com.olamide.findartt.utils.network.FindArttAPI;
-import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.Moshi;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +16,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.moshi.MoshiConverterFactory;
 
 @Module
 public class ApiModule {

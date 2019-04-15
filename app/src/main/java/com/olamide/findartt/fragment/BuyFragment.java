@@ -30,9 +30,9 @@
 //import retrofit2.MVResponse;
 //import timber.log.Timber;
 //
-//import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-//import static com.olamide.findartt.Constants.ARTWORK_STRING;
-//import static com.olamide.findartt.Constants.CURRENT_USER;
+//import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
+//import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
+//import static com.olamide.findartt.AppConstants.CURRENT_USER;
 //
 //
 //public class BuyFragment extends Fragment {

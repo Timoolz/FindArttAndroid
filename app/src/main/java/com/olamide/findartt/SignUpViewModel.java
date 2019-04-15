@@ -31,8 +31,7 @@ public class SignUpViewModel extends ViewModel {
     }
 
 
-    public void signUp(UserSignup userSignup, Activity activity)  {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void signUp(UserSignup userSignup) {
 
         disposables.add(findArttRepository.signUp(userSignup)
                 .subscribeOn(schedulersFactory.io())
@@ -45,8 +44,7 @@ public class SignUpViewModel extends ViewModel {
 
     }
 
-    public void signUpGoogle(TokenInfo tokenInfo, Activity activity) {
-        if(!ConnectionUtils.handleNoInternet(activity)) return;
+    public void signUpGoogle(TokenInfo tokenInfo) {
 
         disposables.add(findArttRepository.signUpGoogle(tokenInfo)
                 .subscribeOn(schedulersFactory.io())

@@ -12,14 +12,16 @@ import com.olamide.findartt.models.Artwork;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 @Dao
 public interface ArtworkDao {
 
     @Query("SELECT * FROM artwork ORDER BY created_at")
-    LiveData<List<Artwork>> loadAllArtworks();
+    Single<List<Artwork>> loadAllArtworks();
 
     @Query("SELECT * FROM artwork WHERE id = :id")
-    LiveData<Artwork> loadArtworkById(int id);
+    Single<Artwork> loadArtworkById(int id);
 
     @Query("SELECT * FROM artwork WHERE id = :id")
     Artwork loadArtwork(int id);

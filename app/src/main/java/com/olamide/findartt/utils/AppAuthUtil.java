@@ -23,7 +23,10 @@ public class AppAuthUtil {
 
     public @Nullable UserResult authorize(){
         UserResult userResult = TempStorageUtils.getActiveUser(application);
-
+        if (userResult == null) {
+            logout();
+            return null;
+        }
         return userResult;
     }
 

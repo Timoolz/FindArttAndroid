@@ -2,7 +2,7 @@ package com.olamide.findartt.utils.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.olamide.findartt.Constants;
+import com.olamide.findartt.AppConstants;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,7 +17,7 @@ public class RetrofitBuilder {
         if (retrofit==null) {
             Gson gson = new GsonBuilder().setLenient().create();
             retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.FINDARTT_BASE_URL)
+                    .baseUrl(AppConstants.FINDARTT_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }

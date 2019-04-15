@@ -4,24 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.olamide.findartt.Constants;
+import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserLogin;
 import com.olamide.findartt.models.UserResult;
 
-import java.io.IOException;
-
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.CURRENT_USER;
-import static com.olamide.findartt.Constants.USEREMAIL_STRING;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
+import static com.olamide.findartt.AppConstants.CURRENT_USER;
+import static com.olamide.findartt.AppConstants.USEREMAIL_STRING;
+import static com.olamide.findartt.AppConstants.USERPASSWORD_STRING;
 
 public class TempStorageUtils {
 
@@ -70,8 +67,8 @@ public class TempStorageUtils {
 
 
     public static void storeUserLogin(Context context, UserLogin userLogin) {
-        writeSharedPreferenceString(context, Constants.USEREMAIL_STRING, GeneralUtils.encrypt(userLogin.getEmail()));
-        writeSharedPreferenceString(context, Constants.USERPASSWORD_STRING, GeneralUtils.encrypt(userLogin.getPassword()));
+        writeSharedPreferenceString(context, AppConstants.USEREMAIL_STRING, GeneralUtils.encrypt(userLogin.getEmail()));
+        writeSharedPreferenceString(context, AppConstants.USERPASSWORD_STRING, GeneralUtils.encrypt(userLogin.getPassword()));
 
     }
 
@@ -97,8 +94,8 @@ public class TempStorageUtils {
 
         Gson gson = new GsonBuilder().create();
         try {
-            writeSharedPreferenceString(context, Constants.CURRENT_USER, new GsonBuilder().create().toJson(userResult.getUser()));
-            writeSharedPreferenceString(context, Constants.ACCESS_TOKEN_STRING, userResult.getTokenInfo().getAccessToken());
+            writeSharedPreferenceString(context, AppConstants.CURRENT_USER, new GsonBuilder().create().toJson(userResult.getUser()));
+            writeSharedPreferenceString(context, AppConstants.ACCESS_TOKEN_STRING, userResult.getTokenInfo().getAccessToken());
         } catch (Exception e) {
             Timber.e(e);
         }
