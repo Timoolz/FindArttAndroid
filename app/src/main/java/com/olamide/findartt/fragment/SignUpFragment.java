@@ -289,6 +289,7 @@ public class SignUpFragment extends Fragment {
                 try {
                     arttResponse = objectMapper.convertValue(mVResponse.data, FindArttResponse.class);
                     UserResult userResult = objectMapper.convertValue(arttResponse.getData(), UserResult.class);
+                    storeUserCredentials(userResult);
                     UiUtils.showSuccessSnack("Successful SignUp. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
                 } catch (Exception e) {
                     Timber.e(e);
@@ -307,6 +308,11 @@ public class SignUpFragment extends Fragment {
             default:
                 break;
         }
+    }
+
+    void storeUserCredentials(UserResult userResult) {
+        TempStorageUtils.storeActiveUser(getContext(), userResult);
+
     }
 
     void goToDashboard() {
@@ -369,9 +375,9 @@ public class SignUpFragment extends Fragment {
         signup.setCountry(country);
         signup.setPassword(userPassword);
         //temporary
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSS");
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSS");
 //        signup.setDateOfBirth(simpleDateFormat.format(new Date()));
-        signup.setDateOfBirth("1900-01-01T09:04:21.798Z");
+//        signup.setDateOfBirth("1900-01-01T09:04:21.798Z");
     }
 
     private boolean signUpValid(UserSignup signup1, String confirmUserPassword) {

@@ -62,7 +62,7 @@ public class AppModule {
     @Provides
     @Singleton
     ViewModelProvider.Factory providesViewModelFactory(FindArttRepository myRepository, SchedulersFactory schedulersFactory) {
-        return new ViewModelFactory(myRepository, schedulersFactory);
+        return new ViewModelFactory(application,myRepository, schedulersFactory);
     }
 
 

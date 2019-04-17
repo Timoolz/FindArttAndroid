@@ -1,5 +1,6 @@
 package com.olamide.findartt;
 
+import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
@@ -13,11 +14,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private FindArttRepository findArttRepository;
     private SchedulersFactory schedulersFactory;
+    private Application application;
 
     @Inject
-    public ViewModelFactory(FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
+    public ViewModelFactory(Application application, FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
         this.findArttRepository = findArttRepository;
         this.schedulersFactory = schedulersFactory;
+        this.application= application;
     }
 
     @NonNull
@@ -32,7 +35,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
 
         if (modelClass.isAssignableFrom(DashboardViewModel.class)) {
-            return (T) new DashboardViewModel(findArttRepository, schedulersFactory);
+            return (T) new DashboardViewModel(application, findArttRepository, schedulersFactory);
         }
         throw new IllegalArgumentException("Unknown class name");    }
 }

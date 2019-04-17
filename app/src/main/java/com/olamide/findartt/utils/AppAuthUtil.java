@@ -15,10 +15,16 @@ import io.reactivex.annotations.Nullable;
 public class AppAuthUtil {
 
     private Application application;
+    private Context context;
 
     @Inject
     public AppAuthUtil(Application application) {
         this.application = application;
+    }
+
+    public AppAuthUtil(Context context) {
+
+        this.context = context;
     }
 
     public @Nullable UserResult authorize(){
@@ -32,12 +38,22 @@ public class AppAuthUtil {
 
     public void logout() {
 
-        //remove current Active User
-        TempStorageUtils.removeActiveUser(application);
-        //re direct to sign in activity
-        Intent intent = new Intent(application, SignInActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        application.startActivity(intent);
+        if(context!=null){
+            //remove current Active User
+            TempStorageUtils.removeActiveUser(context);
+            //re direct to sign in activity
+            Intent intent = new Intent(context, SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }else {
+            //remove current Active User
+            TempStorageUtils.removeActiveUser(application);
+            //re direct to sign in activity
+            Intent intent = new Intent(application, SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            application.startActivity(intent);
+        }
+
     }
 
 }

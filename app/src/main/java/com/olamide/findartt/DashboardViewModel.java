@@ -1,8 +1,11 @@
 package com.olamide.findartt;
 
 import android.app.Activity;
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.models.mvvm.MVResponse;
@@ -11,7 +14,7 @@ import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class DashboardViewModel extends ViewModel {
+public class DashboardViewModel extends AndroidViewModel {
 
     private FindArttRepository findArttRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -19,9 +22,14 @@ public class DashboardViewModel extends ViewModel {
     private SchedulersFactory schedulersFactory;
 
 
-    public DashboardViewModel(FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
+    public DashboardViewModel(Application application,FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
+        this(application);
         this.findArttRepository = findArttRepository;
         this.schedulersFactory = schedulersFactory;
+    }
+
+    public DashboardViewModel(@NonNull Application application) {
+        super(application);
     }
 
     public MutableLiveData<MVResponse> getArtWorkResponse() {
