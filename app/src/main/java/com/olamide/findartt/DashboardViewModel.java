@@ -1,15 +1,12 @@
 package com.olamide.findartt;
 
-import android.app.Activity;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.models.mvvm.MVResponse;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;

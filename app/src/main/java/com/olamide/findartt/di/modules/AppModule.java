@@ -1,8 +1,8 @@
 package com.olamide.findartt.di.modules;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.persistence.room.Room;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 
 import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.ViewModelFactory;

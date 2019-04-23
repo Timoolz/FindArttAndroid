@@ -1,7 +1,7 @@
 package com.olamide.findartt.models.mvvm;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 import static com.olamide.findartt.models.mvvm.Status.*;
@@ -29,7 +29,7 @@ public class MVResponse {
         return new MVResponse(LOADING, null, null);
     }
 
-    public static MVResponse success(@NonNull Object data) {
+    public static MVResponse success( Object data) {
         return new MVResponse(SUCCESS, data, null);
     }
 

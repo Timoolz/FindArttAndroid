@@ -1,9 +1,9 @@
 package com.olamide.findartt;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.utils.network.FindArttRepository;
@@ -36,6 +36,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass.isAssignableFrom(DashboardViewModel.class)) {
             return (T) new DashboardViewModel(application, findArttRepository, schedulersFactory);
+        }
+
+        if (modelClass.isAssignableFrom(ArtworkNewViewModel.class)) {
+            return (T) new ArtworkNewViewModel(application, findArttRepository, schedulersFactory);
         }
         throw new IllegalArgumentException("Unknown class name");    }
 }

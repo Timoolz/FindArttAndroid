@@ -1,12 +1,13 @@
 package com.olamide.findartt.activity;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Parcelable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.DashboardViewModel;
-import com.olamide.findartt.FindArttApplication;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
@@ -40,6 +40,8 @@ import butterknife.ButterKnife;
 //import retrofit2.MVResponse;
 import dagger.android.AndroidInjection;
 import timber.log.Timber;
+
+import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 
 public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
@@ -193,10 +195,9 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     @Override
     public void onClickListener(Artwork artwork) {
 
-//        Intent intent = new Intent(getApplicationContext(), ArtworkActivity.class);
-//        intent.putExtra(ARTWORK_STRING, artwork);
-//        intent.putExtra(CURRENT_USER, user);
-//        startActivity(intent);
+        Intent intent = new Intent(this, ArtworkActivity.class);
+        intent.putExtra(ARTWORK_STRING, artwork);
+        startActivity(intent);
     }
 
 

@@ -69,7 +69,7 @@ public class ErrorUtils {
 
 
     public static void handleThrowable(Throwable throwable, Context context, ViewGroup viewGroup) {
-
+        Timber.e(throwable);
         try {
 
             if (throwable instanceof HttpException) {
