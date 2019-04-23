@@ -80,7 +80,6 @@ public class ArtworkNewViewModel extends AndroidViewModel {
                 .doOnSubscribe((d) -> artworkFavouriteLive.setValue(MVResponse.loading()))
                 .subscribe(
                         () -> artworkFavouriteLive.setValue(MVResponse.success(new Artwork())),
-//                        () -> artwork.getCreatedBy(),
                         throwable -> artworkFavouriteLive.setValue(MVResponse.error(throwable))
                 ));
 
@@ -94,7 +93,6 @@ public class ArtworkNewViewModel extends AndroidViewModel {
                 .doOnSubscribe((d) -> artworkFavouriteLive.setValue(MVResponse.loading()))
                 .subscribe(
                         () -> artworkFavouriteLive.setValue(MVResponse.success(null)),
-//                        () -> artwork.getCreatedBy(),
                         throwable -> artworkFavouriteLive.setValue(MVResponse.error(throwable))
                 )
         );
