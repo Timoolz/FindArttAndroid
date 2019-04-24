@@ -29,7 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import com.olamide.findartt.AppConstants;
-import com.olamide.findartt.LoginViewModel;
+import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;

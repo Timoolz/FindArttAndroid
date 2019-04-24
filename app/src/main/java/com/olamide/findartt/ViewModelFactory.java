@@ -7,6 +7,10 @@ import androidx.annotation.NonNull;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.utils.network.FindArttRepository;
+import com.olamide.findartt.viewmodels.ArtworkViewModel;
+import com.olamide.findartt.viewmodels.DashboardViewModel;
+import com.olamide.findartt.viewmodels.LoginViewModel;
+import com.olamide.findartt.viewmodels.SignUpViewModel;
 
 import javax.inject.Inject;
 
@@ -38,8 +42,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DashboardViewModel(application, findArttRepository, schedulersFactory);
         }
 
-        if (modelClass.isAssignableFrom(ArtworkNewViewModel.class)) {
-            return (T) new ArtworkNewViewModel(application, findArttRepository, schedulersFactory);
+        if (modelClass.isAssignableFrom(ArtworkViewModel.class)) {
+            return (T) new ArtworkViewModel(application, findArttRepository, schedulersFactory);
         }
         throw new IllegalArgumentException("Unknown class name");    }
 }

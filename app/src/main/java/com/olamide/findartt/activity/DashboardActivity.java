@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.olamide.findartt.DashboardViewModel;
+import com.olamide.findartt.viewmodels.DashboardViewModel;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;

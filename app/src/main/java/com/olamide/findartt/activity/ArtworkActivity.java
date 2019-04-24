@@ -43,7 +43,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.olamide.findartt.ArtworkNewViewModel;
+import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 //import com.olamide.findartt.fragment.BidFragment;
@@ -90,7 +90,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    ArtworkNewViewModel artworkNewViewModel;
+    ArtworkViewModel artworkViewModel;
 
     private UserResult userResult;
     private Artwork artwork;
@@ -169,9 +169,9 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
             artwork = extras.getParcelable(ARTWORK_STRING);
         }
 
-        artworkNewViewModel = ViewModelProviders.of(this, viewModelFactory).get(ArtworkNewViewModel.class);
-        artworkNewViewModel.getArtWorkResponse().observe(this, this::showUi);
-        artworkNewViewModel.getArtWorkFavourite().observe(this, this::showFavUi);
+        artworkViewModel = ViewModelProviders.of(this, viewModelFactory).get(ArtworkViewModel.class);
+        artworkViewModel.getArtWorkResponse().observe(this, this::showUi);
+        artworkViewModel.getArtWorkFavourite().observe(this, this::showFavUi);
 
         if (savedInstanceState == null) {
             getArtSummary();
@@ -258,9 +258,9 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     public void setFavourite() {
 
         if (favouriteArt) {
-            artworkNewViewModel.deleteFavouriteArt(artworkSummary);
+            artworkViewModel.deleteFavouriteArt(artworkSummary);
         }else {
-            artworkNewViewModel.insertFavouriteArt(artworkSummary);
+            artworkViewModel.insertFavouriteArt(artworkSummary);
         }
 
     }
@@ -280,9 +280,9 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
     void getArtSummary() {
         if (connectionUtils.handleNoInternet(this)) {
-            artworkNewViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), artwork.getId());
+            artworkViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), artwork.getId());
         }
-        artworkNewViewModel.findArtFavourite(artwork.getId());
+        artworkViewModel.findArtFavourite(artwork.getId());
     }
 
 

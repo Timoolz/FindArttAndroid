@@ -28,7 +28,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.AppConstants;
-import com.olamide.findartt.SignUpViewModel;
+import com.olamide.findartt.viewmodels.SignUpViewModel;
 import com.olamide.findartt.ViewModelFactory;
 
 import com.olamide.findartt.activity.DashboardActivity;

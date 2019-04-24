@@ -1,41 +1,37 @@
-package com.olamide.findartt;
+package com.olamide.findartt.viewmodels;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.models.TokenInfo;
-import com.olamide.findartt.models.UserLogin;
+import com.olamide.findartt.models.UserSignup;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-
-
-public class LoginViewModel extends ViewModel {
+public class SignUpViewModel extends ViewModel {
 
     private FindArttRepository findArttRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final MutableLiveData<MVResponse> responseLiveData = new MutableLiveData<>();
-    private  SchedulersFactory schedulersFactory;
+    private SchedulersFactory schedulersFactory;
 
 
-    public LoginViewModel(FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
+    public SignUpViewModel(FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
         this.findArttRepository = findArttRepository;
         this.schedulersFactory = schedulersFactory;
     }
 
-    public MutableLiveData<MVResponse> getLoginResponse() {
+    public MutableLiveData<MVResponse> getSignupResponse() {
         return responseLiveData;
     }
 
-    /*
-     * method to call normal login api with $(email + password)
-     * */
-    public void hitLogin(UserLogin userLogin) {
 
-        disposables.add(findArttRepository.login(userLogin)
+    public void signUp(UserSignup userSignup) {
+
+        disposables.add(findArttRepository.signUp(userSignup)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
@@ -46,22 +42,9 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void hitGoogleLogin(TokenInfo tokenInfo) {
+    public void signUpGoogle(TokenInfo tokenInfo) {
 
-        disposables.add(findArttRepository.loginGoogle(tokenInfo)
-                .subscribeOn(schedulersFactory.io())
-                .observeOn(schedulersFactory.ui())
-                .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
-                .subscribe(
-                        result -> responseLiveData.setValue(MVResponse.success(result)),
-                        throwable -> responseLiveData.setValue(MVResponse.error(throwable))
-                ));
-
-    }
-
-    public void getUserFromToken(String accessToken) {
-
-        disposables.add(findArttRepository.getUserFromToken(accessToken)
+        disposables.add(findArttRepository.signUpGoogle(tokenInfo)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> responseLiveData.setValue(MVResponse.loading()))
@@ -76,5 +59,6 @@ public class LoginViewModel extends ViewModel {
     protected void onCleared() {
         disposables.clear();
     }
-}
 
+
+}
