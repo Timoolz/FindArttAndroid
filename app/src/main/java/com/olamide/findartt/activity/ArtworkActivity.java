@@ -2,6 +2,7 @@ package com.olamide.findartt.activity;
 
 import android.app.Dialog;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -117,6 +118,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    ProgressDialog progressDialog;
 
 
     @BindView(R.id.cl_root)
@@ -161,8 +163,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         ButterKnife.bind(this);
         userResult = appAuthUtil.authorize();
 
-        //mDb = FindArttDatabase.getInstance(getApplicationContext());
-
+        progressDialog = UiUtils.getProgressDialog(this, getString(R.string.loading),false);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             artwork = extras.getParcelable(ARTWORK_STRING);
@@ -225,10 +226,10 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         switch (mvResponse.status) {
 
             case LOADING:
-
+                progressDialog.show();
                 break;
             case SUCCESS:
-//                displayUi();
+                progressDialog.dismiss();
                 FindArttResponse arttResponse = new FindArttResponse();
                 try {
                     arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
@@ -242,6 +243,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                 break;
 
             case ERROR:
+                progressDialog.dismiss();
                 ErrorUtils.handleThrowable(mvResponse.error, this, clRoot);
                 break;
 
@@ -257,10 +259,8 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
         if (favouriteArt) {
             artworkNewViewModel.deleteFavouriteArt(artworkSummary);
-//            btFavourite.setImageResource(R.drawable.not_favourite2);
         }else {
             artworkNewViewModel.insertFavouriteArt(artworkSummary);
-//            btFavourite.setImageResource(R.drawable.favourite);
         }
 
     }
