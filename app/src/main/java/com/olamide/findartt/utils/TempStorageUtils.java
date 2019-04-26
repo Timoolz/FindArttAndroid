@@ -31,7 +31,7 @@ public class TempStorageUtils {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Gson gson = new GsonBuilder().create();
 
-    public static int readSharedPreferenceInt(Context context, String key) {
+    public static int readSharedPreferenceNumber(Context context, String key) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         tempInt = preferences.getInt(key, DEFAULT_INT);
         return tempInt;
@@ -50,10 +50,16 @@ public class TempStorageUtils {
         editor.apply();
     }
 
-    public static void writeSharedPreferenceInt(Context context, String key, int value) {
+    public static void writeSharedPreferenceNumber(Context context, String key, int value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(key, value);
+        editor.apply();
+    }
+    public static void writeSharedPreferenceNumber(Context context, String key, long value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(key, (int) value);
         editor.apply();
     }
 

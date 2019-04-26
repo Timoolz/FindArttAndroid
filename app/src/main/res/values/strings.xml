@@ -93,6 +93,7 @@ Each Android ND project will be reviewed against the Common Project Requirements
     <string name="sort_favourite">Favourite</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="cache_type">media_cache</string>
 
 
 </resources>

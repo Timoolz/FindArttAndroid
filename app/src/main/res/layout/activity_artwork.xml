@@ -60,13 +60,14 @@
                     <FrameLayout
                         android:id="@+id/player_frame"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
-                        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                        <com.google.android.exoplayer2.ui.PlayerView
                             android:id="@+id/pv_art"
                             android:layout_width="match_parent"
                             android:layout_height="450dp"
-                            android:visibility="gone" />
+                            />
                     </FrameLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout

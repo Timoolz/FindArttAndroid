@@ -12,23 +12,23 @@ public class AbstractEntity /*implements Parcelable*/ {
 @PrimaryKey()
     @ColumnInfo(name = "id")
     @SerializedName("id")
-    private Integer id;
+    protected Integer id;
 
     @ColumnInfo(name = "created_date")
     @SerializedName("createdDate")
-    private String createdDate;
+    protected String createdDate;
 
     @ColumnInfo(name = "created_date_epoch")
     @SerializedName("createdDateEpoch")
-    private Long createdDateEpoch;
+    protected Long createdDateEpoch;
 
     @ColumnInfo(name = "updated_date")
     @SerializedName("updatedDate")
-    private String updatedDate;
+    protected String updatedDate;
 
     @ColumnInfo(name = "updated_date_epoch")
     @SerializedName("updatedDateEpoch")
-    private Long updatedDateEpoch;
+    protected Long updatedDateEpoch;
 
     public Integer getId() {
         return id;

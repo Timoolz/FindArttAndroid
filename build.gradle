@@ -7,7 +7,6 @@ buildscript {
         jcenter()
         maven { url 'https://dl.google.com/dl/android/maven2/' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url "https://kotlin.bintray.com/kotlinx/" } // For kotlinx-metadata-jvm used by Room 2.1.0 (KT-27991)
 
     }
     dependencies {
@@ -27,7 +26,7 @@ allprojects {
         jcenter()
         maven { url 'https://dl.google.com/dl/android/maven2/' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven { url "https://kotlin.bintray.com/kotlinx/" } // For kotlinx-metadata-jvm used by Room 2.1.0 (KT-27991)
+//        maven { url "https://kotlin.bintray.com/kotlinx/" } // For kotlinx-metadata-jvm used by Room 2.1.0 (KT-27991)
 
     }
 }

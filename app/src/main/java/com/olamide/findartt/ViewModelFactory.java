@@ -45,5 +45,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(ArtworkViewModel.class)) {
             return (T) new ArtworkViewModel(application, findArttRepository, schedulersFactory);
         }
+
+        if (modelClass.isAssignableFrom(VideoViewModel.class)) {
+            return (T) new VideoViewModel(schedulersFactory);
+        }
         throw new IllegalArgumentException("Unknown class name");    }
 }

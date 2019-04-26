@@ -23,4 +23,12 @@ public class AppConstants {
 
     public static final String BUNDLE = "bundle";
 
+    public static final String EXO_PLAYER_USER_AGENT = BuildConfig.APPLICATION_ID;
+    public static final int EXO_PLAYER_VIDEO_CACHE_DURATION = 10 * 1024 * 1024;
+
+    public static final String CURRENT_POSITION_KEY = "exo_current_position";
+    public static final String EXO_PREF_NAME = "exo_shared_pref";
+
+    public static final int GLIDE_DEFAULT_TIMEOUT = 60;
+
 }

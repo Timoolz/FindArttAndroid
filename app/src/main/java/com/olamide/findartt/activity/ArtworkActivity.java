@@ -10,11 +10,15 @@ import android.net.Uri;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.media.session.MediaButtonReceiver;
+
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +44,13 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.olamide.findartt.VideoViewModel;
+import com.olamide.findartt.utils.exo.ExoUtil;
+import com.olamide.findartt.utils.exo.ExoUtilFactory;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
@@ -72,16 +80,22 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Lazy;
 import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 
 
-public class ArtworkActivity extends AppCompatActivity implements Player.EventListener {
+public class ArtworkActivity extends AppCompatActivity implements ExoUtil.PlayerStateListener {
 
     @Inject
     ViewModelFactory viewModelFactory;
+
+    private ExoUtil exoUtil;
+
+    @Inject
+    Lazy<ExoUtilFactory> exoUtilFactory;
 
     @Inject
     AppAuthUtil appAuthUtil;
@@ -91,6 +105,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     ArtworkViewModel artworkViewModel;
+    VideoViewModel videoViewModel;
 
     private UserResult userResult;
     private Artwork artwork;
@@ -131,7 +146,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     ImageView ivArt;
 
     @BindView(R.id.pv_art)
-    SimpleExoPlayerView pvArt;
+    PlayerView pvArt;
 
     @BindView(R.id.tv_date)
     TextView tvDate;
@@ -163,7 +178,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         ButterKnife.bind(this);
         userResult = appAuthUtil.authorize();
 
-        progressDialog = UiUtils.getProgressDialog(this, getString(R.string.loading),false);
+        progressDialog = UiUtils.getProgressDialog(this, getString(R.string.loading), false);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             artwork = extras.getParcelable(ARTWORK_STRING);
@@ -173,12 +188,13 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         artworkViewModel.getArtWorkResponse().observe(this, this::showUi);
         artworkViewModel.getArtWorkFavourite().observe(this, this::showFavUi);
 
+
         if (savedInstanceState == null) {
             getArtSummary();
         }
-        if (savedInstanceState != null) {
-            getSavedStartPosition(savedInstanceState);
-        }
+//        if (savedInstanceState != null) {
+//            getSavedStartPosition(savedInstanceState);
+//        }
 
 
     }
@@ -195,7 +211,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
                     if (favArtwork != null) {
                         favouriteArt = true;
                         btFavourite.setImageResource(R.drawable.favourite);
-                    }else{
+                    } else {
                         favouriteArt = false;
                         btFavourite.setImageResource(R.drawable.not_favourite2);
                     }
@@ -259,24 +275,23 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
         if (favouriteArt) {
             artworkViewModel.deleteFavouriteArt(artworkSummary);
-        }else {
+        } else {
             artworkViewModel.insertFavouriteArt(artworkSummary);
         }
 
     }
 
 
-
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-
-        updateStartPosition();
-        savedInstanceState.putBoolean(KEY_AUTO_PLAY, startAutoPlay);
-        savedInstanceState.putInt(KEY_WINDOW, startWindow);
-        savedInstanceState.putLong(KEY_POSITION, startPosition);
-
-    }
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//
+//
+//        updateStartPosition();
+//        savedInstanceState.putBoolean(KEY_AUTO_PLAY, startAutoPlay);
+//        savedInstanceState.putInt(KEY_WINDOW, startWindow);
+//        savedInstanceState.putLong(KEY_POSITION, startPosition);
+//
+//    }
 
     void getArtSummary() {
         if (connectionUtils.handleNoInternet(this)) {
@@ -329,139 +344,177 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
 
 
     void loadVideo() {
-        initFullscreenDialog();
-        pvArt.setVisibility(View.VISIBLE);
-        initializeMediaSession();
-        videoUri = Uri.parse(artworkSummary.getVideoUrl());
-        initializePlayer(videoUri);
-        if (!GeneralUtils.isTablet(getApplicationContext()) && GeneralUtils.isLand(getApplicationContext())) {
-            openFullscreenDialog();
-        }
-    }
-
-    private void initializeMediaSession() {
-
-        // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(this, getLocalClassName().getClass().getSimpleName());
-
-        // Enable callbacks from MediaButtons and TransportControls.
-        mMediaSession.setFlags(
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-        // Do not let MediaButtons restart the player when the app is not visible.
-        mMediaSession.setMediaButtonReceiver(null);
-
-        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-        mStateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(
-                        PlaybackStateCompat.ACTION_PLAY |
-                                PlaybackStateCompat.ACTION_PAUSE |
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
-
-        mMediaSession.setPlaybackState(mStateBuilder.build());
+//        initFullscreenDialog();
+        playerFrame.setVisibility(View.VISIBLE);
+//        initializeMediaSession();
+//        videoUri = Uri.parse(artworkSummary.getVideoUrl());
+//        initializePlayer(videoUri);
+//        if (!GeneralUtils.isTablet(getApplicationContext()) && GeneralUtils.isLand(getApplicationContext())) {
+//            openFullscreenDialog();
+//        }
 
 
-        // MySessionCallback has methods that handle callbacks from a media controller.
-        mMediaSession.setCallback(new MySessionCallback());
-
-        // Start the Media Session since the activity is active.
-        mMediaSession.setActive(true);
+        videoViewModel = ViewModelProviders.of(this, viewModelFactory).get(VideoViewModel.class);
+        exoUtil = exoUtilFactory.get().getExoUtil(this, this, playerFrame, pvArt, mFullScreenIcon);
+//        exoUtil.setPlayerView(pvArt);
+//        exoUtil.setPlayerViewWrapper(playerFrame);
+//        exoUtil.setmFullScreenIcon(mFullScreenIcon);
+//        exoUtil.setListener(this);
+        videoViewModel.getPlayableContent(artworkSummary.getVideoUrl());
+        videoViewModel.getContent().observe(this, videoUrl -> {
+            exoUtil.setUrl(videoUrl);
+            exoUtil.onStart();
+        });
 
     }
 
 
-    private void initializePlayer(Uri mediaUri) {
-        if (mExoPlayer == null) {
-            // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            //LoadControl loadControl = new DefaultLoadControl();
-            //mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-            pvArt.setPlayer(mExoPlayer);
+    @Override
+    public void onPlayerError() {
+        //mActivityVideoBinding.pbError.setVisibility(View.GONE);
+    }
 
-            // Set the ExoPlayer.EventListener to this activity.
-            mExoPlayer.addListener(this);
+    /**
+     * Gets called when video is ready to be played.
+     *
+     * @param playbackState indicates the status of video
+     */
+    @Override
+    public void onPlayerStateChanged(int playbackState) {
+        switch (playbackState) {
+            case Player.STATE_BUFFERING:
+                //      mActivityVideoBinding.pbError.setVisibility(View.VISIBLE);
+                break;
+            case Player.STATE_READY:
+                //    mActivityVideoBinding.pbError.setVisibility(View.GONE);
+                break;
 
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(this, getLocalClassName().getClass().getSimpleName());
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-                    this, userAgent), new DefaultExtractorsFactory(), null, null);
-
-            boolean haveStartPosition = startWindow != C.INDEX_UNSET;
-            if (haveStartPosition) {
-                mExoPlayer.seekTo(startWindow, startPosition);
-            }
-
-            mExoPlayer.prepare(mediaSource, !haveStartPosition, false);
-            mExoPlayer.setPlayWhenReady(startAutoPlay);
-
-
+            case Player.STATE_IDLE:
+                //  mActivityVideoBinding.pbError.setVisibility(View.GONE);
+                break;
         }
     }
 
 
-    private void releasePlayer() {
-        clearStartPosition();
-        if (mExoPlayer != null) {
-            mExoPlayer.stop();
-            mExoPlayer.release();
-            mExoPlayer = null;
-            updateStartPosition();
+//    private void initializeMediaSession() {
+//
+//        // Create a MediaSessionCompat.
+//        mMediaSession = new MediaSessionCompat(this, getLocalClassName().getClass().getSimpleName());
+//
+//        // Enable callbacks from MediaButtons and TransportControls.
+//        mMediaSession.setFlags(
+//                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+//                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+//
+//        // Do not let MediaButtons restart the player when the app is not visible.
+//        mMediaSession.setMediaButtonReceiver(null);
+//
+//        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
+//        mStateBuilder = new PlaybackStateCompat.Builder()
+//                .setActions(
+//                        PlaybackStateCompat.ACTION_PLAY |
+//                                PlaybackStateCompat.ACTION_PAUSE |
+//                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+//                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
+//
+//        mMediaSession.setPlaybackState(mStateBuilder.build());
+//
+//
+//        // MySessionCallback has methods that handle callbacks from a media controller.
+//        mMediaSession.setCallback(new MySessionCallback());
+//
+//        // Start the Media Session since the activity is active.
+//        mMediaSession.setActive(true);
+//
+//    }
 
-        }
+//
+//    private void initializePlayer(Uri mediaUri) {
+//        if (mExoPlayer == null) {
+//            // Create an instance of the ExoPlayer.
+//            TrackSelector trackSelector = new DefaultTrackSelector();
+//            //LoadControl loadControl = new DefaultLoadControl();
+//            //mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+//            pvArt.setPlayer(mExoPlayer);
+//
+//            // Set the ExoPlayer.EventListener to this activity.
+//            mExoPlayer.addListener(this);
+//
+//            // Prepare the MediaSource.
+//            String userAgent = Util.getUserAgent(this, getLocalClassName().getClass().getSimpleName());
+//            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
+//                    this, userAgent), new DefaultExtractorsFactory(), null, null);
+//
+//            boolean haveStartPosition = startWindow != C.INDEX_UNSET;
+//            if (haveStartPosition) {
+//                mExoPlayer.seekTo(startWindow, startPosition);
+//            }
+//
+//            mExoPlayer.prepare(mediaSource, !haveStartPosition, false);
+//            mExoPlayer.setPlayWhenReady(startAutoPlay);
+//
+//
+//        }
+//    }
+//
+//
+//    private void releasePlayer() {
+//        clearStartPosition();
+//        if (mExoPlayer != null) {
+//            mExoPlayer.stop();
+//            mExoPlayer.release();
+//            mExoPlayer = null;
+//            updateStartPosition();
+//
+//        }
+//
+//    }
 
-    }
-
-    private void releasePlayerPartially() {
-        if (mExoPlayer != null) {
-            mExoPlayer.release();
-            mExoPlayer = null;
-            updateStartPosition();
-
-        }
-
-    }
+//    private void releasePlayerPartially() {
+//        if (mExoPlayer != null) {
+//            mExoPlayer.release();
+//            mExoPlayer = null;
+//            updateStartPosition();
+//
+//        }
+//
+//    }
 
 
-    private void initFullscreenDialog() {
-
-        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
-            public void onBackPressed() {
-                if (mExoPlayerFullscreen)
-                    closeFullscreenDialog();
-                super.onBackPressed();
-            }
-        };
-    }
-
-
-    private void openFullscreenDialog() {
-
-        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
-        mFullScreenDialog.addContentView(pvArt, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_shrink));
-        mExoPlayerFullscreen = true;
-        mFullScreenDialog.show();
-    }
-
-    private void closeFullscreenDialog() {
-
-        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
-        playerFrame.addView(pvArt);
-        mExoPlayerFullscreen = false;
-        mFullScreenDialog.dismiss();
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
-    }
-
+//    private void initFullscreenDialog() {
+//
+//        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+//            public void onBackPressed() {
+//                if (mExoPlayerFullscreen)
+//                    closeFullscreenDialog();
+//                super.onBackPressed();
+//            }
+//        };
+//    }
+//
+//
+//    private void openFullscreenDialog() {
+//
+//        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
+//        mFullScreenDialog.addContentView(pvArt, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_shrink));
+//        mExoPlayerFullscreen = true;
+//        mFullScreenDialog.show();
+//    }
+//
+//    private void closeFullscreenDialog() {
+//
+//        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
+//        playerFrame.addView(pvArt);
+//        mExoPlayerFullscreen = false;
+//        mFullScreenDialog.dismiss();
+//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
+//    }
+//
     @OnClick(R.id.exo_fullscreen_button)
     void processFullScreen() {
-        if (!mExoPlayerFullscreen)
-            openFullscreenDialog();
-        else
-            closeFullscreenDialog();
-
+       exoUtil.processFullScreen();
     }
 
 
@@ -470,7 +523,7 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
         super.onResume();
 
         if (videoUri != null) {
-            initializePlayer(videoUri);
+//            initializePlayer(videoUri);
 
         }
 
@@ -500,93 +553,99 @@ public class ArtworkActivity extends AppCompatActivity implements Player.EventLi
     }
 
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+//    @Override
+//    public void onTimelineChanged(Timeline timeline, Object manifest) {
+//
+//    }
 
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mExoPlayer.getCurrentPosition(), 1f);
-        } else if ((playbackState == ExoPlayer.STATE_READY)) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mExoPlayer.getCurrentPosition(), 1f);
-        }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
-
-
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-        if (isBehindLiveWindow(error)) {
-            clearStartPosition();
-            initializePlayer(videoUri);
-        } else {
-            updateStartPosition();
-
-        }
-
-    }
-
-    @Override
-    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
-
-//        if (mExoPlayer.get != null) {
-//            // The user has performed a seek whilst in the error state. Update the resume position so
-//            // that if the user then retries, playback resumes from the position to which they seeked.
-//            updateStartPosition();
+//    @Override
+//    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+//
+//    }
+//
+//    @Override
+//    public void onLoadingChanged(boolean isLoading) {
+//
+//    }
+//
+//    @Override
+//    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+//
+//        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
+//            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+//                    mExoPlayer.getCurrentPosition(), 1f);
+//        } else if ((playbackState == ExoPlayer.STATE_READY)) {
+//            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+//                    mExoPlayer.getCurrentPosition(), 1f);
 //        }
+//        mMediaSession.setPlaybackState(mStateBuilder.build());
+//
+//
+//    }
 
+//    @Override
+//    public void onRepeatModeChanged(int repeatMode) {
+//
+//    }
+//
+//    @Override
+//    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+//
+//    }
+//
+//    @Override
+//    public void onPlayerError(ExoPlaybackException error) {
+//
+//        if (isBehindLiveWindow(error)) {
+//            clearStartPosition();
+////            initializePlayer(videoUri);
+//        } else {
+//            updateStartPosition();
+//
+//        }
+//
+//    }
+
+//    @Override
+//    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
+//
+////        if (mExoPlayer.get != null) {
+////            // The user has performed a seek whilst in the error state. Update the resume position so
+////            // that if the user then retries, playback resumes from the position to which they seeked.
+////            updateStartPosition();
+////        }
+//
+//    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (exoUtil!= null) exoUtil.onPause();
     }
-
 
     @Override
     public void onStop() {
         super.onStop();
-        releasePlayerPartially();
+        if (exoUtil!= null) exoUtil.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        releasePlayer();
+        if (exoUtil!= null) exoUtil.onStop();
+//        releasePlayer();
     }
 
 
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
-
-    @Override
-    public void onSeekProcessed() {
-
-    }
+//    @Override
+//    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+//
+//    }
+//
+//    @Override
+//    public void onSeekProcessed() {
+//
+//    }
 
 
     private class MySessionCallback extends MediaSessionCompat.Callback {
