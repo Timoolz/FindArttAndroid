@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -89,7 +91,7 @@ public class BidFragment extends Fragment {
     RecyclerView rvBids;
 
     @BindView(R.id.bid_frame)
-    FrameLayout bidFrame;
+    NestedScrollView bidFrame;
 
     private UserResult userResult;
 

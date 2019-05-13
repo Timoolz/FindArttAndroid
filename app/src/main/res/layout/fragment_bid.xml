@@ -28,7 +28,7 @@
                 style="@style/AppTheme.TextView.Medium"
                 android:id="@+id/tv_amount"/>
         </LinearLayout>
-        <FrameLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:visibility="gone"
@@ -36,13 +36,13 @@
             >
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/rv_bids">
 
             </androidx.recyclerview.widget.RecyclerView>
 
 
-        </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <EditText
             android:layout_width="match_parent"
