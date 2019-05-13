@@ -28,7 +28,7 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 import com.olamide.findartt.R;
-import com.olamide.findartt.utils.exo.DefaultCacheDataSourceFactory;
+//import com.olamide.findartt.utils.exo.DefaultCacheDataSourceFactory;
 
 
 import java.io.File;
@@ -206,11 +206,11 @@ public class ExoModule {
      * @param cacheDataSource represents an instance of {@link CacheDataSource}
      * @return an instance of {@link DataSource.Factory}
      */
-    @Reusable
-    @Provides
-    public DataSource.Factory provideDataSourceFactory(@NonNull CacheDataSource cacheDataSource) {
-        return new DefaultCacheDataSourceFactory(cacheDataSource);
-    }
+//    @Reusable
+//    @Provides
+//    public DataSource.Factory provideDataSourceFactory(@NonNull CacheDataSource cacheDataSource) {
+//        return new DefaultCacheDataSourceFactory(cacheDataSource);
+//    }
 
     /**
      * Returns an instance of {@link ExtractorMediaSource.Factory}
@@ -218,9 +218,15 @@ public class ExoModule {
      * @param factory represents an instance of {@link DataSource.Factory}
      * @return an instance of {@link ExtractorMediaSource.Factory}
      */
+//    @Reusable
+//    @Provides
+//    public ExtractorMediaSource.Factory provideExtractorMediaSourceFactory(@NonNull DataSource.Factory factory) {
+//        return new ExtractorMediaSource.Factory(factory);
+//    }
+
     @Reusable
     @Provides
-    public ExtractorMediaSource.Factory provideExtractorMediaSourceFactory(@NonNull DataSource.Factory factory) {
+    public ExtractorMediaSource.Factory provideExtractorMediaSourceFactory(@NonNull DefaultDataSourceFactory factory) {
         return new ExtractorMediaSource.Factory(factory);
     }
 
