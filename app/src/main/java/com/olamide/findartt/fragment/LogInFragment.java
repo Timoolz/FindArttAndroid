@@ -33,7 +33,6 @@ import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;
-//import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.api.FindArttResponse;

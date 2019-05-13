@@ -6,11 +6,10 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
+
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.media.session.MediaButtonReceiver;
 
@@ -21,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,32 +28,22 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
+
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+
 import com.olamide.findartt.VideoViewModel;
+import com.olamide.findartt.enums.PurchaseType;
+import com.olamide.findartt.fragment.BidFragment;
+import com.olamide.findartt.fragment.BuyFragment;
 import com.olamide.findartt.utils.exo.ExoUtil;
 import com.olamide.findartt.utils.exo.ExoUtilFactory;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
-//import com.olamide.findartt.fragment.BidFragment;
-//import com.olamide.findartt.fragment.BuyFragment;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.UserResult;
@@ -64,11 +52,9 @@ import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.Converters;
 import com.olamide.findartt.utils.ErrorUtils;
-import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
-//import com.olamide.findartt.viewmodels.ArtworkViewModel;
-//import com.olamide.findartt.viewmodels.ArtworkViewModelFactory;
+
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -85,6 +71,7 @@ import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
+import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
 public class ArtworkActivity extends AppCompatActivity implements ExoUtil.PlayerStateListener {
@@ -112,10 +99,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     private ArtworkSummary artworkSummary;
 
     private boolean favouriteArt = false;
-//    private FindArttDatabase mDb;
-
-
-    private Uri videoUri;
 
     private static final String KEY_WINDOW = "window";
     private static final String KEY_POSITION = "position";
@@ -282,17 +265,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     }
 
 
-//    public void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
-//
-//
-//        updateStartPosition();
-//        savedInstanceState.putBoolean(KEY_AUTO_PLAY, startAutoPlay);
-//        savedInstanceState.putInt(KEY_WINDOW, startWindow);
-//        savedInstanceState.putLong(KEY_POSITION, startPosition);
-//
-//    }
-
     void getArtSummary() {
         if (connectionUtils.handleNoInternet(this)) {
             artworkViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), artwork.getId());
@@ -302,7 +274,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
 
 
     void displayUi() {
-//        checkFavourite();
         SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
         Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
         tvArtName.setText(artworkSummary.getName());
@@ -317,45 +288,36 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
                 .into(ivArt);
 
         if (artworkSummary.getVideoUrl() != null && !artworkSummary.getVideoUrl().isEmpty()) {
-            UiUtils.showSuccessSnack("this one has video", this, clRoot);
+//            UiUtils.showSuccessSnack("this one has video", this, clRoot);
             loadVideo();
         }
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable(ARTWORK_STRING, artworkSummary);
-//        bundle.putParcelable(CURRENT_USER, user);
-//        if (artworkSummary.getPurchaseType().equals(PurchaseType.BID)) {
-//            BidFragment bidFragment = new BidFragment();
-//            bidFragment.setArguments(bundle);
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.detail_frame, bidFragment)
-//                    .commit();
-//        } else {
-//            BuyFragment buyFragment = new BuyFragment();
-//            buyFragment.setArguments(bundle);
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.detail_frame, buyFragment)
-//                    .commit();
-//        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARTWORK_STRING, artworkSummary);
+        bundle.putParcelable(CURRENT_USER, userResult);
+        if (artworkSummary.getPurchaseType().equals(PurchaseType.BID)) {
+            BidFragment bidFragment = new BidFragment();
+            bidFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detail_frame, bidFragment)
+                    .commit();
+        } else {
+            BuyFragment buyFragment = new BuyFragment();
+            buyFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detail_frame, buyFragment)
+                    .commit();
+        }
 
     }
 
 
     void loadVideo() {
-//        initFullscreenDialog();
         playerFrame.setVisibility(View.VISIBLE);
-//        initializeMediaSession();
-//        videoUri = Uri.parse(artworkSummary.getVideoUrl());
-//        initializePlayer(videoUri);
-//        if (!GeneralUtils.isTablet(getApplicationContext()) && GeneralUtils.isLand(getApplicationContext())) {
-//            openFullscreenDialog();
-//        }
-
 
         videoViewModel = ViewModelProviders.of(this, viewModelFactory).get(VideoViewModel.class);
-        exoUtil = exoUtilFactory.get().getExoUtil(this, this, playerFrame, pvArt, mFullScreenIcon);
+        exoUtil = exoUtilFactory.get().getExoUtil(this, this, playerFrame, pvArt, mFullScreenIcon, false);
 //        exoUtil.setPlayerView(pvArt);
 //        exoUtil.setPlayerViewWrapper(playerFrame);
 //        exoUtil.setmFullScreenIcon(mFullScreenIcon);
@@ -395,123 +357,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
         }
     }
 
-
-//    private void initializeMediaSession() {
-//
-//        // Create a MediaSessionCompat.
-//        mMediaSession = new MediaSessionCompat(this, getLocalClassName().getClass().getSimpleName());
-//
-//        // Enable callbacks from MediaButtons and TransportControls.
-//        mMediaSession.setFlags(
-//                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-//                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-//
-//        // Do not let MediaButtons restart the player when the app is not visible.
-//        mMediaSession.setMediaButtonReceiver(null);
-//
-//        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-//        mStateBuilder = new PlaybackStateCompat.Builder()
-//                .setActions(
-//                        PlaybackStateCompat.ACTION_PLAY |
-//                                PlaybackStateCompat.ACTION_PAUSE |
-//                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-//                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
-//
-//        mMediaSession.setPlaybackState(mStateBuilder.build());
-//
-//
-//        // MySessionCallback has methods that handle callbacks from a media controller.
-//        mMediaSession.setCallback(new MySessionCallback());
-//
-//        // Start the Media Session since the activity is active.
-//        mMediaSession.setActive(true);
-//
-//    }
-
-//
-//    private void initializePlayer(Uri mediaUri) {
-//        if (mExoPlayer == null) {
-//            // Create an instance of the ExoPlayer.
-//            TrackSelector trackSelector = new DefaultTrackSelector();
-//            //LoadControl loadControl = new DefaultLoadControl();
-//            //mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-//            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-//            pvArt.setPlayer(mExoPlayer);
-//
-//            // Set the ExoPlayer.EventListener to this activity.
-//            mExoPlayer.addListener(this);
-//
-//            // Prepare the MediaSource.
-//            String userAgent = Util.getUserAgent(this, getLocalClassName().getClass().getSimpleName());
-//            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(
-//                    this, userAgent), new DefaultExtractorsFactory(), null, null);
-//
-//            boolean haveStartPosition = startWindow != C.INDEX_UNSET;
-//            if (haveStartPosition) {
-//                mExoPlayer.seekTo(startWindow, startPosition);
-//            }
-//
-//            mExoPlayer.prepare(mediaSource, !haveStartPosition, false);
-//            mExoPlayer.setPlayWhenReady(startAutoPlay);
-//
-//
-//        }
-//    }
-//
-//
-//    private void releasePlayer() {
-//        clearStartPosition();
-//        if (mExoPlayer != null) {
-//            mExoPlayer.stop();
-//            mExoPlayer.release();
-//            mExoPlayer = null;
-//            updateStartPosition();
-//
-//        }
-//
-//    }
-
-//    private void releasePlayerPartially() {
-//        if (mExoPlayer != null) {
-//            mExoPlayer.release();
-//            mExoPlayer = null;
-//            updateStartPosition();
-//
-//        }
-//
-//    }
-
-
-//    private void initFullscreenDialog() {
-//
-//        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
-//            public void onBackPressed() {
-//                if (mExoPlayerFullscreen)
-//                    closeFullscreenDialog();
-//                super.onBackPressed();
-//            }
-//        };
-//    }
-//
-//
-//    private void openFullscreenDialog() {
-//
-//        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
-//        mFullScreenDialog.addContentView(pvArt, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_shrink));
-//        mExoPlayerFullscreen = true;
-//        mFullScreenDialog.show();
-//    }
-//
-//    private void closeFullscreenDialog() {
-//
-//        ((ViewGroup) pvArt.getParent()).removeView(pvArt);
-//        playerFrame.addView(pvArt);
-//        mExoPlayerFullscreen = false;
-//        mFullScreenDialog.dismiss();
-//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
-//    }
-//
     @OnClick(R.id.exo_fullscreen_button)
     void processFullScreen() {
        exoUtil.processFullScreen();
@@ -521,11 +366,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     @Override
     public void onResume() {
         super.onResume();
-
-        if (videoUri != null) {
-//            initializePlayer(videoUri);
-
-        }
+        if (exoUtil!= null) exoUtil.onResume();
 
     }
 
@@ -553,70 +394,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     }
 
 
-//    @Override
-//    public void onTimelineChanged(Timeline timeline, Object manifest) {
-//
-//    }
-
-//    @Override
-//    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//
-//    }
-//
-//    @Override
-//    public void onLoadingChanged(boolean isLoading) {
-//
-//    }
-//
-//    @Override
-//    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//
-//        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-//            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-//                    mExoPlayer.getCurrentPosition(), 1f);
-//        } else if ((playbackState == ExoPlayer.STATE_READY)) {
-//            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-//                    mExoPlayer.getCurrentPosition(), 1f);
-//        }
-//        mMediaSession.setPlaybackState(mStateBuilder.build());
-//
-//
-//    }
-
-//    @Override
-//    public void onRepeatModeChanged(int repeatMode) {
-//
-//    }
-//
-//    @Override
-//    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-//
-//    }
-//
-//    @Override
-//    public void onPlayerError(ExoPlaybackException error) {
-//
-//        if (isBehindLiveWindow(error)) {
-//            clearStartPosition();
-////            initializePlayer(videoUri);
-//        } else {
-//            updateStartPosition();
-//
-//        }
-//
-//    }
-
-//    @Override
-//    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
-//
-////        if (mExoPlayer.get != null) {
-////            // The user has performed a seek whilst in the error state. Update the resume position so
-////            // that if the user then retries, playback resumes from the position to which they seeked.
-////            updateStartPosition();
-////        }
-//
-//    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -633,19 +410,9 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     public void onDestroy() {
         super.onDestroy();
         if (exoUtil!= null) exoUtil.onStop();
-//        releasePlayer();
     }
 
 
-//    @Override
-//    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-//
-//    }
-//
-//    @Override
-//    public void onSeekProcessed() {
-//
-//    }
 
 
     private class MySessionCallback extends MediaSessionCompat.Callback {

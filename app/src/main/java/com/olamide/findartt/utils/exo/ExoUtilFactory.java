@@ -33,12 +33,14 @@ public class ExoUtilFactory {
     public ExoUtil getExoUtil(Activity rootActivity, ExoUtil.PlayerStateListener mPlayerStateListener,
                                FrameLayout mPlayerViewWrapper,
                                PlayerView mPlayerView,
-                               ImageView mFullScreenIcon) {
+                               ImageView mFullScreenIcon,
+                               boolean shouldAutoPlay) {
         exoUtil.setActivity(rootActivity);
         exoUtil.setListener(mPlayerStateListener);
         exoUtil.setPlayerViewWrapper(mPlayerViewWrapper);
         exoUtil.setPlayerView(mPlayerView);
         exoUtil.setmFullScreenIcon(mFullScreenIcon);
+        exoUtil.setmShouldAutoPlay(shouldAutoPlay);
         return exoUtil;
     }
 

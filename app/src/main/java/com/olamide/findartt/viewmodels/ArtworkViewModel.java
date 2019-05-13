@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.models.Artwork;
+import com.olamide.findartt.models.Bid;
+import com.olamide.findartt.models.Buy;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.network.FindArttRepository;
 
@@ -19,9 +21,14 @@ public class ArtworkViewModel extends AndroidViewModel {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final CompositeDisposable favouriteDisposables = new CompositeDisposable();
-    private final CompositeDisposable videoDisposables = new CompositeDisposable();
+//    private final CompositeDisposable videoDisposables = new CompositeDisposable();
     private final MutableLiveData<MVResponse> artworkSummaryLive = new MutableLiveData<>();
     private final MutableLiveData<MVResponse> artworkFavouriteLive = new MutableLiveData<>();
+
+    private final CompositeDisposable buyDisposable = new CompositeDisposable();
+    private final CompositeDisposable bidDisposable = new CompositeDisposable();
+    private final MutableLiveData<MVResponse> buyLive = new MutableLiveData<>();
+    private final MutableLiveData<MVResponse> bidLive = new MutableLiveData<>();
 
 
 
@@ -43,6 +50,14 @@ public class ArtworkViewModel extends AndroidViewModel {
         return artworkFavouriteLive;
     }
 
+    public MutableLiveData<MVResponse> getBuyResponse() {
+        return buyLive;
+    }
+
+    public MutableLiveData<MVResponse> getBidResponse() {
+        return bidLive;
+    }
+
 
 
     public void findArtSummary(String accessToken, int artId ) {
@@ -54,6 +69,32 @@ public class ArtworkViewModel extends AndroidViewModel {
                 .subscribe(
                         result -> artworkSummaryLive.setValue(MVResponse.success(result)),
                         throwable -> artworkSummaryLive.setValue(MVResponse.error(throwable))
+                ));
+
+    }
+
+    public void buyArt(String accessToken, Buy buy ) {
+
+        buyDisposable.add(findArttRepository.buyArt(accessToken, buy)
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
+                .doOnSubscribe((d) -> buyLive.setValue(MVResponse.loading()))
+                .subscribe(
+                        result -> buyLive.setValue(MVResponse.success(result)),
+                        throwable -> buyLive.setValue(MVResponse.error(throwable))
+                ));
+
+    }
+
+    public void bidForArt(String accessToken, Bid bid ) {
+
+        bidDisposable.add(findArttRepository.bidForArt(accessToken, bid)
+                .subscribeOn(schedulersFactory.io())
+                .observeOn(schedulersFactory.ui())
+                .doOnSubscribe((d) -> bidLive.setValue(MVResponse.loading()))
+                .subscribe(
+                        result -> bidLive.setValue(MVResponse.success(result)),
+                        throwable -> bidLive.setValue(MVResponse.error(throwable))
                 ));
 
     }
@@ -104,6 +145,8 @@ public class ArtworkViewModel extends AndroidViewModel {
     protected void onCleared() {
         disposables.clear();
         favouriteDisposables.clear();
-        videoDisposables.clear();
+//        videoDisposables.clear();
+        buyDisposable.clear();
+        bidDisposable.clear();
     }
 }

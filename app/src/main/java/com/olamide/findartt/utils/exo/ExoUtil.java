@@ -67,7 +67,6 @@ public class ExoUtil implements PlaybackPreparer, Player.EventListener {
         this.mediaFactory = mediaFactory;
         this.application = application;
 
-        mShouldAutoPlay = true;
     }
 
     /**
@@ -105,6 +104,10 @@ public class ExoUtil implements PlaybackPreparer, Player.EventListener {
      */
     public void setUrl(@NonNull String url) {
         this.mUrl = url;
+    }
+
+    public void setmShouldAutoPlay(boolean shouldAutoPlay){
+        mShouldAutoPlay = shouldAutoPlay;
     }
 
     /**
