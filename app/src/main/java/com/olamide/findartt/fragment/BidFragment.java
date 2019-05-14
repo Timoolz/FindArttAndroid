@@ -11,13 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +37,7 @@ import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
-import com.olamide.findartt.views.MaxHeightNestedScrollView;
+import com.olamide.findartt.customviews.MaxHeightNestedScrollView;
 
 import java.util.Objects;
 

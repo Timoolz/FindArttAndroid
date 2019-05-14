@@ -27,21 +27,21 @@
 //        mArtworks = artworks;
 //        for (int appWidgetId : appWidgetIds)
 //        {
-//            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.artt_widget);
+//            RemoteViews customviews = new RemoteViews(context.getPackageName(), R.layout.artt_widget);
 //
 //            Intent intent = new Intent(context, arttViewsService.class);
-//            views.setRemoteAdapter(R.id.lv_artt, intent);
+//            customviews.setRemoteAdapter(R.id.lv_artt, intent);
 //
 //
 //            // Set the artworkACtivity intent to launch when clicked
 //            Intent appIntent = new Intent(context, ArtworkActivity.class);
 //            //appIntent.putExtra()
 //            PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            views.setPendingIntentTemplate(R.id.lv_artt, appPendingIntent);
+//            customviews.setPendingIntentTemplate(R.id.lv_artt, appPendingIntent);
 //
 //            ComponentName component = new ComponentName(context, ArttWidget.class);
 //            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_artt);
-//            appWidgetManager.updateAppWidget(component, views);
+//            appWidgetManager.updateAppWidget(component, customviews);
 //        }
 //    }
 //

@@ -1,4 +1,4 @@
-package com.olamide.findartt.views;
+package com.olamide.findartt.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,11 +1,9 @@
-package com.olamide.findartt.views;
+package com.olamide.findartt.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 
 import com.olamide.findartt.R;

@@ -77,29 +77,29 @@
 //
 //    @Override
 //    public RemoteViews getViewAt(int i) {
-//        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.artt_widget_item);
+//        RemoteViews customviews = new RemoteViews(mContext.getPackageName(), R.layout.artt_widget_item);
 //
 //        try {
 //            Bitmap b = Picasso.with(mContext).load(mArtts.get(i).getImageUrl())
 //                    .placeholder(R.drawable.img_load)
 //                    .error(R.drawable.img_error).get();
-//            views.setImageViewBitmap(R.id.iv_art, Bitmap.createScaledBitmap(b, 1000, 1000, false));
+//            customviews.setImageViewBitmap(R.id.iv_art, Bitmap.createScaledBitmap(b, 1000, 1000, false));
 //        } catch (Exception e) {
 //            Timber.e(e);
 //            e.printStackTrace();
 //
 //        }
-//        views.setTextViewText(R.id.tv_title, mArtts.get(i).getName());
-//        views.setTextViewText(R.id.tv_description, mArtts.get(i).getDescription());
+//        customviews.setTextViewText(R.id.tv_title, mArtts.get(i).getName());
+//        customviews.setTextViewText(R.id.tv_description, mArtts.get(i).getDescription());
 //
 //        Bundle extras = new Bundle();
 //        extras.putParcelable(ARTWORK_STRING, mArtts.get(i));
 //        extras.putParcelable(CURRENT_USER, user);
 //        Intent fillInIntent = new Intent();
 //        fillInIntent.putExtras(extras);
-//        views.setOnClickFillInIntent(R.id.iv_art, fillInIntent);
+//        customviews.setOnClickFillInIntent(R.id.iv_art, fillInIntent);
 //
-//        return views;
+//        return customviews;
 //    }
 //
 //    @Override

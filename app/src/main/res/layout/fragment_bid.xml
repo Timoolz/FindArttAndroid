@@ -28,7 +28,7 @@
                 style="@style/AppTheme.TextView.Medium"
                 android:id="@+id/tv_amount"/>
         </LinearLayout>
-        <com.olamide.findartt.views.MaxHeightNestedScrollView
+        <com.olamide.findartt.customviews.MaxHeightNestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -43,7 +43,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
 
-        </com.olamide.findartt.views.MaxHeightNestedScrollView>
+        </com.olamide.findartt.customviews.MaxHeightNestedScrollView>
 
         <EditText
             android:layout_width="match_parent"
