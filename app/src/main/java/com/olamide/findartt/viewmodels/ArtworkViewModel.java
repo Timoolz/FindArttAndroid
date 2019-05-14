@@ -20,13 +20,9 @@ public class ArtworkViewModel extends AndroidViewModel {
     private SchedulersFactory schedulersFactory;
 
     private final CompositeDisposable disposables = new CompositeDisposable();
-    private final CompositeDisposable favouriteDisposables = new CompositeDisposable();
-//    private final CompositeDisposable videoDisposables = new CompositeDisposable();
+
     private final MutableLiveData<MVResponse> artworkSummaryLive = new MutableLiveData<>();
     private final MutableLiveData<MVResponse> artworkFavouriteLive = new MutableLiveData<>();
-
-    private final CompositeDisposable buyDisposable = new CompositeDisposable();
-    private final CompositeDisposable bidDisposable = new CompositeDisposable();
     private final MutableLiveData<MVResponse> buyLive = new MutableLiveData<>();
     private final MutableLiveData<MVResponse> bidLive = new MutableLiveData<>();
 
@@ -75,7 +71,7 @@ public class ArtworkViewModel extends AndroidViewModel {
 
     public void buyArt(String accessToken, Buy buy ) {
 
-        buyDisposable.add(findArttRepository.buyArt(accessToken, buy)
+        disposables.add(findArttRepository.buyArt(accessToken, buy)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> buyLive.setValue(MVResponse.loading()))
@@ -88,7 +84,7 @@ public class ArtworkViewModel extends AndroidViewModel {
 
     public void bidForArt(String accessToken, Bid bid ) {
 
-        bidDisposable.add(findArttRepository.bidForArt(accessToken, bid)
+        disposables.add(findArttRepository.bidForArt(accessToken, bid)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> bidLive.setValue(MVResponse.loading()))
@@ -101,7 +97,7 @@ public class ArtworkViewModel extends AndroidViewModel {
 
     public void findArtFavourite( int artId ) {
 
-        favouriteDisposables.add(findArttRepository.loadArtworkById( artId)
+        disposables.add(findArttRepository.loadArtworkById( artId)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> artworkFavouriteLive.setValue(MVResponse.loading()))
@@ -115,7 +111,7 @@ public class ArtworkViewModel extends AndroidViewModel {
     public void insertFavouriteArt(Artwork artwork) {
 
 
-        favouriteDisposables.add(findArttRepository.insertFavouriteArt(artwork)
+        disposables.add(findArttRepository.insertFavouriteArt(artwork)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> artworkFavouriteLive.setValue(MVResponse.loading()))
@@ -128,7 +124,7 @@ public class ArtworkViewModel extends AndroidViewModel {
 
     public void deleteFavouriteArt( Artwork artwork ) {
 
-        favouriteDisposables.add(findArttRepository.deleteFavouriteArt(artwork)
+        disposables.add(findArttRepository.deleteFavouriteArt(artwork)
                 .subscribeOn(schedulersFactory.io())
                 .observeOn(schedulersFactory.ui())
                 .doOnSubscribe((d) -> artworkFavouriteLive.setValue(MVResponse.loading()))
@@ -144,9 +140,6 @@ public class ArtworkViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         disposables.clear();
-        favouriteDisposables.clear();
-//        videoDisposables.clear();
-        buyDisposable.clear();
-        bidDisposable.clear();
+
     }
 }
