@@ -28,10 +28,11 @@
                 style="@style/AppTheme.TextView.Medium"
                 android:id="@+id/tv_amount"/>
         </LinearLayout>
-        <androidx.core.widget.NestedScrollView
+        <com.olamide.findartt.views.MaxHeightNestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
+            app:maxHeight="250dp"
             android:id="@+id/bid_frame"
             >
             <androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
 
-        </androidx.core.widget.NestedScrollView>
+        </com.olamide.findartt.views.MaxHeightNestedScrollView>
 
         <EditText
             android:layout_width="match_parent"

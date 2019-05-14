@@ -40,6 +40,7 @@ import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
+import com.olamide.findartt.views.MaxHeightNestedScrollView;
 
 import java.util.Objects;
 
@@ -91,7 +92,7 @@ public class BidFragment extends Fragment {
     RecyclerView rvBids;
 
     @BindView(R.id.bid_frame)
-    NestedScrollView bidFrame;
+    MaxHeightNestedScrollView bidFrame;
 
     private UserResult userResult;
 
