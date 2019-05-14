@@ -31,12 +31,6 @@ public class MaxHeightNestedScrollView extends NestedScrollView {
         }
     }
 
-//    public MaxHeightNestedScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        super(context, attrs, defStyleAttr, defStyleRes);
-//        if (!isInEditMode()) {
-//            init(context, attrs);
-//        }
-//    }
 
 
     private void init(Context context, AttributeSet attrs) {
