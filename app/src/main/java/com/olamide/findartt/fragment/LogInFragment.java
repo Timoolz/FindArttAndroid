@@ -144,9 +144,10 @@ public class LogInFragment extends Fragment {
 
         accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
         if (accessToken != null && !accessToken.isEmpty()) {
-            if(connectionUtils.handleNoInternet(getActivity())){
-                loginFromFromToken(accessToken);
-            }
+            goToDashboard();
+//            if(connectionUtils.handleNoInternet(getActivity())){
+//                loginFromFromToken(accessToken);
+//            }
             return rootView;
         }
         if (getArguments() != null) {
