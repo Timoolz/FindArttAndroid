@@ -1,7 +1,7 @@
 //package com.olamide.findartt.di.modules;
 //
-//import com.olamide.findartt.fragment.LogInFragment;
-//import com.olamide.findartt.fragment.SignUpFragment;
+//import com.olamide.findartt.ui.fragment.LogInFragment;
+//import com.olamide.findartt.ui.fragment.SignUpFragment;
 //
 //import dagger.Module;
 //import dagger.android.ContributesAndroidInjector;

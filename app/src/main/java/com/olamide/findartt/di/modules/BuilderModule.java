@@ -1,12 +1,16 @@
 package com.olamide.findartt.di.modules;
 
-import com.olamide.findartt.activity.ArtworkActivity;
-import com.olamide.findartt.activity.DashboardActivity;
-import com.olamide.findartt.activity.SignInActivity;
-import com.olamide.findartt.fragment.BidFragment;
-import com.olamide.findartt.fragment.BuyFragment;
-import com.olamide.findartt.fragment.LogInFragment;
-import com.olamide.findartt.fragment.SignUpFragment;
+import com.olamide.findartt.ui.activity.ArtworkActivity;
+import com.olamide.findartt.ui.activity.DashboardActivity;
+import com.olamide.findartt.ui.fragment.ArtworkFragment;
+import com.olamide.findartt.ui.fragment.HomeFragment;
+import com.olamide.findartt.ui.activity.SignInActivity;
+import com.olamide.findartt.ui.fragment.BidFragment;
+import com.olamide.findartt.ui.fragment.BuyFragment;
+import com.olamide.findartt.ui.fragment.LogInFragment;
+import com.olamide.findartt.ui.fragment.MyArtworkFragment;
+import com.olamide.findartt.ui.fragment.SignUpFragment;
+import com.olamide.findartt.ui.fragment.UserFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -34,6 +38,19 @@ public abstract class BuilderModule {
 
     @ContributesAndroidInjector
     abstract BidFragment bindBidFragment();
+
+    @ContributesAndroidInjector
+    abstract HomeFragment bindHomeFragment();
+
+    @ContributesAndroidInjector
+    abstract UserFragment bindUserFragment();
+
+    @ContributesAndroidInjector
+    abstract ArtworkFragment bindArtworkFragment();
+
+    @ContributesAndroidInjector
+    abstract MyArtworkFragment bindMyArtworkFragment();
+
 
 
     // Add bindings for other sub-components here

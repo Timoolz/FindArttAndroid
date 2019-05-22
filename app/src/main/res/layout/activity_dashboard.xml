@@ -1,69 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/cl_root"
+    android:id="@+id/drawer_root"
     android:fitsSystemWindows="true"
 
     >
 
-    <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:id="@+id/ab_main"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="?colorPrimary"-->
-        <!--android:elevation="8dp"-->
-        <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
-        <!--&gt;-->
-
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
-            <!--android:layout_marginLeft="@dimen/list_toolbar_side_margin"-->
-            <!--android:layout_marginRight="@dimen/list_toolbar_side_margin"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?actionBarSize"-->
-            <!--android:background="?attr/colorPrimary"-->
-            <!--android:layout_gravity="center_vertical"-->
-            <!--app:layout_scrollFlags="scroll|enterAlways"-->
-            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
-            <!--android:elevation="4dp">-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/findart11"-->
-                <!--android:contentDescription="@string/app_name" />-->
-
-        <!--</android.support.v7.widget.Toolbar>-->
-    <!--</android.support.design.widget.AppBarLayout>-->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rv_artwork"
-
-        />
-
-    <ProgressBar
-        android:id="@+id/pb_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/tv_empty"
-        style="@style/AppTheme.TextView.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty_art"
-        android:visibility="invisible"
-        android:layout_gravity="center"
-
-        />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

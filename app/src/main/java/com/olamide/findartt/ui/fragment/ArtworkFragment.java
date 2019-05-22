@@ -1,25 +1,23 @@
-package com.olamide.findartt.activity;
+package com.olamide.findartt.ui.fragment;
 
 import android.app.Dialog;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.media.session.MediaButtonReceiver;
 
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,20 +28,12 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
-
 import com.google.android.exoplayer2.ui.PlayerView;
-
-import com.olamide.findartt.VideoViewModel;
-import com.olamide.findartt.enums.PurchaseType;
-import com.olamide.findartt.fragment.BidFragment;
-import com.olamide.findartt.fragment.BuyFragment;
-import com.olamide.findartt.utils.exo.ExoUtil;
-import com.olamide.findartt.utils.exo.ExoUtilFactory;
-import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.R;
+import com.olamide.findartt.VideoViewModel;
 import com.olamide.findartt.ViewModelFactory;
+import com.olamide.findartt.enums.PurchaseType;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.UserResult;
@@ -53,13 +43,16 @@ import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.Converters;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.UiUtils;
+import com.olamide.findartt.utils.exo.ExoUtil;
+import com.olamide.findartt.utils.exo.ExoUtilFactory;
 import com.olamide.findartt.utils.network.ConnectionUtils;
-
+import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -67,14 +60,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Lazy;
-import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link ArtworkFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
 
-public class ArtworkActivity extends AppCompatActivity implements ExoUtil.PlayerStateListener {
+ */
+public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateListener {
+
+    private OnFragmentInteractionListener mListener;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -90,6 +91,8 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     ConnectionUtils connectionUtils;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    ViewGroup dummyFrame;
 
     ArtworkViewModel artworkViewModel;
     VideoViewModel videoViewModel;
@@ -117,10 +120,6 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
     ProgressDialog progressDialog;
-
-
-    @BindView(R.id.cl_root)
-    CoordinatorLayout clRoot;
 
     @BindView(R.id.tv_art_name)
     TextView tvArtName;
@@ -153,20 +152,31 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
     ImageButton btFavourite;
 
 
+
+
+    public ArtworkFragment() {
+        // Required empty public constructor
+    }
+
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artwork);
-        ButterKnife.bind(this);
         userResult = appAuthUtil.authorize();
+        if (getArguments() != null) {
+            artwork = getArguments().getParcelable(ARTWORK_STRING);
+            }
+    }
 
-        progressDialog = UiUtils.getProgressDialog(this, getString(R.string.loading), false);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            artwork = extras.getParcelable(ARTWORK_STRING);
-        }
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_artwork, container, false);
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
+        ButterKnife.bind(this, rootView);
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
         artworkViewModel = ViewModelProviders.of(this, viewModelFactory).get(ArtworkViewModel.class);
         artworkViewModel.getArtWorkResponse().observe(this, this::showUi);
         artworkViewModel.getArtWorkFavourite().observe(this, this::showFavUi);
@@ -175,12 +185,9 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
         if (savedInstanceState == null) {
             getArtSummary();
         }
-//        if (savedInstanceState != null) {
-//            getSavedStartPosition(savedInstanceState);
-//        }
-
-
+        return rootView;
     }
+
 
     private void showFavUi(MVResponse mvResponse) {
         switch (mvResponse.status) {
@@ -237,13 +244,13 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
 
                 } catch (Exception e) {
                     Timber.e(e);
-                    ErrorUtils.handleError((this), clRoot);
+                    ErrorUtils.handleError((Objects.requireNonNull(getContext())), dummyFrame);
                 }
                 break;
 
             case ERROR:
                 progressDialog.dismiss();
-                ErrorUtils.handleThrowable(mvResponse.error, this, clRoot);
+                ErrorUtils.handleThrowable(mvResponse.error, getContext(), dummyFrame);
                 break;
 
             default:
@@ -266,7 +273,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
 
 
     void getArtSummary() {
-        if (connectionUtils.handleNoInternet(this)) {
+        if (connectionUtils.handleNoInternet(getActivity())) {
             artworkViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), artwork.getId());
         }
         artworkViewModel.findArtFavourite(artwork.getId());
@@ -280,7 +287,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
         tvDate.setText(outputFormat.format(date));
         tv_description.setText(artworkSummary.getDescription());
 
-        Picasso.with(this)
+        Picasso.with(getContext())
                 .load(artworkSummary.getImageUrl())
                 .fit()
                 .placeholder(R.drawable.img_load)
@@ -292,7 +299,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
             loadVideo();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getChildFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARTWORK_STRING, artworkSummary);
         bundle.putParcelable(CURRENT_USER, userResult);
@@ -317,7 +324,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
         playerFrame.setVisibility(View.VISIBLE);
 
         videoViewModel = ViewModelProviders.of(this, viewModelFactory).get(VideoViewModel.class);
-        exoUtil = exoUtilFactory.get().getExoUtil(this, this, playerFrame, pvArt, mFullScreenIcon, false);
+        exoUtil = exoUtilFactory.get().getExoUtil(getActivity(), this, playerFrame, pvArt, mFullScreenIcon, false);
 //        exoUtil.setPlayerView(pvArt);
 //        exoUtil.setPlayerViewWrapper(playerFrame);
 //        exoUtil.setmFullScreenIcon(mFullScreenIcon);
@@ -359,7 +366,7 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
 
     @OnClick(R.id.exo_fullscreen_button)
     void processFullScreen() {
-       exoUtil.processFullScreen();
+        exoUtil.processFullScreen();
     }
 
 
@@ -457,6 +464,30 @@ public class ArtworkActivity extends AppCompatActivity implements ExoUtil.Player
             cause = cause.getCause();
         }
         return false;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
     }
 
 

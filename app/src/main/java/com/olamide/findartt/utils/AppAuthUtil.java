@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
-import com.olamide.findartt.FindArttApplication;
-import com.olamide.findartt.activity.SignInActivity;
+import com.olamide.findartt.ui.activity.SignInActivity;
 import com.olamide.findartt.models.UserResult;
 
 import javax.inject.Inject;

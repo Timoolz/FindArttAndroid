@@ -11,7 +11,7 @@ import com.olamide.findartt.utils.network.FindArttRepository;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class DashboardViewModel extends AndroidViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
     private FindArttRepository findArttRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
@@ -19,13 +19,13 @@ public class DashboardViewModel extends AndroidViewModel {
     private SchedulersFactory schedulersFactory;
 
 
-    public DashboardViewModel(Application application,FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
+    public HomeViewModel(Application application, FindArttRepository findArttRepository, SchedulersFactory schedulersFactory) {
         this(application);
         this.findArttRepository = findArttRepository;
         this.schedulersFactory = schedulersFactory;
     }
 
-    public DashboardViewModel(@NonNull Application application) {
+    public HomeViewModel(@NonNull Application application) {
         super(application);
     }
 
