@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/home_dest">
+    <fragment
+        android:id="@+id/home_dest"
+        android:name="com.olamide.findartt.ui.fragment.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home">
+
+        <!-- TODO STEP 7.1 - Add action with transitions -->
+        <!--<action-->
+            <!--android:id="@+id/next_action"-->
+            <!--app:destination="@+id/flow_step_one_dest"-->
+            <!--app:enterAnim="@anim/slide_in_right"-->
+            <!--app:exitAnim="@anim/slide_out_left"-->
+            <!--app:popEnterAnim="@anim/slide_in_left"-->
+            <!--app:popExitAnim="@anim/slide_out_right" />-->
+        <!-- TODO END STEP 7.1 -->
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/user_dest"
+        android:name="com.olamide.findartt.ui.fragment.UserFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_user">
+
+    </fragment>
 
 </navigation>

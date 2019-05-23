@@ -30,6 +30,10 @@
 
     <string name="login">Login </string>
     <string name="signup">Sign Up</string>
+    <string name="logout">Logout </string>
+    <string name="signout">Sign Out</string>
+    <string name="profile">My Profile</string>
+
     <string name="login_suggest">Already have an account? Login In</string>
     <string name="signup_suggest">Don\'t have an account? Sign Up</string>
     <string name="fname">First Name</string>
@@ -91,6 +95,8 @@ Each Android ND project will be reviewed against the Common Project Requirements
     </string>
     <string name="sort_all">All</string>
     <string name="sort_favourite">Favourite</string>
+    <string name="settings">Settings</string>
+    <string name="home">Home</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="cache_type">media_cache</string>

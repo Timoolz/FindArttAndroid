@@ -29,7 +29,7 @@ import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
-import com.olamide.findartt.ui.activity.ArtworkActivity;
+//import com.olamide.findartt.ui.activity.ArtworkActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
@@ -107,6 +107,7 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, rootView);
+        this.setHasOptionsMenu(true);
 
         homeViewModel.getArtWorkResponse().observe(this, this::displayUi);
         dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
@@ -210,15 +211,15 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
     @Override
     public void onClickListener(Artwork artwork) {
 
-        Intent intent = new Intent(getActivity(), ArtworkActivity.class);
-        intent.putExtra(ARTWORK_STRING, artwork);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), ArtworkActivity.class);
+//        intent.putExtra(ARTWORK_STRING, artwork);
+//        startActivity(intent);
     }
 
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.artwork_menu, menu);
     }
 
     @Override

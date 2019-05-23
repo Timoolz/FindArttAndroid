@@ -1,6 +1,6 @@
 package com.olamide.findartt.di.modules;
 
-import com.olamide.findartt.ui.activity.ArtworkActivity;
+//import com.olamide.findartt.ui.activity.ArtworkActivity;
 import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.ui.fragment.ArtworkFragment;
 import com.olamide.findartt.ui.fragment.HomeFragment;
@@ -30,8 +30,8 @@ public abstract class BuilderModule {
     @ContributesAndroidInjector
     abstract SignUpFragment bindSignUpFragment();
 
-    @ContributesAndroidInjector
-    abstract ArtworkActivity bindArtworkActivity();
+//    @ContributesAndroidInjector
+//    abstract ArtworkActivity bindArtworkActivity();
 
     @ContributesAndroidInjector
     abstract BuyFragment bindBuyFragment();
