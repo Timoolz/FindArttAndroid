@@ -1,5 +1,6 @@
 package com.olamide.findartt.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -7,7 +8,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import com.google.android.material.navigation.NavigationView;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.UserResult;
@@ -67,6 +71,18 @@ public class DashboardActivity extends AppCompatActivity {
 
         setupActionBar(navController, appBarConfiguration);
         setupNavigationMenu(navController);
+        //
+        // *TO CALL THE LOGOUT METHOD*
+        // *AND TO PREVENT JETPACK NAVIGATION FROM HANDLING IT*
+        //
+        sideNavView.getMenu().findItem(R.id.log_out).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                appAuthUtil.logout();
+                return true;
+            }
+        });
+
 
 
     }
