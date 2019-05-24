@@ -1,5 +1,7 @@
 package com.olamide.findartt.utils.network;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -7,6 +9,10 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 
 import com.olamide.findartt.enums.ConnectionStatus;
+import com.olamide.findartt.utils.ErrorUtils;
+import com.olamide.findartt.utils.UiUtils;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -14,14 +20,18 @@ import timber.log.Timber;
 public final class ConnectionUtils {
 
 
-    private ConnectionUtils() {
 
+    private Application application;
+
+    @Inject
+    public ConnectionUtils(Application application) {
+        this.application = application;
     }
 
-    public static ConnectionStatus getConnectionStatus(Context context) {
+    public  ConnectionStatus getConnectionStatus() {
 
         ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
@@ -56,7 +66,15 @@ public final class ConnectionUtils {
         }
         return new ConnectionStatus(ConnectionStatus.NONE);
 
+    }
 
+    public  boolean handleNoInternet(Activity activity){
+        ConnectionStatus connectionStatus = getConnectionStatus();
+        if (connectionStatus.connectionStatus.equals(ConnectionStatus.NONE)) {
+            ErrorUtils.handleInternetError(activity, UiUtils.getDummyFrame(activity));
+            return false;
+        }
+        return true;
     }
 
 

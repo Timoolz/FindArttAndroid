@@ -1,54 +1,64 @@
 package com.olamide.findartt.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.olamide.findartt.viewmodels.DashboardViewModel;
 import com.olamide.findartt.R;
+import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
-import com.olamide.findartt.enums.ConnectionStatus;
 import com.olamide.findartt.models.Artwork;
-import com.olamide.findartt.models.FindArttResponse;
-import com.olamide.findartt.models.User;
+import com.olamide.findartt.models.UserResult;
+import com.olamide.findartt.models.api.FindArttResponse;
+import com.olamide.findartt.models.mvvm.MVResponse;
+import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
-import com.olamide.findartt.utils.TempStorageUtils;
-import com.olamide.findartt.utils.network.FindArttService;
-import com.olamide.findartt.viewmodels.MainViewModel;
-import com.olamide.findartt.widget.ArttUpdateService;
+import com.olamide.findartt.utils.network.ConnectionUtils;
+//import com.olamide.findartt.widget.ArttUpdateService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+//import retrofit2.MVResponse;
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.ARTWORK_STRING;
-import static com.olamide.findartt.Constants.BUNDLE;
-import static com.olamide.findartt.Constants.CURRENT_USER;
-import static com.olamide.findartt.utils.network.ConnectionUtils.getConnectionStatus;
+import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 
 public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
-    private String accessToken;
-    private User user;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    @Inject
+    AppAuthUtil appAuthUtil;
+    @Inject
+    ConnectionUtils connectionUtils;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    DashboardViewModel dashboardViewModel;
+
+    private UserResult userResult;
 
     @BindView(R.id.cl_root)
     CoordinatorLayout clRoot;
@@ -62,15 +72,10 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
 
-
     @BindView(R.id.pb_loading)
     ProgressBar loadingPb;
 
-
-    private Call<FindArttResponse<List<Artwork>>> responseCall;
-
     private List<Artwork> artworkList;
-
     private ArtworkAdapter mAdapter;
     StaggeredGridLayoutManager layoutManager;
 
@@ -80,100 +85,97 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         ButterKnife.bind(this);
-        Timber.plant(new Timber.DebugTree());
-        accessToken = TempStorageUtils.readSharedPreferenceString(getApplicationContext(), ACCESS_TOKEN_STRING);
+        userResult = appAuthUtil.authorize();
+
+
+        dashboardViewModel = ViewModelProviders.of(this, viewModelFactory).get(DashboardViewModel.class);
+        dashboardViewModel.getArtWorkResponse().observe(this, this::displayUi);
 
         int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
         layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
 
+
+        mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
+        mAdapter.setArtworkList(artworkList);
+        Objects.requireNonNull(artworkRv.getLayoutManager()).onRestoreInstanceState(savedRecyclerLayoutState);
+        artworkRv.setNestedScrollingEnabled(false);
+        artworkRv.setAdapter(mAdapter);
+
+
         if (savedInstanceState == null) {
             loadArtWorks();
-
-            mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
-            mAdapter.setArtworkList(artworkList);
-            artworkRv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-
-            artworkRv.setNestedScrollingEnabled(false);
-            artworkRv.setAdapter(mAdapter);
-
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                user = extras.getParcelable(CURRENT_USER);
-            }
         }
 
 
+    }
+
+    private void displayUi(MVResponse mvResponse) {
+
+        switch (mvResponse.status) {
+
+            case LOADING:
+                loadingPb.setVisibility(View.VISIBLE);
+                break;
+            case SUCCESS:
+                displayUi();
+                FindArttResponse arttResponse = new FindArttResponse();
+                try {
+                    arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
+                    artworkList = objectMapper.convertValue(arttResponse.getData(), new TypeReference<List<Artwork>>() {
+                    });
+                    if (artworkList.size() <= 0) {
+                        showEmptyMessage();
+                    } else {
+                        mAdapter.setArtworkList(artworkList);
+                    }
+
+                } catch (Exception e) {
+                    try{
+                        //Local data doesn't come in Api Response
+                        artworkList = objectMapper.convertValue(mvResponse.data, new TypeReference<List<Artwork>>() {
+                        });
+                        if (artworkList.size() <= 0) {
+                            showEmptyMessage();
+                        } else {
+                            mAdapter.setArtworkList(artworkList);
+                        }
+                    }catch (Exception ee){
+                        Timber.e(ee);
+                        ErrorUtils.handleError((this), clRoot);
+                    }
+
+
+                }
+                break;
+
+            case ERROR:
+                loadingPb.setVisibility(View.INVISIBLE);
+                ErrorUtils.handleThrowable(mvResponse.error, this, clRoot);
+                break;
+
+            default:
+                loadingPb.setVisibility(View.INVISIBLE);
+                break;
+        }
     }
 
 
     void loadArtWorks() {
-        ConnectionStatus connectionStatus = getConnectionStatus(getApplicationContext());
-        if (connectionStatus.connectionStatus.equals(ConnectionStatus.NONE)) {
-            ErrorUtils.handleInternetError(this, clRoot);
-
-            return;
+        if(connectionUtils.handleNoInternet(this)){
+            dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken());
         }
-
-        loadingPb.setVisibility(View.VISIBLE);
-
-        responseCall = FindArttService.findArt(accessToken);
-        responseCall.enqueue(new Callback<FindArttResponse<List<Artwork>>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<List<Artwork>>> call, Response<FindArttResponse<List<Artwork>>> response) {
-                loadingPb.setVisibility(View.INVISIBLE);
-
-
-                if (response.body() != null) {
-                    FindArttResponse<List<Artwork>> arttResponse = response.body();
-                    artworkList = arttResponse.getData();
-                    if (artworkList.size() <= 0) {
-                        showEmptyMessage();
-                    } else {
-
-                        mAdapter.setArtworkList(artworkList);
-                        //UiUtils.showSuccessSnack("Successful Login. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
-                    }
-
-                } else {
-                    ErrorUtils.handleApiError(response.errorBody(), getApplicationContext(), clRoot);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<FindArttResponse<List<Artwork>>> call, Throwable t) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                ErrorUtils.handleInternetError(getApplicationContext(), clRoot);
-                Timber.e(t);
-            }
-        });
-
 
     }
 
     private void getFavouriteArt() {
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getArtworks().observe(this, new Observer<List<Artwork>>() {
-            @Override
-            public void onChanged(@Nullable List<Artwork> favArt) {
-                Timber.d("Updating list of artworks from LiveData in ViewModel");
-                artworkList = favArt;
-
-                if (artworkList.size() <= 0) {
-                    showEmptyMessage();
-                } else {
-                    mAdapter.setArtworkList(favArt);
-                }
-
-                startArttWidgetService();
-            }
-        });
+        dashboardViewModel.findFavouriteArtworks();
     }
+
 
     void showEmptyMessage() {
         tvEmpty.setVisibility(View.VISIBLE);
@@ -181,14 +183,20 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         loadingPb.setVisibility(View.INVISIBLE);
 
     }
+    void displayUi() {
+        tvEmpty.setVisibility(View.INVISIBLE);
+        artworkRv.setVisibility(View.VISIBLE);
+        loadingPb.setVisibility(View.INVISIBLE);
+
+    }
+
 
 
     @Override
     public void onClickListener(Artwork artwork) {
 
-        Intent intent = new Intent(getApplicationContext(), ArtworkActivity.class);
+        Intent intent = new Intent(this, ArtworkActivity.class);
         intent.putExtra(ARTWORK_STRING, artwork);
-        intent.putExtra(CURRENT_USER, user);
         startActivity(intent);
     }
 
@@ -220,13 +228,13 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         return super.onOptionsItemSelected(item);
     }
 
-    void startArttWidgetService() {
-        Intent i = new Intent(getApplicationContext(), ArttUpdateService.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(ARTWORK_STRING, (ArrayList<? extends Parcelable>) artworkList);
-        i.putExtra(BUNDLE, bundle);
-        i.setAction(ArttUpdateService.ACTION_UPDATE_ARTT_WIDGET);
-        startService(i);
-    }
+//    void startArttWidgetService() {
+//        Intent i = new Intent(getApplicationContext(), ArttUpdateService.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList(ARTWORK_STRING, (ArrayList<? extends Parcelable>) artworkList);
+//        i.putExtra(BUNDLE, bundle);
+//        i.setAction(ArttUpdateService.ACTION_UPDATE_ARTT_WIDGET);
+//        startService(i);
+//    }
 
 }

@@ -1,7 +1,7 @@
 package com.olamide.findartt.activity;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -13,11 +13,12 @@ import com.olamide.findartt.utils.TempStorageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.TYPE_STRING;
-import static com.olamide.findartt.Constants.USEREMAIL_STRING;
-import static com.olamide.findartt.Constants.USERPASSWORD_STRING;
+import static com.olamide.findartt.AppConstants.TYPE_STRING;
+import static com.olamide.findartt.AppConstants.USEREMAIL_STRING;
+import static com.olamide.findartt.AppConstants.USERPASSWORD_STRING;
 
 public class SignInActivity extends AppCompatActivity implements FragmentDataPasser {
 
@@ -29,10 +30,10 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
-        Timber.plant(new Timber.DebugTree());
 
         if (savedInstanceState != null) {
             typeString = savedInstanceState.getString(TYPE_STRING);
@@ -45,7 +46,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
             if (!userLogin.getEmail().isEmpty() && !userLogin.getPassword().isEmpty()) {
                 Bundle bundle = new Bundle();
                 bundle.putString(USEREMAIL_STRING, userLogin.getEmail());
-                bundle.putString(USERPASSWORD_STRING,userLogin.getPassword());
+                bundle.putString(USERPASSWORD_STRING, userLogin.getPassword());
                 logInFragment.setArguments(bundle);
             }
 
@@ -67,7 +68,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentDataPas
     @Override
     public void onDataPass(Bundle bundle) {
         if (bundle != null) {
-            Timber.e("hello " + bundle.getString(TYPE_STRING));
+            Timber.e("hello %s", bundle.getString(TYPE_STRING));
             typeString = bundle.getString(TYPE_STRING);
         }
 

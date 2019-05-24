@@ -1,53 +1,70 @@
 package com.olamide.findartt.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
+import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.BidAdapter;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Bid;
-import com.olamide.findartt.models.FindArttResponse;
-import com.olamide.findartt.models.User;
+
+import com.olamide.findartt.models.UserResult;
+import com.olamide.findartt.models.api.FindArttResponse;
+
+import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.ErrorUtils;
-import com.olamide.findartt.utils.TempStorageUtils;
+
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.FindArttService;
+import com.olamide.findartt.utils.network.ConnectionUtils;
+
+import com.olamide.findartt.viewmodels.ArtworkViewModel;
+import com.olamide.findartt.customviews.MaxHeightNestedScrollView;
+
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import dagger.android.support.AndroidSupportInjection;
+
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.Constants.ARTWORK_STRING;
-import static com.olamide.findartt.Constants.CURRENT_USER;
+
+import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
+import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
 public class BidFragment extends Fragment {
 
 
-    private Call<FindArttResponse<Bid>> responseCall;
+    @Inject
+    ViewModelFactory viewModelFactory;
 
-    private String accessToken;
-    private User user;
+    ArtworkViewModel artworkViewModel;
+
+    @Inject
+    ConnectionUtils connectionUtils;
     private ArtworkSummary artworkSummary;
 
     @BindView(R.id.cl_root)
@@ -72,8 +89,15 @@ public class BidFragment extends Fragment {
     RecyclerView rvBids;
 
     @BindView(R.id.bid_frame)
-    FrameLayout bidFrame;
+    MaxHeightNestedScrollView bidFrame;
 
+    private UserResult userResult;
+
+    ProgressDialog progressDialog;
+    ViewGroup dummyFrame;
+
+    //To ensure it doesnt recur while getting the summary
+    private boolean newCheck = false;
 
     //To store the Recycler view Current state
     private Parcelable savedRecyclerLayoutState;
@@ -83,6 +107,8 @@ public class BidFragment extends Fragment {
     private BidAdapter mAdapter;
     LinearLayoutManager layoutManager;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     public BidFragment() {
         // Required empty public constructor
     }
@@ -91,7 +117,7 @@ public class BidFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        accessToken = TempStorageUtils.readSharedPreferenceString(getContext(), ACCESS_TOKEN_STRING);
+        artworkViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(ArtworkViewModel.class);
 
 
     }
@@ -102,8 +128,13 @@ public class BidFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_bid, container, false);
         ButterKnife.bind(this, rootView);
+        artworkViewModel.getBidResponse().observe(this, this::handleBid);
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
+
+
         if (getArguments() != null) {
-            user = getArguments().getParcelable(CURRENT_USER);
+            userResult = getArguments().getParcelable(CURRENT_USER);
             artworkSummary = getArguments().getParcelable(ARTWORK_STRING);
 
             layoutManager = new LinearLayoutManager(getContext() );
@@ -132,6 +163,7 @@ public class BidFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
@@ -171,6 +203,43 @@ public class BidFragment extends Fragment {
         }
     }
 
+
+    private void handleBid(MVResponse mvResponse) {
+        switch (mvResponse.status) {
+
+            case LOADING:
+                progressDialog.show();
+                break;
+            case SUCCESS:
+                progressDialog.dismiss();
+                FindArttResponse arttResponse = new FindArttResponse();
+                try {
+                    arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
+                    Bid completedBid = objectMapper.convertValue(arttResponse.getData(), Bid.class);
+                    UiUtils.showSuccessSnack("Successful Purchase. Welcome ", getContext(), clRoot);
+                    if(newCheck){
+                        newCheck = false;
+                        artworkViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), completedBid.getArtworkId());
+                    }
+
+                } catch (Exception e) {
+                    Timber.e(e);
+                    ErrorUtils.handleError((Objects.requireNonNull(getActivity())), clRoot);
+                }
+                break;
+
+            case ERROR:
+                progressDialog.dismiss();
+                ErrorUtils.handleThrowable(mvResponse.error, getActivity(), clRoot);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
+
     @OnClick(R.id.bt_bid)
     void attemptPurchase() {
 
@@ -179,37 +248,10 @@ public class BidFragment extends Fragment {
         bid.setAmount(Double.parseDouble(stringAmount));
         bid.setArtworkId(artworkSummary.getId());
 
-        loadingPb.setVisibility(View.VISIBLE);
-        btBid.setVisibility(View.INVISIBLE);
-        responseCall = FindArttService.bidForArt(accessToken, bid);
-        responseCall.enqueue(new Callback<FindArttResponse<Bid>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<Bid>> call, Response<FindArttResponse<Bid>> response) {
-                loadingPb.setVisibility(View.INVISIBLE);
-//                btBuy.setVisibility(View.VISIBLE);
-
-                if (response.body() != null) {
-                    FindArttResponse<Bid> arttResponse = response.body();
-                    Bid completedBid = arttResponse.getData();
-                    UiUtils.showSuccessSnack("Successful Purchase. ", getContext(), clRoot);
-
-                } else {
-                    btBid.setVisibility(View.VISIBLE);
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<FindArttResponse<Bid>> call, Throwable t) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                btBid.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
-
+        if (connectionUtils.handleNoInternet(getActivity())) {
+            newCheck = true;
+            artworkViewModel.bidForArt(userResult.getTokenInfo().getAccessToken(), bid);
+        }
 
     }
 }

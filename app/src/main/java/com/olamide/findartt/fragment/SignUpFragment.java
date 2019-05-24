@@ -1,13 +1,15 @@
 package com.olamide.findartt.fragment;
 
+import android.app.ProgressDialog;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -24,33 +27,37 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.olamide.findartt.Constants;
+import com.olamide.findartt.AppConstants;
+import com.olamide.findartt.viewmodels.SignUpViewModel;
+import com.olamide.findartt.ViewModelFactory;
+
 import com.olamide.findartt.activity.DashboardActivity;
 import com.olamide.findartt.enums.Gender;
 import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
-import com.olamide.findartt.models.FindArttResponse;
+import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.UserSignup;
+import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.FindArttService;
+import com.olamide.findartt.utils.network.ConnectionUtils;
 
-import java.text.SimpleDateFormat;
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.Constants.CURRENT_USER;
-import static com.olamide.findartt.Constants.RC_SIGN_IN;
-import static com.olamide.findartt.Constants.TYPE_STRING;
+import static com.olamide.findartt.AppConstants.RC_SIGN_IN;
+import static com.olamide.findartt.AppConstants.TYPE_STRING;
 
 
 /**
@@ -63,8 +70,11 @@ import static com.olamide.findartt.Constants.TYPE_STRING;
  */
 public class SignUpFragment extends Fragment {
 
-    private Call<FindArttResponse<UserResult>> responseCall;
+    @Inject
+    ViewModelFactory viewModelFactory;
 
+    @Inject
+    ConnectionUtils connectionUtils;
 
     FragmentDataPasser dataPasser;
 
@@ -110,6 +120,13 @@ public class SignUpFragment extends Fragment {
     @BindView(R.id.btn_signup_google)
     SignInButton signInButton;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    SignUpViewModel signUpViewModel;
+
+    ProgressDialog progressDialog;
+    ViewGroup dummyFrame;
+
 
     private UserSignup signup = new UserSignup();
     private String userEmail;
@@ -132,23 +149,32 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
 
 
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
+
+
+        signUpViewModel = ViewModelProviders.of(this, viewModelFactory).get(SignUpViewModel.class);
+        signUpViewModel.getSignupResponse().observe(this, this::consumeResponse);
+
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestIdToken(Constants.GOOGLE_WEB_CLIENT_ID)
+                .requestIdToken(AppConstants.GOOGLE_WEB_CLIENT_ID)
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
@@ -160,8 +186,8 @@ public class SignUpFragment extends Fragment {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
         if (account != null) {
-            //call api google login
-            //signUpGoogle(account);
+            //call api google signup
+            signUpGoogle(account);
         }
 
         return rootView;
@@ -177,6 +203,7 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         dataPasser = (FragmentDataPasser) context;
         Bundle bundle = new Bundle();
@@ -208,7 +235,7 @@ public class SignUpFragment extends Fragment {
     void loadLogin() {
         FragmentManager fragmentManager = getFragmentManager();
         LogInFragment logInFragment = new LogInFragment();
-        fragmentManager.beginTransaction()
+        Objects.requireNonNull(fragmentManager).beginTransaction()
                 .replace(R.id.sign_in_frame, logInFragment)
                 .commit();
 
@@ -238,56 +265,67 @@ public class SignUpFragment extends Fragment {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Timber.w("signInResult:failed code=%s", e.getStatusCode());
-            ErrorUtils.handleError(getContext(), clRoot);
+            ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
         }
     }
 
 
+    /*
+     * method to handle response
+     * */
+    private void consumeResponse(MVResponse mVResponse) {
+
+        switch (mVResponse.status) {
+
+            case LOADING:
+
+                progressDialog.show();
+                break;
+            case SUCCESS:
+
+                progressDialog.dismiss();
+                FindArttResponse arttResponse = new FindArttResponse();
+                try {
+                    arttResponse = objectMapper.convertValue(mVResponse.data, FindArttResponse.class);
+                    UserResult userResult = objectMapper.convertValue(arttResponse.getData(), UserResult.class);
+                    storeUserCredentials(userResult);
+                    UiUtils.showSuccessSnack("Successful SignUp. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
+                } catch (Exception e) {
+                    Timber.e(e);
+                    ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
+
+                }
+                goToDashboard();
+                break;
+
+            case ERROR:
+                progressDialog.dismiss();
+                googleSignOut();
+                ErrorUtils.handleThrowable(mVResponse.error, getContext(), clRoot);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void storeUserCredentials(UserResult userResult) {
+        TempStorageUtils.storeActiveUser(getContext(), userResult);
+
+    }
+
+    void goToDashboard() {
+        Intent intent = new Intent(getContext(), DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
 
     void signUpGoogle(GoogleSignInAccount account) {
-        account.getIdToken();
-        loadingPbGoogle.setIndeterminate(true);
-        loadingPbGoogle.getIndeterminateDrawable().setColorFilter(getContext().getColor(R.color.color_primary), android.graphics.PorterDuff.Mode.MULTIPLY);
-        loadingPbGoogle.setVisibility(View.VISIBLE);
-        signInButton.setVisibility(View.INVISIBLE);
-
         String idToken = account.getIdToken();
-        responseCall = FindArttService.signUpGoogle(new TokenInfo(account.getIdToken()));
-        responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<UserResult>> call, Response<FindArttResponse<UserResult>> response) {
-                loadingPbGoogle.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-
-                if (response.body() != null) {
-                    FindArttResponse<UserResult> arttResponse = response.body();
-                    UserResult userResult = arttResponse.getData();
-                    storeAccessToken(userResult.getTokenInfo().getAccessToken());
-                    UiUtils.showSuccessSnack("Successful Sign Up. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
-
-                    Intent intent = new Intent(getContext(), DashboardActivity.class);
-                    intent.putExtra(CURRENT_USER,userResult.getUser());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } else {
-                    googleSignOut();
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
-                loadingPbGoogle.setVisibility(View.INVISIBLE);
-                signInButton.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
-
-
+        if (connectionUtils.handleNoInternet(getActivity())) {
+            signUpViewModel.signUpGoogle(new TokenInfo(idToken));
+        }
     }
 
 
@@ -300,49 +338,20 @@ public class SignUpFragment extends Fragment {
 
     @OnClick(R.id.btn_sign_up)
     void signUp() {
-
         updateSignUp(true);
-        loadingPb.setVisibility(View.VISIBLE);
-        signUpbt.setVisibility(View.INVISIBLE);
-        responseCall = FindArttService.signUp(signup);
-        responseCall.enqueue(new Callback<FindArttResponse<UserResult>>() {
-
-            @Override
-            public void onResponse(Call<FindArttResponse<UserResult>> call, Response<FindArttResponse<UserResult>> response) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                signUpbt.setVisibility(View.VISIBLE);
-
-                if (response.body() != null) {
-                    FindArttResponse<UserResult> arttResponse = response.body();
-                    UserResult userResult = arttResponse.getData();
-                    storeAccessToken(userResult.getTokenInfo().getAccessToken());
-
-                    UiUtils.showSuccessSnack("Successful Sign Up. Welcome " + userResult.getUser().getName(), getContext(), clRoot);
-
-                    Intent intent = new Intent(getContext(), DashboardActivity.class);
-                    intent.putExtra(CURRENT_USER,userResult.getUser());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } else {
-                    ErrorUtils.handleApiError(response.errorBody(), getContext(), clRoot);
-                }
-
+        if ((!signUpValid(signup, confirmUserPassword))) {
+            ErrorUtils.handleUserError(getString(R.string.generic_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
+        } else if (!passwordValidated(signup.getPassword(), confirmUserPassword)) {
+            ErrorUtils.handleUserError(getString(R.string.password_form_validation), Objects.requireNonNull(getContext()), dummyFrame);
+        } else {
+            if (connectionUtils.handleNoInternet(getActivity())) {
+                signUpViewModel.signUp(signup);
             }
 
-            @Override
-            public void onFailure(Call<FindArttResponse<UserResult>> call, Throwable t) {
-                loadingPb.setVisibility(View.INVISIBLE);
-                signUpbt.setVisibility(View.VISIBLE);
-                ErrorUtils.handleInternetError(getContext(), clRoot);
-                Timber.e(t);
-            }
-        });
+        }
 
 
     }
-
-
-
 
 
     void updateSignUp(boolean withUi) {
@@ -365,33 +374,56 @@ public class SignUpFragment extends Fragment {
         signup.setCountry(country);
         signup.setPassword(userPassword);
         //temporary
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSS");
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSS");
 //        signup.setDateOfBirth(simpleDateFormat.format(new Date()));
-        signup.setDateOfBirth("1900-01-01T09:04:21.798Z");
+//        signup.setDateOfBirth("1900-01-01T09:04:21.798Z");
     }
 
-    void storeAccessToken(String accessToken) {
-        TempStorageUtils.writeSharedPreferenceString(getContext(), Constants.ACCESS_TOKEN_STRING, accessToken);
+    private boolean signUpValid(UserSignup signup1, String confirmUserPassword) {
+        if (signup1.getEmail().trim().isEmpty()
+                || signup1.getPassword().trim().isEmpty()
+                || confirmUserPassword.trim().isEmpty()
+                || signup1.getFirstName().trim().isEmpty()
+                || signup1.getLastName().trim().isEmpty()
+                || signup1.getPhone().trim().isEmpty()
+                || signup1.getCountry().trim().isEmpty()
+
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean passwordValidated(String password, String confirmUserPassword) {
+        if (!password.trim().equals(confirmUserPassword.trim())) {
+            return false;
+        }
+        return true;
+    }
+
+    void storeActiveUser(UserResult userResult) {
+        TempStorageUtils.storeActiveUser(getContext(), userResult);
     }
 
 
-    private void googleSignOut (){
+    private void googleSignOut() {
         signOut();
         revokeAccess();
     }
 
     private void signOut() {
         mGoogleSignInClient.signOut()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
                     }
                 });
     }
+
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...

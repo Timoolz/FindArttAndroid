@@ -1,4 +1,4 @@
-package com.olamide.findartt.models;
+package com.olamide.findartt.models.api;
 
 
 import com.google.gson.annotations.SerializedName;
