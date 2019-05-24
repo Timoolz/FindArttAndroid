@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/primary">
+        <item
+            android:id="@+id/home_dest"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/user_dest"
+            android:title="@string/profile" />
+    </group>
+    <item android:title="@string/settings" />
+    <item
+        android:id="@+id/log_out"
+        android:title="@string/logout" />
+</menu>

@@ -41,9 +41,9 @@
         <!--</service>-->
 
 
-        <activity android:name=".activity.ArtworkActivity" />
-        <activity android:name=".activity.DashboardActivity" />
-        <activity android:name=".activity.SignInActivity">
+        <!--<activity android:name=".ui.activity.ArtworkActivity" />-->
+        <activity android:name=".ui.activity.DashboardActivity" />
+        <activity android:name=".ui.activity.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

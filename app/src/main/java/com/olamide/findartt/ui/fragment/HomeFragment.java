@@ -1,22 +1,26 @@
-package com.olamide.findartt.activity;
+package com.olamide.findartt.ui.fragment;
 
-import androidx.lifecycle.ViewModelProviders;
-import android.content.Intent;
-import android.os.Parcelable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.olamide.findartt.viewmodels.DashboardViewModel;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
@@ -27,8 +31,9 @@ import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
+import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
-//import com.olamide.findartt.widget.ArttUpdateService;
+import com.olamide.findartt.viewmodels.HomeViewModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,17 +42,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-//import retrofit2.MVResponse;
-import dagger.android.AndroidInjection;
+import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 
-public class DashboardActivity extends AppCompatActivity implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
+public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdapterOnClickListener {
+
+    private OnFragmentInteractionListener mListener;
 
     @Inject
     ViewModelFactory viewModelFactory;
+
+    ViewGroup dummyFrame;
 
     @Inject
     AppAuthUtil appAuthUtil;
@@ -56,15 +63,9 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    DashboardViewModel dashboardViewModel;
+    HomeViewModel homeViewModel;
 
     private UserResult userResult;
-
-    @BindView(R.id.cl_root)
-    CoordinatorLayout clRoot;
-
-//    @BindView((R.id.toolbar))
-//    Toolbar toolbar;
 
     @BindView(R.id.rv_artwork)
     RecyclerView artworkRv;
@@ -79,30 +80,39 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     private ArtworkAdapter mAdapter;
     StaggeredGridLayoutManager layoutManager;
 
-    //To store the Recycler view Current state
-    private Parcelable savedRecyclerLayoutState;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-        ButterKnife.bind(this);
         userResult = appAuthUtil.authorize();
+        homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
+        if (getArguments() != null) {
 
+        }
+    }
 
-        dashboardViewModel = ViewModelProviders.of(this, viewModelFactory).get(DashboardViewModel.class);
-        dashboardViewModel.getArtWorkResponse().observe(this, this::displayUi);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, rootView);
+        this.setHasOptionsMenu(true);
 
+        homeViewModel.getArtWorkResponse().observe(this, this::displayUi);
+        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
         int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
         layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
 
 
-        mAdapter = new ArtworkAdapter(artworkList, getApplicationContext(), this);
+        mAdapter = new ArtworkAdapter(artworkList, getContext(), this);
         mAdapter.setArtworkList(artworkList);
-        Objects.requireNonNull(artworkRv.getLayoutManager()).onRestoreInstanceState(savedRecyclerLayoutState);
         artworkRv.setNestedScrollingEnabled(false);
         artworkRv.setAdapter(mAdapter);
 
@@ -111,7 +121,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
             loadArtWorks();
         }
 
-
+        return rootView;
     }
 
     private void displayUi(MVResponse mvResponse) {
@@ -135,7 +145,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                     }
 
                 } catch (Exception e) {
-                    try{
+                    try {
                         //Local data doesn't come in Api Response
                         artworkList = objectMapper.convertValue(mvResponse.data, new TypeReference<List<Artwork>>() {
                         });
@@ -144,9 +154,9 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
                         } else {
                             mAdapter.setArtworkList(artworkList);
                         }
-                    }catch (Exception ee){
+                    } catch (Exception ee) {
                         Timber.e(ee);
-                        ErrorUtils.handleError((this), clRoot);
+                        ErrorUtils.handleError((getContext()), dummyFrame);
                     }
 
 
@@ -155,7 +165,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
             case ERROR:
                 loadingPb.setVisibility(View.INVISIBLE);
-                ErrorUtils.handleThrowable(mvResponse.error, this, clRoot);
+                ErrorUtils.handleThrowable(mvResponse.error, getContext(), dummyFrame);
                 break;
 
             default:
@@ -166,14 +176,14 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 
 
     void loadArtWorks() {
-        if(connectionUtils.handleNoInternet(this)){
-            dashboardViewModel.findArtworks(userResult.getTokenInfo().getAccessToken());
+        if (connectionUtils.handleNoInternet(getActivity())) {
+            homeViewModel.findArtworks(userResult.getTokenInfo().getAccessToken());
         }
 
     }
 
     private void getFavouriteArt() {
-        dashboardViewModel.findFavouriteArtworks();
+        homeViewModel.findFavouriteArtworks();
     }
 
 
@@ -183,6 +193,7 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
         loadingPb.setVisibility(View.INVISIBLE);
 
     }
+
     void displayUi() {
         tvEmpty.setVisibility(View.INVISIBLE);
         artworkRv.setVisibility(View.VISIBLE);
@@ -191,20 +202,18 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
     }
 
 
-
     @Override
     public void onClickListener(Artwork artwork) {
+        HomeFragmentDirections.GoToArtwork action = HomeFragmentDirections.goToArtwork(artwork);
+        Navigation.findNavController(Objects.requireNonNull(getActivity()),R.id.nav_host_fragment)
+                .navigate(action);
 
-        Intent intent = new Intent(this, ArtworkActivity.class);
-        intent.putExtra(ARTWORK_STRING, artwork);
-        startActivity(intent);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.artwork_menu, menu);
     }
 
     @Override
@@ -237,4 +246,28 @@ public class DashboardActivity extends AppCompatActivity implements ArtworkAdapt
 //        startService(i);
 //    }
 
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+//        if (context instanceof OnFragmentInteractionListener) {
+//            mListener = (OnFragmentInteractionListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
 }

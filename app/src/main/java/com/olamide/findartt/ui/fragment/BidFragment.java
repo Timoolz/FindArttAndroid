@@ -1,4 +1,4 @@
-package com.olamide.findartt.fragment;
+package com.olamide.findartt.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,7 +37,7 @@ import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
-import com.olamide.findartt.customviews.MaxHeightNestedScrollView;
+import com.olamide.findartt.ui.customviews.MaxHeightNestedScrollView;
 
 import java.util.Objects;
 
@@ -117,7 +117,7 @@ public class BidFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        artworkViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(ArtworkViewModel.class);
+        artworkViewModel = ViewModelProviders.of(Objects.requireNonNull(getParentFragment()), viewModelFactory).get(ArtworkViewModel.class);
 
 
     }

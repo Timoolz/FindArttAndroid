@@ -9,7 +9,7 @@
 //import android.widget.RemoteViews;
 //
 //import com.olamide.findartt.R;
-//import com.olamide.findartt.activity.ArtworkActivity;
+//import com.olamide.findartt.ui.activity.ArtworkActivity;
 //import com.olamide.findartt.models.Artwork;
 //
 //import java.util.List;
@@ -27,21 +27,21 @@
 //        mArtworks = artworks;
 //        for (int appWidgetId : appWidgetIds)
 //        {
-//            RemoteViews customviews = new RemoteViews(context.getPackageName(), R.layout.artt_widget);
+//            RemoteViews ui = new RemoteViews(context.getPackageName(), R.layout.artt_widget);
 //
 //            Intent intent = new Intent(context, arttViewsService.class);
-//            customviews.setRemoteAdapter(R.id.lv_artt, intent);
+//            ui.setRemoteAdapter(R.id.lv_artt, intent);
 //
 //
 //            // Set the artworkACtivity intent to launch when clicked
 //            Intent appIntent = new Intent(context, ArtworkActivity.class);
 //            //appIntent.putExtra()
 //            PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            customviews.setPendingIntentTemplate(R.id.lv_artt, appPendingIntent);
+//            ui.setPendingIntentTemplate(R.id.lv_artt, appPendingIntent);
 //
 //            ComponentName component = new ComponentName(context, ArttWidget.class);
 //            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.lv_artt);
-//            appWidgetManager.updateAppWidget(component, customviews);
+//            appWidgetManager.updateAppWidget(component, ui);
 //        }
 //    }
 //

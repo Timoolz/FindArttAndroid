@@ -1,22 +1,21 @@
-package com.olamide.findartt.customviews;
+package com.olamide.findartt.ui.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
-import androidx.core.widget.NestedScrollView;
+import android.widget.ScrollView;
 
 import com.olamide.findartt.R;
 
-public class MaxHeightNestedScrollView extends NestedScrollView {
+public class MaxHeightScrollView extends ScrollView {
     private int maxHeight;
     private int defaultMaxHeight = 250;
 
-    public MaxHeightNestedScrollView(Context context) {
+    public MaxHeightScrollView(Context context) {
         super(context);
     }
 
-    public MaxHeightNestedScrollView(Context context, AttributeSet attrs) {
+    public MaxHeightScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init(context, attrs);
@@ -24,19 +23,25 @@ public class MaxHeightNestedScrollView extends NestedScrollView {
 
     }
 
-    public MaxHeightNestedScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MaxHeightScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (!isInEditMode()) {
             init(context, attrs);
         }
     }
 
+    public MaxHeightScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        if (!isInEditMode()) {
+            init(context, attrs);
+        }
+    }
 
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightNestedScrollView);
-            maxHeight = styledAttrs.getDimensionPixelSize(R.styleable.MaxHeightNestedScrollView_maxHeight, defaultMaxHeight);
+            TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView);
+            maxHeight = styledAttrs.getDimensionPixelSize(R.styleable.MaxHeightScrollView_maxHeight, defaultMaxHeight);
             styledAttrs.recycle();
         }
     }

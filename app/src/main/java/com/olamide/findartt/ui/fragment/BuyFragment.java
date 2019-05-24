@@ -1,4 +1,4 @@
-package com.olamide.findartt.fragment;
+package com.olamide.findartt.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -93,7 +93,7 @@ public class BuyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        artworkViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), viewModelFactory).get(ArtworkViewModel.class);
+        artworkViewModel = ViewModelProviders.of(Objects.requireNonNull(getParentFragment()), viewModelFactory).get(ArtworkViewModel.class);
 
 
     }
