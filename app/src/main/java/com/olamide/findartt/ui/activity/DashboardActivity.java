@@ -71,6 +71,17 @@ public class DashboardActivity extends AppCompatActivity {
 
         setupActionBar(navController, appBarConfiguration);
         setupNavigationMenu(navController);
+
+
+    }
+
+    private void setupActionBar(NavController navController, AppBarConfiguration appBarConfiguration) {
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+    }
+
+
+    private void setupNavigationMenu(NavController navController) {
+        NavigationUI.setupWithNavController(sideNavView, navController);
         //
         // *TO CALL THE LOGOUT METHOD*
         // *AND TO PREVENT JETPACK NAVIGATION FROM HANDLING IT*
@@ -83,19 +94,8 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
-    private void setupActionBar(NavController navController, AppBarConfiguration appBarConfiguration) {
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-    }
-
-
-    private void setupNavigationMenu(NavController navController) {
-        NavigationUI.setupWithNavController(sideNavView, navController);
-
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
