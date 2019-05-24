@@ -164,9 +164,9 @@ public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userResult = appAuthUtil.authorize();
-        if (getArguments() != null) {
-            artwork = getArguments().getParcelable(ARTWORK_STRING);
-            }
+
+        //get from safe args
+        artwork = ArtworkFragmentArgs.fromBundle(getArguments()).getArtwork();
     }
 
     @Override

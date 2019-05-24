@@ -10,15 +10,13 @@
         android:label="@string/home"
         tools:layout="@layout/fragment_home">
 
-        <!-- TODO STEP 7.1 - Add action with transitions -->
-        <!--<action-->
-            <!--android:id="@+id/next_action"-->
-            <!--app:destination="@+id/flow_step_one_dest"-->
-            <!--app:enterAnim="@anim/slide_in_right"-->
-            <!--app:exitAnim="@anim/slide_out_left"-->
-            <!--app:popEnterAnim="@anim/slide_in_left"-->
-            <!--app:popExitAnim="@anim/slide_out_right" />-->
-        <!-- TODO END STEP 7.1 -->
+        <action
+            android:id="@+id/go_to_artwork"
+            app:destination="@+id/artwork_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
@@ -29,6 +27,18 @@
         android:label="@string/profile"
         tools:layout="@layout/fragment_user">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/artwork_dest"
+        android:name="com.olamide.findartt.ui.fragment.ArtworkFragment"
+        tools:layout="@layout/fragment_artwork">
+
+
+        <argument
+            android:name="artwork"
+            app:argType="com.olamide.findartt.models.Artwork"
+            />
     </fragment>
 
 </navigation>

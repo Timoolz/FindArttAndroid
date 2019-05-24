@@ -1,16 +1,15 @@
 package com.olamide.findartt.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +28,6 @@ import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
-//import com.olamide.findartt.ui.activity.ArtworkActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
@@ -47,7 +45,6 @@ import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
-import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 
 
 public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdapterOnClickListener {
@@ -83,8 +80,6 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
     private ArtworkAdapter mAdapter;
     StaggeredGridLayoutManager layoutManager;
 
-    //To store the Recycler view Current state
-    private Parcelable savedRecyclerLayoutState;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -118,7 +113,6 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
 
         mAdapter = new ArtworkAdapter(artworkList, getContext(), this);
         mAdapter.setArtworkList(artworkList);
-        Objects.requireNonNull(artworkRv.getLayoutManager()).onRestoreInstanceState(savedRecyclerLayoutState);
         artworkRv.setNestedScrollingEnabled(false);
         artworkRv.setAdapter(mAdapter);
 
@@ -210,10 +204,10 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
 
     @Override
     public void onClickListener(Artwork artwork) {
+        HomeFragmentDirections.GoToArtwork action = HomeFragmentDirections.goToArtwork(artwork);
+        Navigation.findNavController(Objects.requireNonNull(getActivity()),R.id.nav_host_fragment)
+                .navigate(action);
 
-//        Intent intent = new Intent(getActivity(), ArtworkActivity.class);
-//        intent.putExtra(ARTWORK_STRING, artwork);
-//        startActivity(intent);
     }
 
 
