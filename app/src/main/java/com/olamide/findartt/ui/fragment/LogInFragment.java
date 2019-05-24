@@ -1,15 +1,20 @@
 package com.olamide.findartt.ui.fragment;
 
 import android.app.ProgressDialog;
+
 import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +34,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import com.olamide.findartt.AppConstants;
+import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;
-import com.olamide.findartt.interfaces.FragmentDataPasser;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
@@ -58,9 +63,6 @@ import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.AppConstants.RC_SIGN_IN;
-import static com.olamide.findartt.AppConstants.TYPE_STRING;
-import static com.olamide.findartt.AppConstants.USEREMAIL_STRING;
-import static com.olamide.findartt.AppConstants.USERPASSWORD_STRING;
 
 
 public class LogInFragment extends Fragment {
@@ -70,7 +72,6 @@ public class LogInFragment extends Fragment {
 
     @Inject
     ConnectionUtils connectionUtils;
-    FragmentDataPasser dataPasser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -134,9 +135,8 @@ public class LogInFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, rootView);
 
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
+        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
         dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
-
 
 
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
@@ -150,15 +150,18 @@ public class LogInFragment extends Fragment {
 //            }
             return rootView;
         }
-        if (getArguments() != null) {
-            userEmail = getArguments().getString(USEREMAIL_STRING);
-            userPassword = getArguments().getString(USERPASSWORD_STRING);
+
+        UserLogin userLogin = TempStorageUtils.getUserLogin(getContext());
+        if (!userLogin.getEmail().isEmpty() && !userLogin.getPassword().isEmpty()) {
+            userEmail = userLogin.getEmail();
+            userPassword = userLogin.getPassword();
             updateLogin(false);
-            if(connectionUtils.handleNoInternet(getActivity())){
+            if (connectionUtils.handleNoInternet(getActivity())) {
                 login(login);
             }
             return rootView;
         }
+
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -195,10 +198,6 @@ public class LogInFragment extends Fragment {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
-        dataPasser = (FragmentDataPasser) context;
-        Bundle bundle = new Bundle();
-        bundle.putString(TYPE_STRING, "LOGIN");
-        dataPasser.onDataPass(bundle);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
@@ -300,7 +299,7 @@ public class LogInFragment extends Fragment {
 
     void loginGoogle(GoogleSignInAccount account) {
         String idToken = account.getIdToken();
-        if(connectionUtils.handleNoInternet(getActivity())){
+        if (connectionUtils.handleNoInternet(getActivity())) {
             loginViewModel.hitGoogleLogin(new TokenInfo(idToken));
         }
 
@@ -315,7 +314,7 @@ public class LogInFragment extends Fragment {
     void login(final UserLogin logins) {
         login = logins;
         if (loginValid(login)) {
-            if(connectionUtils.handleNoInternet(getActivity())){
+            if (connectionUtils.handleNoInternet(getActivity())) {
                 loginViewModel.hitLogin(login);
             }
         } else {
@@ -333,11 +332,7 @@ public class LogInFragment extends Fragment {
 
     @OnClick(R.id.sign_up_sug)
     void loadSignUp() {
-        FragmentManager fragmentManager = getFragmentManager();
-        SignUpFragment signUpFragment = new SignUpFragment();
-        Objects.requireNonNull(fragmentManager).beginTransaction()
-                .replace(R.id.sign_in_frame, signUpFragment)
-                .commit();
+        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment).navigate(R.id.sign_up_dest);
 
     }
 
@@ -348,11 +343,11 @@ public class LogInFragment extends Fragment {
     }
 
 
-        void goToDashboard(){
-        Intent intent = new Intent(getContext(), DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    void goToDashboard() {
+        NavigationUtils.goToDashboard(getActivity());
+
     }
+
     void updateLogin(boolean withUi) {
         if (withUi) {
             userEmail = emailText.getText().toString();
@@ -387,7 +382,7 @@ public class LogInFragment extends Fragment {
     }
 
     private void signOut() {
-        if(mGoogleSignInClient!=null){
+        if (mGoogleSignInClient != null) {
             mGoogleSignInClient.signOut()
                     .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                         @Override
@@ -400,7 +395,7 @@ public class LogInFragment extends Fragment {
     }
 
     private void revokeAccess() {
-        if(mGoogleSignInClient!=null){
+        if (mGoogleSignInClient != null) {
             mGoogleSignInClient.revokeAccess()
                     .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<Void>() {
                         @Override
@@ -415,7 +410,7 @@ public class LogInFragment extends Fragment {
 
     private boolean loginValid(UserLogin logins) {
 
-        if (logins.getEmail().trim().isEmpty()||logins.getPassword().trim().isEmpty()) {
+        if (logins.getEmail().trim().isEmpty() || logins.getPassword().trim().isEmpty()) {
             return false;
         }
         return true;

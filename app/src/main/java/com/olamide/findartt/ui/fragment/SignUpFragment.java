@@ -1,15 +1,21 @@
 package com.olamide.findartt.ui.fragment;
 
 import android.app.ProgressDialog;
+
 import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +34,13 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.AppConstants;
+import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.SignUpViewModel;
 import com.olamide.findartt.ViewModelFactory;
 
 import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.enums.Gender;
-import com.olamide.findartt.interfaces.FragmentDataPasser;
+
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
@@ -76,7 +83,6 @@ public class SignUpFragment extends Fragment {
     @Inject
     ConnectionUtils connectionUtils;
 
-    FragmentDataPasser dataPasser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -205,10 +211,6 @@ public class SignUpFragment extends Fragment {
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
-        dataPasser = (FragmentDataPasser) context;
-        Bundle bundle = new Bundle();
-        bundle.putString(TYPE_STRING, "SIGNUP");
-        dataPasser.onDataPass(bundle);
 
 
 //        if (context instanceof OnFragmentInteractionListener) {
@@ -233,11 +235,8 @@ public class SignUpFragment extends Fragment {
 
     @OnClick(R.id.login_sug)
     void loadLogin() {
-        FragmentManager fragmentManager = getFragmentManager();
-        LogInFragment logInFragment = new LogInFragment();
-        Objects.requireNonNull(fragmentManager).beginTransaction()
-                .replace(R.id.sign_in_frame, logInFragment)
-                .commit();
+        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment).navigate(R.id.login_dest);
+
 
     }
 
@@ -315,9 +314,8 @@ public class SignUpFragment extends Fragment {
     }
 
     void goToDashboard() {
-        Intent intent = new Intent(getContext(), DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        NavigationUtils.goToDashboard(getActivity());
+
     }
 
 
