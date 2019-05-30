@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "405378603130-ofm1mine0itpeh5u3nbgo4ofetspevll.apps.googleusercontent.com",
+          "client_id": "405378603130-j8nr5gknal8sneebbkef4lcr2dklkp21.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.olamide.findartt",
-            "certificate_hash": "a104f397dc5592a345160f8258e9422b7140a308"
+            "certificate_hash": "d4e2d391ed26f6d801a3deac24d93b50580e49eb"
+          }
+        },
+        {
+          "client_id": "405378603130-0qbeib9eahnerhdgjo67msg6qdkigk91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.olamide.findartt",
+            "certificate_hash": "65155ea3d05b8565b031b54cb4bd5a03d902fae7"
           }
         },
         {
@@ -28,6 +36,14 @@
           "android_info": {
             "package_name": "com.olamide.findartt",
             "certificate_hash": "c499576b489dae1b47a5ca49fb224e4bbb98e06f"
+          }
+        },
+        {
+          "client_id": "405378603130-ofm1mine0itpeh5u3nbgo4ofetspevll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.olamide.findartt",
+            "certificate_hash": "a104f397dc5592a345160f8258e9422b7140a308"
           }
         },
         {
@@ -41,20 +57,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "405378603130-es1ogscm9md8isoe61fj2c413guub7ii.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
