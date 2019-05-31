@@ -12,7 +12,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ import com.google.android.gms.tasks.Task;
 import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.LoginViewModel;
-import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.R;
@@ -240,7 +238,7 @@ public class LogInFragment extends Fragment {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Timber.w("signInResult:failed code=%s", e.getStatusCode());
+            Timber.e(e);
             ErrorUtils.handleError(Objects.requireNonNull(getContext()), clRoot);
         }
     }

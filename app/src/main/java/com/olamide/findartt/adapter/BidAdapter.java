@@ -14,6 +14,7 @@ import com.olamide.findartt.R;
 import com.olamide.findartt.enums.BidStatus;
 import com.olamide.findartt.models.Bid;
 import com.olamide.findartt.utils.Converters;
+import com.olamide.findartt.utils.GeneralUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -103,9 +104,10 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHo
 
         holder.tvAmount.setText(currentBid.getAmount().toString());
 
-        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
-        Date date = Converters.toDate(currentBid.getCreatedDateEpoch());
-        holder.tvDate.setText(outputFormat.format(date));
+//        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
+//        Date date = Converters.toDate(currentBid.getCreatedDateEpoch());
+//        holder.tvDate.setText(outputFormat.format(date));
+        holder.tvDate.setText(GeneralUtils.dateFromNowFormat(currentBid.getCreatedDateEpoch()));
 
         if (currentBid.getBidStatus().equals(BidStatus.ACCEPTED)){
             holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.success));

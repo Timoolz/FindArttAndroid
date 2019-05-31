@@ -26,9 +26,9 @@ public class RecyclerViewUtils {
 
         int newSpanCount = (int) Math.floor(width / cardWidth);
 
-        Timber.e( "width  " +width);
-        Timber.e( "cardWidth  " +cardWidth);
-        Timber.e( "Spancount  " +newSpanCount);
+        Timber.i( "width  %s", width);
+        Timber.i( "cardWidth  %s", cardWidth);
+        Timber.i( "Spancount  %s", newSpanCount);
 
         return newSpanCount;
     }

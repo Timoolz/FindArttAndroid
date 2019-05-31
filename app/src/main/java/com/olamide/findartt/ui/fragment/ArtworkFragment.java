@@ -42,6 +42,7 @@ import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.Converters;
 import com.olamide.findartt.utils.ErrorUtils;
+import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.exo.ExoUtil;
 import com.olamide.findartt.utils.exo.ExoUtilFactory;
@@ -281,10 +282,11 @@ public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateList
 
 
     void displayUi() {
-        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
-        Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
+//        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM-d-yyyy", Locale.ENGLISH);
+//        Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
+//        tvDate.setText(outputFormat.format(date));
+        tvDate.setText(GeneralUtils.dateFromNowFormat(artworkSummary.getCreatedDateEpoch()));
         tvArtName.setText(artworkSummary.getName());
-        tvDate.setText(outputFormat.format(date));
         tv_description.setText(artworkSummary.getDescription());
 
         Picasso.with(getContext())
