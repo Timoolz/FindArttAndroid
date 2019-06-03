@@ -1,16 +1,30 @@
-
 <resources>
-    <color name="photo_placeholder">#ccc</color>
+
+    <color name="primary">#053A87</color>
+    <color name="primary_dark">#052C6A</color>
+    <color name="primary_light">#CEE6F6</color>
+    <color name="accent">#3F9B76</color>
+    <color name="primary_text">#10151B</color>
+    <color name="secondary_text">#50585C</color>
+    <color name="icons">#053A87</color>
+    <color name="divider">#CEE6F6</color>
+
+    <!--<color name="detail_text">#E9F2FE</color>-->
 
 
-    <color name="color_primary">#AEA8A3</color>
-        <color name="color_primary_dark">#62554b</color>
-    <color name="color_primary_light">#E4E2E1</color>
-    <color name="color_accent">#DBA534</color>
+    <!--<color name="primary">#AEA8A3</color>-->
+    <!--<color name="primary_dark">#62554b</color>-->
+    <!--<color name="primary_light">#E4E2E1</color>-->
+    <!--<color name="accent">#DBA534</color>-->
+    <!--<color name="primary_text">#1D1F1F</color>-->
+    <!--<color name="secondary_text">#5B605D</color>-->
+    <!--<color name="icons">#AEA8A3</color>-->
+    <!--<color name="divider">#62554b</color>-->
 
-    <color name="color_primary_text">#1D1F1F</color>
-    <color name="color_secondary_text">#5B605D</color>
-    <color name="color_detail_text">#FFFFFF</color>
+
+    <color name="photo_placeholder">#CEE6F6</color>
+    <color name="detail_text">#FFFFFF</color>
+
 
     <color name="light_grey">#E9E8E7</color>
 
@@ -18,9 +32,7 @@
 
     <color name="failure">#FF4500</color>
 
-
-
-
+    <color name="red">#FF4500</color>
 
 
 </resources>

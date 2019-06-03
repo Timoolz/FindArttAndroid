@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/color_primary_light"
-    >
+    android:background="@color/primary_light"
+    android:orientation="vertical">
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_gravity="bottom"
-        android:background="@color/color_primary_light">
+        android:background="@color/primary_light">
 
 
         <!--suppress AndroidLintContentDescription -->
@@ -19,9 +18,9 @@
             android:id="@+id/iv_art"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/photo_placeholder"
             android:scaleType="fitXY"
-            android:transitionName="animated"
-            android:background="@color/photo_placeholder" />
+            android:transitionName="animated" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -30,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:ellipsize="end"
-            android:textColor="@color/color_detail_text"            android:maxLines="4"
+            android:maxLines="4"
+            android:textColor="@color/detail_text"
 
             />
 
@@ -43,7 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:maxLines="10"
-        />
+        android:maxLines="10" />
 
 </LinearLayout>

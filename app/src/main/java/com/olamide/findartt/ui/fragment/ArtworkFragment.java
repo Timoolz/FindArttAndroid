@@ -40,7 +40,6 @@ import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.AppAuthUtil;
-import com.olamide.findartt.utils.Converters;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.UiUtils;
@@ -50,9 +49,6 @@ import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -201,17 +197,17 @@ public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateList
                     Artwork favArtwork = objectMapper.convertValue(mvResponse.data, Artwork.class);
                     if (favArtwork != null) {
                         favouriteArt = true;
-                        btFavourite.setImageResource(R.drawable.favourite);
+                        btFavourite.setImageResource(R.drawable.ic_favorite_24dp);
                     } else {
                         favouriteArt = false;
-                        btFavourite.setImageResource(R.drawable.not_favourite2);
+                        btFavourite.setImageResource(R.drawable.ic_favorite_border_24dp);
                     }
 
 
                 } catch (Exception e) {
                     Timber.e(e);
                     favouriteArt = false;
-                    btFavourite.setImageResource(R.drawable.not_favourite2);
+                    btFavourite.setImageResource(R.drawable.ic_favorite_border_24dp);
                     //ErrorUtils.handleError((this), clRoot);
                 }
                 break;
@@ -219,7 +215,7 @@ public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateList
             case ERROR:
 
                 favouriteArt = false;
-                btFavourite.setImageResource(R.drawable.not_favourite2);
+                btFavourite.setImageResource(R.drawable.ic_favorite_border_24dp);
 
                 break;
 

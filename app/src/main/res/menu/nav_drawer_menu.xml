@@ -4,13 +4,19 @@
     <group android:id="@+id/primary">
         <item
             android:id="@+id/home_dest"
+            android:icon="@drawable/ic_home_24dp"
             android:title="@string/home" />
         <item
             android:id="@+id/user_dest"
+            android:icon="@drawable/ic_account_circle_24dp"
             android:title="@string/profile" />
+        <item
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/settings" />
     </group>
-    <item android:title="@string/settings" />
+
     <item
         android:id="@+id/log_out"
+        android:icon="@drawable/ic_exit_to_app_24dp"
         android:title="@string/logout" />
 </menu>

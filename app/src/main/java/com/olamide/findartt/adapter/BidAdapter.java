@@ -1,10 +1,13 @@
 package com.olamide.findartt.adapter;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +30,8 @@ import butterknife.ButterKnife;
 public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHolder> {
 
 
-
-
     private List<Bid> bidList;
     private Context context;
-
-
 
 
     public BidAdapter(List<Bid> bids, Context context) {
@@ -43,18 +42,18 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHo
     }
 
 
-    public void setBidList(List<Bid> bids){
+    public void setBidList(List<Bid> bids) {
         this.bidList = bids;
         notifyDataSetChanged();
     }
 
 
-    public interface  BidAdapterOnClickListener {
+    public interface BidAdapterOnClickListener {
         void onClickListener(Bid bid);
     }
 
 
-    public  class BidAdapterViewHolder extends RecyclerView.ViewHolder  {
+    public class BidAdapterViewHolder extends RecyclerView.ViewHolder {
 
 
         @BindView(R.id.tv_date)
@@ -109,25 +108,21 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHo
 //        holder.tvDate.setText(outputFormat.format(date));
         holder.tvDate.setText(GeneralUtils.dateFromNowFormat(currentBid.getCreatedDateEpoch()));
 
-        if (currentBid.getBidStatus().equals(BidStatus.ACCEPTED)){
-            holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.success));
-        }else if (currentBid.getBidStatus().equals(BidStatus.CURRENT)){
-            holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.color_accent));
-        }else{
-            holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.failure));
-        }
+        holder.cvBidItem.setBackgroundColor(ContextCompat.getColor(context, R.color.success));
+        if (currentBid.getBidStatus().equals(BidStatus.COUNTERED)) {
 
+            holder.cvBidItem.setAlpha(.5f);
+        }
 
 
     }
 
 
-
     @Override
     public int getItemCount() {
-        if(bidList != null){
+        if (bidList != null) {
             return bidList.size();
-        }else {
+        } else {
             return 0;
         }
     }

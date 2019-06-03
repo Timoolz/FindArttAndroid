@@ -84,6 +84,7 @@
                         android:layout_height="50dp"
                         android:background="@null"
                         android:scaleType="fitCenter"
+                        android:padding="3dp"
                         app:layout_constraintEnd_toEndOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
