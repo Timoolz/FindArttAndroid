@@ -1,7 +1,6 @@
 package com.olamide.findartt.service;
 
 import android.app.IntentService;
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
@@ -14,6 +13,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 public class LogoutService extends IntentService {
@@ -32,6 +32,8 @@ public class LogoutService extends IntentService {
         super("LogoutService");
     }
 
+    private final CompositeDisposable disposables = new CompositeDisposable();
+
 
     @Override
     public void onCreate() {
@@ -45,9 +47,14 @@ public class LogoutService extends IntentService {
         if (intent != null && Objects.equals(intent.getAction(), ACTION_LOGOUT_FROM_SERVER)) {
             Timber.i(ACTION_LOGOUT_FROM_SERVER);
             String mAccess = intent.getStringExtra(AppConstants.ACCESS_TOKEN_STRING);
-            findArttRepository.logout(mAccess);
+            disposables.add(findArttRepository.logout(mAccess).subscribe());
 
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposables.clear();
     }
 }
