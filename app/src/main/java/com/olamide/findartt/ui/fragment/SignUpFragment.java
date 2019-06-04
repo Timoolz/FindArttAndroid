@@ -14,6 +14,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -235,7 +236,15 @@ public class SignUpFragment extends Fragment {
 
     @OnClick(R.id.login_sug)
     void loadLogin() {
-        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment).navigate(R.id.login_dest);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_left)
+                .setExitAnim(R.anim.slide_out_right)
+                .setPopEnterAnim(R.anim.slide_in_right)
+                .setPopExitAnim(R.anim.slide_out_left)
+                .setPopUpTo(R.id.login_dest, true)
+                .build();
+        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment)
+                .navigate(R.id.login_dest, null, navOptions);
 
 
     }

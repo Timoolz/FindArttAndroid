@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -154,9 +155,11 @@ public class LogInFragment extends Fragment {
             userEmail = userLogin.getEmail();
             userPassword = userLogin.getPassword();
             updateLogin(false);
-            if (connectionUtils.handleNoInternet(getActivity())) {
-                login(login);
-            }
+            emailText.setText(userEmail);
+            passwordText.setText(userPassword);
+//            if (connectionUtils.handleNoInternet(getActivity())) {
+//                login(login);
+//            }
             return rootView;
         }
 
@@ -330,7 +333,14 @@ public class LogInFragment extends Fragment {
 
     @OnClick(R.id.sign_up_sug)
     void loadSignUp() {
-        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment).navigate(R.id.sign_up_dest);
+        NavOptions navOptions = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_right)
+                .setExitAnim(R.anim.slide_out_left)
+                .setPopEnterAnim(R.anim.slide_in_left)
+                .setPopExitAnim(R.anim.slide_out_right)
+                .build();
+        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.pre_auth_nav_host_fragment)
+                .navigate(R.id.sign_up_dest,null, navOptions);
 
     }
 
