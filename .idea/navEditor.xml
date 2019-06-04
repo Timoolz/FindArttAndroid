@@ -79,11 +79,6 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="go_to_signup">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -113,11 +108,6 @@
                         <option name="myPositions">
                           <map>
                             <entry key="go_to_home">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="go_to_login">
                               <value>
                                 <LayoutPositions />
                               </value>

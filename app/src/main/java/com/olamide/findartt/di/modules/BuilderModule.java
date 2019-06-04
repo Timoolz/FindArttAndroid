@@ -1,6 +1,7 @@
 package com.olamide.findartt.di.modules;
 
 //import com.olamide.findartt.ui.activity.ArtworkActivity;
+import com.olamide.findartt.service.LogoutService;
 import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.ui.fragment.ArtworkFragment;
 import com.olamide.findartt.ui.fragment.HomeFragment;
@@ -50,6 +51,9 @@ public abstract class BuilderModule {
 
     @ContributesAndroidInjector
     abstract MyArtworkFragment bindMyArtworkFragment();
+
+    @ContributesAndroidInjector
+    abstract LogoutService logoutService();
 
 
 

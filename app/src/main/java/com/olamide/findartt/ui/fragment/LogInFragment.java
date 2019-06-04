@@ -157,6 +157,7 @@ public class LogInFragment extends Fragment {
             updateLogin(false);
             emailText.setText(userEmail);
             passwordText.setText(userPassword);
+            rememberCheck.setChecked(true);
 //            if (connectionUtils.handleNoInternet(getActivity())) {
 //                login(login);
 //            }

@@ -3,13 +3,18 @@ package com.olamide.findartt.utils;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
+import com.olamide.findartt.service.LogoutService;
 import com.olamide.findartt.ui.activity.SignInActivity;
 import com.olamide.findartt.models.UserResult;
 
 import javax.inject.Inject;
 
 import io.reactivex.annotations.Nullable;
+
+import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
+import static com.olamide.findartt.AppConstants.BUNDLE;
 
 public class AppAuthUtil {
 
@@ -26,7 +31,8 @@ public class AppAuthUtil {
         this.context = context;
     }
 
-    public @Nullable UserResult authorize(){
+    public @Nullable
+    UserResult authorize() {
         UserResult userResult = TempStorageUtils.getActiveUser(application);
         if (userResult == null) {
             logout();
@@ -37,20 +43,36 @@ public class AppAuthUtil {
 
     public void logout() {
 
-        if(context!=null){
+        if (context != null) {
+            logoutOnServer(context);
             //remove current Active User
             TempStorageUtils.removeActiveUser(context);
             //re direct to sign in activity
             Intent intent = new Intent(context, SignInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        }else {
+
+        } else {
+            logoutOnServer(application);
             //remove current Active User
             TempStorageUtils.removeActiveUser(application);
             //re direct to sign in activity
             Intent intent = new Intent(application, SignInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             application.startActivity(intent);
+
+        }
+
+
+    }
+
+    private void logoutOnServer(Context context) {
+        UserResult userResult = TempStorageUtils.getActiveUser(context);
+        if (userResult != null) {
+            Intent i = new Intent(context, LogoutService.class);
+            i.putExtra(ACCESS_TOKEN_STRING, userResult.getTokenInfo().getAccessToken());
+            i.setAction(LogoutService.ACTION_LOGOUT_FROM_SERVER);
+            context.startService(i);
         }
 
     }

@@ -40,6 +40,11 @@
 
         <!--</service>-->
 
+        <service
+        android:name=".service.LogoutService"
+        android:exported="false">
+
+        </service>
 
         <!--<activity android:name=".ui.activity.ArtworkActivity" />-->
         <activity android:name=".ui.activity.DashboardActivity" />
