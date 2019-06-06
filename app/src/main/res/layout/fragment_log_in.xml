@@ -38,10 +38,10 @@
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="110dp"
+                            android:layout_height="@dimen/avatar_dimen"
                             android:layout_gravity="center"
-                            android:src="@drawable/findart11"
-                            android:contentDescription="@string/desc_logo" />
+                            android:contentDescription="@string/desc_logo"
+                            android:src="@drawable/findart11" />
 
                     </FrameLayout>
 
@@ -54,14 +54,33 @@
                         android:hint="@string/email"
                         android:inputType="textEmailAddress" />
 
-
-                    <EditText
-                        android:id="@+id/et_password"
-                        style="@style/AppTheme.EditText"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:hint="@string/password"
-                        android:inputType="textPassword" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        >
+
+                        <EditText
+                            android:id="@+id/et_password"
+                            style="@style/AppTheme.EditText"
+                            android:layout_width="0dp"
+                            android:layout_weight="9"
+                            android:layout_gravity="center"
+                            android:hint="@string/password"
+                            android:inputType="textPassword" />
+
+                        <ImageView
+                            android:id="@+id/iv_et_password"
+                            android:layout_gravity="bottom"
+                            android:layout_width="wrap_content"
+                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_remove_eye_24dp"
+
+
+                            />
+                    </LinearLayout>
 
 
                     <CheckBox
@@ -100,9 +119,8 @@
 
                         <com.google.android.gms.common.SignInButton
                             android:id="@+id/btn_login_google"
-                            android:layout_width="match_parent"
                             style="@style/AppTheme.Button.Google"
-                            />
+                            android:layout_width="match_parent" />
 
                         <ProgressBar
                             android:id="@+id/pb_loading_google"
@@ -126,8 +144,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/signup_suggest"
             android:contentDescription="@string/signup_suggest"
+            android:text="@string/signup_suggest"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

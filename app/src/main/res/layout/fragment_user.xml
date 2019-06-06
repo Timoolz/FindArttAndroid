@@ -1,14 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.UserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="HELLO USER FRAG" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/avatar_dimen"
+                android:layout_height="@dimen/avatar_dimen"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:background="@drawable/ic_avatar"
+                android:layout_margin="@dimen/fab_margin" />
+
+            <EditText
+                android:id="@+id/et_fname"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/fname"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_lname"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/lname"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                />
+
+
+            <EditText
+                android:id="@+id/et_dob"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/dob"
+                android:focusable="false"
+                android:inputType="text" />
+
+
+            <Spinner
+                android:id="@+id/sp_gender"
+                style="@style/AppTheme.EditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:entries="@array/gender" />
+
+
+            <EditText
+                android:id="@+id/et_country"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/country"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/et_address"
+                style="@style/AppTheme.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:hint="@string/dummy_address"
+                android:inputType="textPostalAddress"
+                android:maxLines="5" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

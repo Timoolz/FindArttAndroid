@@ -16,6 +16,8 @@
 
     <dimen name="app_corner_radius">4dp</dimen>
     <dimen name="list_toolbar_side_margin">0dp</dimen>
+    <dimen name="avatar_dimen">160dp</dimen>
+
 
     <!--
 Refer to App Widget Documentation for margin information

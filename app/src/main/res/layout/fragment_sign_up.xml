@@ -98,24 +98,69 @@
                         android:hint="@string/country"
                         android:inputType="text" />
 
-
-                    <EditText
-                        android:id="@+id/et_password"
-                        style="@style/AppTheme.EditText"
+                    <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        >
 
-                        android:layout_gravity="center"
-                        android:hint="@string/password"
-                        android:inputType="textPassword" />
+
+                        <EditText
+                            android:id="@+id/et_password"
+                            style="@style/AppTheme.EditText"
+                            android:layout_width="0dp"
+                            android:layout_weight="9"
+                            android:layout_gravity="center"
+                            android:hint="@string/password"
+                            android:inputType="textPassword" />
+
+                        <ImageView
+                            android:id="@+id/iv_et_password"
+                            android:layout_gravity="bottom"
+                            android:layout_width="wrap_content"
+                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_remove_eye_24dp"
 
 
-                    <EditText
-                        android:id="@+id/et_password_confirm"
-                        style="@style/AppTheme.EditText"
+                            />
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_gravity="center"
-                        android:hint="@string/confirm_password"
-                        android:inputType="textPassword" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        >
+
+
+
+                        <EditText
+                            android:id="@+id/et_password_confirm"
+                            style="@style/AppTheme.EditText"
+                            android:layout_width="0dp"
+                            android:layout_weight="9"
+                            android:layout_gravity="center"
+                            android:hint="@string/confirm_password"
+                            android:inputType="textPassword" />
+
+                        <ImageView
+                            android:id="@+id/iv_et_password_confirm"
+                            android:layout_gravity="bottom"
+                            android:layout_width="wrap_content"
+                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_remove_eye_24dp"
+
+
+                            />
+                    </LinearLayout>
+
+
 
 
                     <RelativeLayout

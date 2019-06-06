@@ -46,6 +46,7 @@
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="address">Enter your address</string>
 
     <string name="generic_form_validation">Complete required fields </string>
     <string name="password_form_validation">Passwords do not match </string>
@@ -100,6 +101,8 @@ Each Android ND project will be reviewed against the Common Project Requirements
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="cache_type">media_cache</string>
+    <string name="dummy_address">5, BroadWay drive, Somewhere. On Earth</string>
+    <string name="dob">19 -Jan -1900</string>
 
 
 </resources>

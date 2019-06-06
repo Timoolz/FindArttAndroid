@@ -10,11 +10,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.olamide.findartt.R;
+import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.AppAuthUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -49,6 +53,7 @@ public class DashboardActivity extends AppCompatActivity {
     NavController navController;
 
     private UserResult userResult;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,17 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void setupNavigationMenu(NavController navController) {
         NavigationUI.setupWithNavController(sideNavView, navController);
+
+        currentUser = userResult.getUser();
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            View hView = sideNavView.inflateHeaderView(R.layout.nav_header);
+            ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
+            Picasso.with(getApplicationContext())
+                    .load(currentUser.getImageUrl())
+                    .fit()
+                    .into(ivAvatar);
+        }
+
         //
         // *TO CALL THE LOGOUT METHOD*
         // *AND TO PREVENT JETPACK NAVIGATION FROM HANDLING IT*
