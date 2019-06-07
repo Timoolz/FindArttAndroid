@@ -9,8 +9,6 @@ public class AppConstants {
     public static final String GOOGLE_WEB_CLIENT_ID = BuildConfig.GOOGLE_WEB_CLIENT_ID;
     public static final String GOOGLE_SERVER_CLIENT_ID = BuildConfig.GOOGLE_SERVER_CLIENT_ID;
     public final static int RC_SIGN_IN = 9001;
-
-
     public final static String TYPE_STRING = "typeString";
 
     public static final String ACCESS_TOKEN_STRING = "accessToken";
@@ -24,7 +22,7 @@ public class AppConstants {
     public static final String BUNDLE = "bundle";
 
     public static final String EXO_PLAYER_USER_AGENT = BuildConfig.APPLICATION_ID;
-//    public static final int EXO_PLAYER_VIDEO_CACHE_DURATION = 10 * 1024 * 1024;
+    //    public static final int EXO_PLAYER_VIDEO_CACHE_DURATION = 10 * 1024 * 1024;
     public static final int EXO_PLAYER_VIDEO_CACHE_DURATION = 0;
 
 
@@ -32,5 +30,15 @@ public class AppConstants {
     public static final String EXO_PREF_NAME = "exo_shared_pref";
 
     public static final int GLIDE_DEFAULT_TIMEOUT = 60;
+
+    public static final String INTENT_ACTION_STRING = "Complete action using";
+    public static final int RC_PHOTO_PICKER = 2;
+    public static final int RC_CAMERA = 22;
+
+    public static final String FIREBASE_USER_PATH = "users";
+    public static final String FIREBASE_ARTWORK_PATH = "artworks";
+    public static final String FIREBASE_USER_IMAGE_PATH =FIREBASE_USER_PATH + "/images";
+    public static final String FIREBASE_ARTWORK_IMAGE_PATH =FIREBASE_ARTWORK_PATH + "/images";
+    public static final String FIREBASE_ARTWORK_VIDEO_PATH =FIREBASE_ARTWORK_PATH + "/videos";
 
 }

@@ -94,7 +94,7 @@ public class DashboardActivity extends AppCompatActivity {
             View hView = sideNavView.getHeaderView(0);
             TextView tvEmail = (TextView) hView.findViewById(R.id.nav_email);
             tvEmail.setText(currentUser.getEmail());
-            currentUser.setImageUrl("https://firebasestorage.googleapis.com/v0/b/findartt.appspot.com/o/bitmoji-20180722065326.png?alt=media&token=62fe50f7-d763-4c3e-9f40-3a9362eb95de");
+            //currentUser.setImageUrl("https://firebasestorage.googleapis.com/v0/b/findartt.appspot.com/o/bitmoji-20180722065326.png?alt=media&token=62fe50f7-d763-4c3e-9f40-3a9362eb95de");
             if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
 
                 ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
