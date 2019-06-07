@@ -34,6 +34,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.SignUpViewModel;
@@ -110,10 +111,10 @@ public class SignUpFragment extends Fragment {
     EditText countryText;
 
     @BindView(R.id.et_password)
-    EditText passwordText;
+    TextInputEditText passwordText;
 
     @BindView(R.id.et_password_confirm)
-    EditText passwordConfirmText;
+    TextInputEditText passwordConfirmText;
 
     @BindView(R.id.pb_loading)
     ProgressBar loadingPb;

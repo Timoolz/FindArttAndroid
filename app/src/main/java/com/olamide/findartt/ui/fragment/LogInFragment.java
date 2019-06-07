@@ -33,6 +33,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.LoginViewModel;
@@ -81,7 +82,7 @@ public class LogInFragment extends Fragment {
     EditText emailText;
 
     @BindView(R.id.et_password)
-    EditText passwordText;
+    TextInputEditText passwordText;
 
     @BindView(R.id.chb_remember_me)
     CheckBox rememberCheck;

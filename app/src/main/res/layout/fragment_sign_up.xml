@@ -41,8 +41,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="110dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/findart11"
-                            android:contentDescription="@string/desc_logo" />
+                            android:contentDescription="@string/desc_logo"
+                            android:src="@drawable/findart11" />
 
                     </FrameLayout>
 
@@ -98,69 +98,37 @@
                         android:hint="@string/country"
                         android:inputType="text" />
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="10"
-                        >
+                        app:passwordToggleEnabled="true">
 
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_password"
                             style="@style/AppTheme.EditText"
-                            android:layout_width="0dp"
-                            android:layout_weight="9"
-                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
                             android:hint="@string/password"
                             android:inputType="textPassword" />
 
-                        <ImageView
-                            android:id="@+id/iv_et_password"
-                            android:layout_gravity="bottom"
-                            android:layout_width="wrap_content"
-                            android:scaleType="fitXY"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/ic_remove_eye_24dp"
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                            />
-                    </LinearLayout>
-
-
-
-
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="10"
-                        >
+                        app:passwordToggleEnabled="true">
 
 
-
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_password_confirm"
                             style="@style/AppTheme.EditText"
-                            android:layout_width="0dp"
-                            android:layout_weight="9"
-                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
                             android:hint="@string/confirm_password"
                             android:inputType="textPassword" />
 
-                        <ImageView
-                            android:id="@+id/iv_et_password_confirm"
-                            android:layout_gravity="bottom"
-                            android:layout_width="wrap_content"
-                            android:scaleType="fitXY"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/ic_remove_eye_24dp"
-
-
-                            />
-                    </LinearLayout>
-
-
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <RelativeLayout
@@ -189,9 +157,8 @@
 
                         <com.google.android.gms.common.SignInButton
                             android:id="@+id/btn_signup_google"
-                            android:layout_width="match_parent"
                             style="@style/AppTheme.Button.Google"
-                            />
+                            android:layout_width="match_parent" />
 
                         <ProgressBar
                             android:id="@+id/pb_loading_google"
@@ -218,8 +185,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/login_suggest"
             android:contentDescription="@string/login_suggest"
+            android:text="@string/login_suggest"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

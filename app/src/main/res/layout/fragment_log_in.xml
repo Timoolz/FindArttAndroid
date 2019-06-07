@@ -54,33 +54,22 @@
                         android:hint="@string/email"
                         android:inputType="textEmailAddress" />
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="10"
+                        app:passwordToggleEnabled="true"
+
                         >
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_password"
                             style="@style/AppTheme.EditText"
-                            android:layout_width="0dp"
-                            android:layout_weight="9"
-                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
                             android:hint="@string/password"
                             android:inputType="textPassword" />
 
-                        <ImageView
-                            android:id="@+id/iv_et_password"
-                            android:layout_gravity="bottom"
-                            android:layout_width="wrap_content"
-                            android:scaleType="fitXY"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/ic_remove_eye_24dp"
 
-
-                            />
-                    </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <CheckBox
