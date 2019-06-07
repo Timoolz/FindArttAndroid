@@ -12,8 +12,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;
@@ -88,13 +90,22 @@ public class DashboardActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(sideNavView, navController);
 
         currentUser = userResult.getUser();
-        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
-            View hView = sideNavView.inflateHeaderView(R.layout.nav_header);
-            ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
-            Picasso.with(getApplicationContext())
-                    .load(currentUser.getImageUrl())
-                    .fit()
-                    .into(ivAvatar);
+        if (sideNavView.getHeaderCount() > 0) {
+            View hView = sideNavView.getHeaderView(0);
+            TextView tvEmail = (TextView) hView.findViewById(R.id.nav_email);
+            tvEmail.setText(currentUser.getEmail());
+            currentUser.setImageUrl("https://firebasestorage.googleapis.com/v0/b/findartt.appspot.com/o/bitmoji-20180722065326.png?alt=media&token=62fe50f7-d763-4c3e-9f40-3a9362eb95de");
+            if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+
+                ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
+                Picasso.with(getApplicationContext())
+                        .load(currentUser.getImageUrl())
+                        .transform(new RoundedTransformationBuilder().cornerRadiusDp((getResources().getDimension(R.dimen.avatar_dimen)) / 2).oval(false).build())
+                        .placeholder(R.drawable.ic_avatar)
+                        .error(R.drawable.ic_avatar)
+                        .fit()
+                        .into(ivAvatar);
+            }
         }
 
         //

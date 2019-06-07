@@ -11,7 +11,15 @@
         android:layout_height="130dp"
         android:layout_gravity="center"
         android:scaleType="fitXY"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
         android:background="@drawable/ic_avatar"/>
+
+    <TextView
+        android:id="@+id/nav_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_dummy_text"
+        android:theme="@style/AppTheme.TextView.Medium"
+        android:padding="8dp"/>
 
 </LinearLayout>
