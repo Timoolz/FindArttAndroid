@@ -21,33 +21,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<receiver android:name=".widget.ArttWidget">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-            <!--</intent-filter>-->
-
-            <!--<meta-data-->
-                <!--android:name="android.appwidget.provider"-->
-                <!--android:resource="@xml/artt_widget_info" />-->
-        <!--</receiver>-->
-
-        <!--<service-->
-            <!--android:name=".widget.arttViewsService"-->
-            <!--android:permission="android.permission.BIND_REMOTEVIEWS"/>-->
-
-        <!--<service-->
-            <!--android:name=".widget.ArttUpdateService"-->
-            <!--android:exported="false">-->
-
-        <!--</service>-->
-
+        <activity android:name=".ui.activity.ImagePickerActivity"></activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!-- <receiver android:name=".widget.ArttWidget"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.appwidget.action.APPWIDGET_UPDATE" /> -->
+        <!-- </intent-filter> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.appwidget.provider" -->
+        <!-- android:resource="@xml/artt_widget_info" /> -->
+        <!-- </receiver> -->
+        <!-- <service -->
+        <!-- android:name=".widget.arttViewsService" -->
+        <!-- android:permission="android.permission.BIND_REMOTEVIEWS"/> -->
+        <!-- <service -->
+        <!-- android:name=".widget.ArttUpdateService" -->
+        <!-- android:exported="false"> -->
+        <!-- </service> -->
         <service
-        android:name=".service.LogoutService"
-        android:exported="false">
-
-        </service>
-
-        <!--<activity android:name=".ui.activity.ArtworkActivity" />-->
+            android:name=".service.LogoutService"
+            android:exported="false"></service> <!-- <activity android:name=".ui.activity.ArtworkActivity" /> -->
         <activity android:name=".ui.activity.DashboardActivity" />
         <activity android:name=".ui.activity.SignInActivity">
             <intent-filter>

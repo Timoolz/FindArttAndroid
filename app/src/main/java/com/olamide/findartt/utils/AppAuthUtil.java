@@ -16,7 +16,7 @@ import io.reactivex.annotations.Nullable;
 import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.AppConstants.BUNDLE;
 
-public class AppAuthUtil {
+public final class AppAuthUtil {
 
     private Application application;
     private Context context;
@@ -24,16 +24,16 @@ public class AppAuthUtil {
     @Inject
     public AppAuthUtil(Application application) {
         this.application = application;
+        this.context = application;
     }
 
     public AppAuthUtil(Context context) {
-
         this.context = context;
     }
 
     public @Nullable
     UserResult authorize() {
-        UserResult userResult = TempStorageUtils.getActiveUser(application);
+        UserResult userResult = TempStorageUtils.getActiveUser(context);
         if (userResult == null) {
             logout();
             return null;
@@ -42,9 +42,8 @@ public class AppAuthUtil {
     }
 
     public void logout() {
-
         if (context != null) {
-            logoutOnServer(context);
+            logoutOnServer();
             //remove current Active User
             TempStorageUtils.removeActiveUser(context);
             //re direct to sign in activity
@@ -52,21 +51,12 @@ public class AppAuthUtil {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
 
-        } else {
-            logoutOnServer(application);
-            //remove current Active User
-            TempStorageUtils.removeActiveUser(application);
-            //re direct to sign in activity
-            Intent intent = new Intent(application, SignInActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            application.startActivity(intent);
-
         }
 
 
     }
 
-    private void logoutOnServer(Context context) {
+    private void logoutOnServer() {
         UserResult userResult = TempStorageUtils.getActiveUser(context);
         if (userResult != null) {
             Intent i = new Intent(context, LogoutService.class);

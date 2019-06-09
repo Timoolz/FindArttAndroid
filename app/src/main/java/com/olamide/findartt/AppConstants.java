@@ -32,8 +32,12 @@ public class AppConstants {
     public static final int GLIDE_DEFAULT_TIMEOUT = 60;
 
     public static final String INTENT_ACTION_STRING = "Complete action using";
-    public static final int RC_PHOTO_PICKER = 2;
-    public static final int RC_CAMERA = 22;
+
+    public static final int RC_IMAGE_PICKER = 21;
+    public static final int RC_GALLERY = 211;
+    public static final int RC_CAMERA = 212;
+
+    public static final String IMAGE_URI_PATH = "path";
 
     public static final String FIREBASE_USER_PATH = "users";
     public static final String FIREBASE_ARTWORK_PATH = "artworks";

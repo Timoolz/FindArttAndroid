@@ -12,6 +12,7 @@ import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.network.FindArttAPI;
 import com.olamide.findartt.utils.network.FindArttRepository;
+import com.olamide.findartt.utils.network.FirebaseUtil;
 
 import javax.inject.Singleton;
 
@@ -66,11 +67,17 @@ public class AppModule {
     }
 
 
-    @Provides
-    @Singleton
-    AppAuthUtil providesAuth() {
-        return new AppAuthUtil(application);
-    }
+//    @Provides
+//    @Singleton
+//    AppAuthUtil providesAuth() {
+//        return new AppAuthUtil(application);
+//    }
+//
+//    @Provides
+//    @Singleton
+//    FirebaseUtil providesFirebaseUtil() {
+//        return new FirebaseUtil(application);
+//    }
 
 
 }
