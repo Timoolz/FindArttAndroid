@@ -184,11 +184,8 @@ public class UserFragment extends Fragment {
 
     @OnClick(R.id.iv_edit_avatar)
     void changeAvatar() {
-
         Intent intent = new Intent(getContext(), ImagePickerActivity.class);
         startActivityForResult(intent, RC_IMAGE_PICKER);
-
-
     }
 
 

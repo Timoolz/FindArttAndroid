@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -41,6 +42,15 @@ public class ImagePickerActivity extends AppCompatActivity {
         View promptView = layoutInflater.inflate(R.layout.image_picker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(ImagePickerActivity.this);
         builder.setView(promptView);
+        builder.setCancelable(true);
+        builder.setOnCancelListener(
+                new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        setResultCancelled();
+                    }
+                }
+        );
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -114,7 +124,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
             case UCrop.RESULT_ERROR:
                 final Throwable cropError = UCrop.getError(data);
-                Timber.e( cropError, "Crop error: ");
+                Timber.e(cropError, "Crop error: ");
                 setResultCancelled();
                 break;
             default:
@@ -137,10 +147,10 @@ public class ImagePickerActivity extends AppCompatActivity {
 //        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         //if (lockAspectRatio)
-            options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y);
+        options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y);
 
         //if (setBitmapMaxWidthHeight)
-            options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight);
+        options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight);
 
         UCrop.of(sourceUri, destinationUri)
                 .withOptions(options)
@@ -175,6 +185,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
+
     private void setResultCancelled() {
         Intent intent = new Intent();
         setResult(Activity.RESULT_CANCELED, intent);
