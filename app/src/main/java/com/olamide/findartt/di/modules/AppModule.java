@@ -9,10 +9,8 @@ import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.database.ArtworkDao;
 import com.olamide.findartt.database.FindArttDatabase;
 import com.olamide.findartt.di.rx.SchedulersFactory;
-import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.network.FindArttAPI;
 import com.olamide.findartt.utils.network.FindArttRepository;
-import com.olamide.findartt.utils.network.FirebaseUtil;
 
 import javax.inject.Singleton;
 

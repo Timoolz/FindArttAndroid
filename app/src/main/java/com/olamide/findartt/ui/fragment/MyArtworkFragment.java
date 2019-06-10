@@ -15,14 +15,7 @@ import com.olamide.findartt.R;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyArtworkFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyArtworkFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MyArtworkFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;

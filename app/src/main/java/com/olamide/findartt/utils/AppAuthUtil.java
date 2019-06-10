@@ -3,7 +3,6 @@ package com.olamide.findartt.utils;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.olamide.findartt.service.LogoutService;
 import com.olamide.findartt.ui.activity.SignInActivity;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 import io.reactivex.annotations.Nullable;
 
 import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
-import static com.olamide.findartt.AppConstants.BUNDLE;
 
 public final class AppAuthUtil {
 

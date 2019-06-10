@@ -83,9 +83,9 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     /* Room lib*/
-    implementation "androidx.room:room-runtime:2.1.0-alpha04"
-    implementation "androidx.room:room-rxjava2:2.1.0-alpha04"
-    annotationProcessor "androidx.room:room-compiler:2.1.0-alpha04"
+    implementation "androidx.room:room-runtime:2.1.0-rc01"
+    implementation "androidx.room:room-rxjava2:2.1.0-rc01"
+    annotationProcessor "androidx.room:room-compiler:2.1.0-rc01"
 
     /* LiveData lib*/
     implementation "androidx.lifecycle:lifecycle-runtime:2.0.0"

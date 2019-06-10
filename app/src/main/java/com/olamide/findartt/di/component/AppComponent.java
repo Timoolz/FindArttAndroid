@@ -5,8 +5,6 @@ import com.olamide.findartt.di.modules.AppModule;
 import com.olamide.findartt.di.modules.BuilderModule;
 import com.olamide.findartt.di.modules.ApiModule;
 import com.olamide.findartt.di.modules.ExoModule;
-import com.olamide.findartt.di.modules.FindArttGlideModule;
-//import com.olamide.findartt.di.modules.FragmentBuilderModule;
 
 import javax.inject.Singleton;
 

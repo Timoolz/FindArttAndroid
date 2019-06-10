@@ -1,11 +1,8 @@
 package com.olamide.findartt.utils;
 
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.olamide.findartt.R;
 import com.squareup.picasso.Transformation;
 import com.yalantis.ucrop.UCrop;
 
@@ -41,7 +38,6 @@ public class ImageUtils {
         RoundedTransformationBuilder transformationBuilder = new RoundedTransformationBuilder();
         transformationBuilder.cornerRadiusDp(radius);
         transformationBuilder.oval(false);
-        Transformation transformation = transformationBuilder.build();
-        return transformation;
+        return  transformationBuilder.build();
     }
 }
