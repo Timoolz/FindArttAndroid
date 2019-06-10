@@ -20,6 +20,7 @@ import com.olamide.findartt.R;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.AppAuthUtil;
+import com.olamide.findartt.utils.ImageUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
@@ -100,7 +101,7 @@ public class DashboardActivity extends AppCompatActivity {
                 ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
                 Picasso.with(getApplicationContext())
                         .load(currentUser.getImageUrl())
-                        .transform(new RoundedTransformationBuilder().cornerRadiusDp((getResources().getDimension(R.dimen.avatar_dimen)) / 2).oval(false).build())
+                        .transform(ImageUtils.defaultAvatarTransformation(ivAvatar.getMaxHeight(),ivAvatar.getMaxWidth()))
                         .placeholder(R.drawable.ic_avatar)
                         .error(R.drawable.ic_avatar)
                         .fit()

@@ -1,27 +1,38 @@
 package com.olamide.findartt.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.olamide.findartt.R;
+import com.olamide.findartt.utils.ImageUtils;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import timber.log.Timber;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static androidx.core.content.FileProvider.getUriForFile;
 import static com.olamide.findartt.AppConstants.IMAGE_URI_PATH;
 import static com.olamide.findartt.AppConstants.INTENT_ACTION_STRING;
 import static com.olamide.findartt.AppConstants.RC_CAMERA;
@@ -29,8 +40,8 @@ import static com.olamide.findartt.AppConstants.RC_GALLERY;
 
 public class ImagePickerActivity extends AppCompatActivity {
 
-    private int ASPECT_RATIO_X = 16, ASPECT_RATIO_Y = 16, bitmapMaxWidth = 1000, bitmapMaxHeight = 1000;
-    private int IMAGE_COMPRESSION = 80;
+
+    public static String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +92,13 @@ public class ImagePickerActivity extends AppCompatActivity {
     }
 
     void launchCamera() {
+
+        fileName = System.currentTimeMillis() + ".jpg";
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //intent.setType("image/*");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, true);
-        startActivityForResult(Intent.createChooser(intent, INTENT_ACTION_STRING), RC_CAMERA);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheImagePath(fileName));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(Intent.createChooser(intent, INTENT_ACTION_STRING), RC_CAMERA);
+        }
     }
 
 
@@ -96,7 +110,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             case RC_GALLERY:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImageUri = data.getData();
-                    cropImage(selectedImageUri);
+                    cropImage(selectedImageUri, ImageUtils.defaultUcropOptions(true));
 
                 } else {
                     setResultCancelled();
@@ -105,7 +119,8 @@ public class ImagePickerActivity extends AppCompatActivity {
                 break;
             case RC_CAMERA:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImageUri = data.getData();
+                    Uri selectedImageUri = getCacheImagePath(fileName);
+                    cropImage(selectedImageUri, ImageUtils.defaultUcropOptions(true));
 
                 } else {
                     setResultCancelled();
@@ -136,21 +151,8 @@ public class ImagePickerActivity extends AppCompatActivity {
 
     }
 
-    private void cropImage(Uri sourceUri) {
+    private void cropImage(Uri sourceUri, UCrop.Options options) {
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), queryName(getContentResolver(), sourceUri)));
-        UCrop.Options options = new UCrop.Options();
-        options.setCompressionQuality(IMAGE_COMPRESSION);
-
-//        // applying UI theme
-//        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-//        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
-//        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.colorPrimary));
-
-        //if (lockAspectRatio)
-        options.withAspectRatio(ASPECT_RATIO_X, ASPECT_RATIO_Y);
-
-        //if (setBitmapMaxWidthHeight)
-        options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight);
 
         UCrop.of(sourceUri, destinationUri)
                 .withOptions(options)
@@ -183,6 +185,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(IMAGE_URI_PATH, imagePath);
         setResult(Activity.RESULT_OK, intent);
+        clearCache(this);
         finish();
     }
 
@@ -190,6 +193,27 @@ public class ImagePickerActivity extends AppCompatActivity {
         Intent intent = new Intent();
         setResult(Activity.RESULT_CANCELED, intent);
         finish();
+    }
+
+
+    private Uri getCacheImagePath(String fileName) {
+        File path = new File(getExternalCacheDir(), "camera");
+        if (!path.exists()) path.mkdirs();
+        File image = new File(path, fileName);
+        return getUriForFile(ImagePickerActivity.this, getPackageName() + ".provider", image);
+    }
+
+    /**
+     * Calling this will delete the images from cache directory
+     * useful to clear some memory
+     */
+    private static void clearCache(Context context) {
+        File path = new File(context.getExternalCacheDir(), "camera");
+        if (path.exists() && path.isDirectory()) {
+            for (File child : path.listFiles()) {
+                child.delete();
+            }
+        }
     }
 
 

@@ -30,6 +30,7 @@ import com.olamide.findartt.ui.activity.ImagePickerActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
+import com.olamide.findartt.utils.ImageUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
@@ -122,11 +123,12 @@ public class UserFragment extends Fragment {
     }
 
     private void loadUi() {
-//        currentUser.setImageUrl("https://firebasestorage.googleapis.com/v0/b/findartt.appspot.com/o/bitmoji-20180722065326.png?alt=media&token=62fe50f7-d763-4c3e-9f40-3a9362eb95de");
+
+
         if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
             Picasso.with(getContext())
                     .load(currentUser.getImageUrl())
-                    .transform(new RoundedTransformationBuilder().cornerRadiusDp((getResources().getDimension(R.dimen.avatar_dimen)) / 2).oval(false).build())
+                    .transform(ImageUtils.defaultAvatarTransformation(avatarIv.getMaxHeight(),avatarIv.getMaxWidth()))
                     .placeholder(R.drawable.ic_avatar)
                     .error(R.drawable.ic_avatar)
                     .fit()
