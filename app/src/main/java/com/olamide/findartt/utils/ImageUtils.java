@@ -26,7 +26,10 @@ public class ImageUtils {
         return options;
     }
 
-    public static Transformation defaultAvatarTransformation(int height, int width) {
+    public static Transformation defaultAvatarTransformation(ImageView imageView) {
+        int height; int width;
+        height = imageView.getMaxHeight();
+        width = imageView.getMaxWidth();
         float radius;
         if (height == width) {
             radius = (float) (height / 2);

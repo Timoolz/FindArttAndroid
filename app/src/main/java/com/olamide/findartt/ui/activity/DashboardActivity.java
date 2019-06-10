@@ -101,7 +101,7 @@ public class DashboardActivity extends AppCompatActivity {
                 ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
                 Picasso.with(getApplicationContext())
                         .load(currentUser.getImageUrl())
-                        .transform(ImageUtils.defaultAvatarTransformation(ivAvatar.getMaxHeight(),ivAvatar.getMaxWidth()))
+                        .transform(ImageUtils.defaultAvatarTransformation(ivAvatar))
                         .placeholder(R.drawable.ic_avatar)
                         .error(R.drawable.ic_avatar)
                         .fit()

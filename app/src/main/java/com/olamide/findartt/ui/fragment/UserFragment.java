@@ -128,7 +128,7 @@ public class UserFragment extends Fragment {
         if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
             Picasso.with(getContext())
                     .load(currentUser.getImageUrl())
-                    .transform(ImageUtils.defaultAvatarTransformation(avatarIv.getMaxHeight(),avatarIv.getMaxWidth()))
+                    .transform(ImageUtils.defaultAvatarTransformation(avatarIv))
                     .placeholder(R.drawable.ic_avatar)
                     .error(R.drawable.ic_avatar)
                     .fit()
