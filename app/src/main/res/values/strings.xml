@@ -29,6 +29,7 @@
     <string name="prev">Prev</string>
 
     <string name="login">Login </string>
+    <string name="save">Save Changes </string>
     <string name="signup">Sign Up</string>
     <string name="logout">Logout </string>
     <string name="signout">Sign Out</string>
@@ -103,6 +104,7 @@ Each Android ND project will be reviewed against the Common Project Requirements
     <string name="cache_type">media_cache</string>
     <string name="dummy_address">5, BroadWay drive, Somewhere. On Earth</string>
     <string name="dob">19 -Jan -1900</string>
+    <string name="update">Make Changes</string>
 
 
 </resources>

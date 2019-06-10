@@ -108,6 +108,17 @@
                 android:inputType="textPostalAddress"
                 android:maxLines="5" />
 
+            <Button
+                android:id="@+id/bt_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                style="@style/AppTheme.Button"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:contentDescription="@string/save"
+                android:text="@string/save"
+                />
+
 
         </LinearLayout>
 

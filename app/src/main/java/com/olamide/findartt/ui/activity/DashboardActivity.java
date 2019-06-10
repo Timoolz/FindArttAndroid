@@ -21,6 +21,7 @@ import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ImageUtils;
+import com.olamide.findartt.utils.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
@@ -95,17 +96,9 @@ public class DashboardActivity extends AppCompatActivity {
             View hView = sideNavView.getHeaderView(0);
             TextView tvEmail = (TextView) hView.findViewById(R.id.nav_email);
             tvEmail.setText(currentUser.getEmail());
-            //currentUser.setImageUrl("https://firebasestorage.googleapis.com/v0/b/findartt.appspot.com/o/bitmoji-20180722065326.png?alt=media&token=62fe50f7-d763-4c3e-9f40-3a9362eb95de");
             if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
-
                 ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
-                Picasso.with(getApplicationContext())
-                        .load(currentUser.getImageUrl())
-                        .transform(ImageUtils.defaultAvatarTransformation(ivAvatar))
-                        .placeholder(R.drawable.ic_avatar)
-                        .error(R.drawable.ic_avatar)
-                        .fit()
-                        .into(ivAvatar);
+                UiUtils.loadAvatar(currentUser.getImageUrl(), ivAvatar, getApplicationContext());
             }
         }
 

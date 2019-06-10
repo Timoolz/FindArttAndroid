@@ -6,7 +6,7 @@ import com.olamide.findartt.enums.Gender;
 public class UserUpdate {
 
 
-    @SerializedName("email")
+    @SerializedName("id")
     private long id;
 
     @SerializedName("firstName")

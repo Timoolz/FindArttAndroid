@@ -11,10 +11,23 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.olamide.findartt.R;
+import com.squareup.picasso.Picasso;
 
 public class UiUtils {
+
+    public static void loadAvatar(String imageUrl, ImageView imageView, Context context){
+        Picasso.with(context)
+                .load(imageUrl)
+                .transform(ImageUtils.defaultAvatarTransformation(imageView))
+                .placeholder(R.drawable.ic_avatar)
+                .error(R.drawable.ic_avatar)
+                .fit()
+                .into(imageView);
+
+    }
 
 
     public static ProgressDialog getProgressDialog(Context context, String msg, boolean cancelable) {

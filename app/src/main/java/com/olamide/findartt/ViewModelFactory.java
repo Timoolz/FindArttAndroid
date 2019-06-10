@@ -11,6 +11,7 @@ import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.viewmodels.HomeViewModel;
 import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.viewmodels.SignUpViewModel;
+import com.olamide.findartt.viewmodels.UserViewModel;
 
 import javax.inject.Inject;
 
@@ -44,6 +45,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass.isAssignableFrom(ArtworkViewModel.class)) {
             return (T) new ArtworkViewModel(application, findArttRepository, schedulersFactory);
+        }
+
+        if (modelClass.isAssignableFrom(UserViewModel.class)) {
+            return (T) new UserViewModel(application, findArttRepository, schedulersFactory);
         }
 
         if (modelClass.isAssignableFrom(VideoViewModel.class)) {
