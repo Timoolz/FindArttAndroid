@@ -77,10 +77,8 @@ import static com.olamide.findartt.AppConstants.TYPE_STRING;
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends BaseFragment {
 
-    @Inject
-    ViewModelFactory viewModelFactory;
 
     @Inject
     ConnectionUtils connectionUtils;
@@ -211,7 +209,6 @@ public class SignUpFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
 

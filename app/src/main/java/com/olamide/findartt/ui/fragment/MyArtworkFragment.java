@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
 
-public class MyArtworkFragment extends Fragment {
+public class MyArtworkFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,7 +45,6 @@ public class MyArtworkFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;

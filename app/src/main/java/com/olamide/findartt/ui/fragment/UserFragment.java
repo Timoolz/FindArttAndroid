@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,11 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.olamide.findartt.R;
 import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.enums.Gender;
-import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.UserUpdate;
@@ -41,14 +36,11 @@ import com.olamide.findartt.ui.activity.ImagePickerActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
-import com.olamide.findartt.utils.ImageUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.utils.network.FirebaseUtil;
-import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.viewmodels.UserViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -57,7 +49,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.IMAGE_URI_PATH;
@@ -66,7 +57,7 @@ import static com.olamide.findartt.AppConstants.RC_IMAGE_PICKER;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserFragment extends Fragment {
+public class UserFragment extends BaseFragment {
 
     private HomeFragment.OnFragmentInteractionListener mListener;
 
@@ -75,8 +66,6 @@ public class UserFragment extends Fragment {
     @Inject
     ConnectionUtils connectionUtils;
 
-    @Inject
-    ViewModelFactory viewModelFactory;
 
     @Inject
     FirebaseUtil firebaseUtil;
@@ -218,14 +207,14 @@ public class UserFragment extends Fragment {
     }
 
     private void fillImageView(String imageUrl, boolean fromServer) {
-        UiUtils.loadAvatar(imageUrl, avatarIv, getContext());
+        UiUtils.loadAvatarView(imageUrl, avatarIv, getContext());
         if (fromServer) {
             Activity rootActivity = getActivity();
             NavigationView sideNavView = rootActivity.findViewById(R.id.nav_view);
             if (sideNavView.getHeaderCount() > 0) {
                 View hView = sideNavView.getHeaderView(0);
                 ImageView ivAvatar = hView.findViewById(R.id.nav_avatar);
-                UiUtils.loadAvatar(imageUrl, ivAvatar, getContext());
+                UiUtils.loadAvatarView(imageUrl, ivAvatar, getContext());
 
 
             }
@@ -249,7 +238,6 @@ public class UserFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;

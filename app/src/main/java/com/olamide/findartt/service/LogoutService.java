@@ -13,10 +13,11 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import dagger.android.DaggerIntentService;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class LogoutService extends IntentService {
+public class LogoutService extends DaggerIntentService {
 
 
     public static final String ACTION_LOGOUT_FROM_SERVER = "com.olamide.findartt.widget.action.server.logout";
@@ -37,7 +38,6 @@ public class LogoutService extends IntentService {
 
     @Override
     public void onCreate() {
-        AndroidInjection.inject(this);
         super.onCreate();
     }
 

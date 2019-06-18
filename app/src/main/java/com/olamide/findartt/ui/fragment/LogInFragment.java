@@ -58,17 +58,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ACCESS_TOKEN_STRING;
 import static com.olamide.findartt.AppConstants.RC_SIGN_IN;
 
 
-public class LogInFragment extends Fragment {
+public class LogInFragment extends BaseFragment {
 
-    @Inject
-    ViewModelFactory viewModelFactory;
+
 
     @Inject
     ConnectionUtils connectionUtils;
@@ -198,7 +196,6 @@ public class LogInFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 
 //        if (context instanceof OnFragmentInteractionListener) {

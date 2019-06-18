@@ -15,9 +15,10 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends BaseActivity {
 
 
     @BindView(R.id.drawer_root)
@@ -27,10 +28,8 @@ public class SignInActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        ButterKnife.bind(this);
         host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.pre_auth_nav_host_fragment);
         navController = Objects.requireNonNull(host).getNavController();
 

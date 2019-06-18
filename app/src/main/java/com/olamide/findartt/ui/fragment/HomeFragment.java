@@ -47,12 +47,11 @@ import timber.log.Timber;
 
 
 
-public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdapterOnClickListener {
+public class HomeFragment extends BaseFragment implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
-    @Inject
-    ViewModelFactory viewModelFactory;
+
 
     ViewGroup dummyFrame;
 
@@ -249,7 +248,6 @@ public class HomeFragment extends Fragment implements ArtworkAdapter.ArtworkAdap
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;

@@ -1,6 +1,5 @@
 package com.olamide.findartt.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -15,33 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.User;
-import com.olamide.findartt.models.UserResult;
-import com.olamide.findartt.utils.AppAuthUtil;
-import com.olamide.findartt.utils.ImageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 //import retrofit2.MVResponse;
-import dagger.android.AndroidInjection;
-
-public class DashboardActivity extends AppCompatActivity {
 
 
-    @Inject
-    AppAuthUtil appAuthUtil;
+public class DashboardActivity extends BaseActivity {
 
-
+    private User currentUser;
     private AppBarConfiguration appBarConfiguration;
 
     @BindView(R.id.toolbar)
@@ -56,17 +43,14 @@ public class DashboardActivity extends AppCompatActivity {
     NavHostFragment host;
     NavController navController;
 
-    private UserResult userResult;
-    private User currentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        userResult = appAuthUtil.authorize();
+
         host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         // Set up Action Bar
         navController = Objects.requireNonNull(host).getNavController();
@@ -98,7 +82,7 @@ public class DashboardActivity extends AppCompatActivity {
             tvEmail.setText(currentUser.getEmail());
             if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
                 ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
-                UiUtils.loadAvatar(currentUser.getImageUrl(), ivAvatar, getApplicationContext());
+                UiUtils.loadAvatarView(currentUser.getImageUrl(), ivAvatar, getApplicationContext());
             }
         }
 
@@ -123,4 +107,6 @@ public class DashboardActivity extends AppCompatActivity {
         //return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout);
         return NavigationUI.navigateUp(navController, appBarConfiguration);
     }
+
+
 }

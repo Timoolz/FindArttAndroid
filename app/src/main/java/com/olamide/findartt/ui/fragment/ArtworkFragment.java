@@ -58,6 +58,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Lazy;
 import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerAppCompatDialogFragment;
+import dagger.android.support.DaggerFragment;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
@@ -70,12 +72,11 @@ import static com.olamide.findartt.AppConstants.CURRENT_USER;
  * to handle interaction events.
 
  */
-public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateListener {
+public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerStateListener {
 
     private OnFragmentInteractionListener mListener;
 
-    @Inject
-    ViewModelFactory viewModelFactory;
+
 
     private ExoUtil exoUtil;
 
@@ -467,7 +468,6 @@ public class ArtworkFragment extends Fragment implements ExoUtil.PlayerStateList
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;

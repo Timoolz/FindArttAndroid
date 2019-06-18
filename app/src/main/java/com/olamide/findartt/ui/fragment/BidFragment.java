@@ -55,10 +55,7 @@ import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
-public class BidFragment extends Fragment {
-
-
-    @Inject
+public class BidFragment extends BaseFragment {@Inject
     ViewModelFactory viewModelFactory;
 
     ArtworkViewModel artworkViewModel;
@@ -163,7 +160,6 @@ public class BidFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;

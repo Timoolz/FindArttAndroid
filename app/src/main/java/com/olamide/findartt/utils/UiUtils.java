@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 
 public class UiUtils {
 
-    public static void loadAvatar(String imageUrl, ImageView imageView, Context context){
+    public static void loadAvatarView(String imageUrl, ImageView imageView, Context context){
         Picasso.with(context)
                 .load(imageUrl)
                 .transform(ImageUtils.defaultAvatarTransformation(imageView))
