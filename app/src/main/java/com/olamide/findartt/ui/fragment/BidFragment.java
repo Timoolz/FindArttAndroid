@@ -55,8 +55,7 @@ import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
 import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
-public class BidFragment extends BaseFragment {@Inject
-    ViewModelFactory viewModelFactory;
+public class BidFragment extends BaseFragment {
 
     ArtworkViewModel artworkViewModel;
 
@@ -88,10 +87,6 @@ public class BidFragment extends BaseFragment {@Inject
     @BindView(R.id.bid_frame)
     MaxHeightNestedScrollView bidFrame;
 
-    private UserResult userResult;
-
-    ProgressDialog progressDialog;
-    ViewGroup dummyFrame;
 
     //To ensure it doesnt recur while getting the summary
     private boolean newCheck = false;
@@ -126,19 +121,15 @@ public class BidFragment extends BaseFragment {@Inject
         View rootView = inflater.inflate(R.layout.fragment_bid, container, false);
         ButterKnife.bind(this, rootView);
         artworkViewModel.getBidResponse().observe(this, this::handleBid);
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading),false);
-        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
-
 
         if (getArguments() != null) {
-            userResult = getArguments().getParcelable(CURRENT_USER);
             artworkSummary = getArguments().getParcelable(ARTWORK_STRING);
 
-            layoutManager = new LinearLayoutManager(getContext() );
+            layoutManager = new LinearLayoutManager(getContext());
             rvBids.setLayoutManager(layoutManager);
 
-            if(savedInstanceState == null){
-                mAdapter = new BidAdapter(artworkSummary.getBids(),  getContext());
+            if (savedInstanceState == null) {
+                mAdapter = new BidAdapter(artworkSummary.getBids(), getContext());
                 mAdapter.setBidList(artworkSummary.getBids());
                 //rvBids.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
 
@@ -191,7 +182,7 @@ public class BidFragment extends BaseFragment {@Inject
             tvSold.setVisibility(View.INVISIBLE);
         }
 
-        if(artworkSummary.getBids()!=null && artworkSummary.getBids().size()>0){
+        if (artworkSummary.getBids() != null && artworkSummary.getBids().size() > 0) {
             bidFrame.setVisibility(View.VISIBLE);
             rvBids.setVisibility(View.VISIBLE);
 
@@ -213,7 +204,7 @@ public class BidFragment extends BaseFragment {@Inject
                     arttResponse = objectMapper.convertValue(mvResponse.data, FindArttResponse.class);
                     Bid completedBid = objectMapper.convertValue(arttResponse.getData(), Bid.class);
                     UiUtils.showSuccessSnack("Successful Purchase. Welcome ", getContext(), clRoot);
-                    if(newCheck){
+                    if (newCheck) {
                         newCheck = false;
                         artworkViewModel.findArtSummary(userResult.getTokenInfo().getAccessToken(), completedBid.getArtworkId());
                     }

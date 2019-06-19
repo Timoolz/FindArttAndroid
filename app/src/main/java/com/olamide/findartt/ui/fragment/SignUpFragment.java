@@ -80,8 +80,6 @@ import static com.olamide.findartt.AppConstants.TYPE_STRING;
 public class SignUpFragment extends BaseFragment {
 
 
-    @Inject
-    ConnectionUtils connectionUtils;
 
 
     private OnFragmentInteractionListener mListener;
@@ -126,12 +124,8 @@ public class SignUpFragment extends BaseFragment {
     @BindView(R.id.btn_signup_google)
     SignInButton signInButton;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     SignUpViewModel signUpViewModel;
 
-    ProgressDialog progressDialog;
-    ViewGroup dummyFrame;
 
 
     private UserSignup signup = new UserSignup();
@@ -166,10 +160,6 @@ public class SignUpFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         ButterKnife.bind(this, rootView);
-
-
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
-        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
 
 
         signUpViewModel = ViewModelProviders.of(this, viewModelFactory).get(SignUpViewModel.class);

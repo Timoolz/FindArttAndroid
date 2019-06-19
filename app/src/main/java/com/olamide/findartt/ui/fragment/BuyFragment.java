@@ -51,8 +51,7 @@ public class BuyFragment extends BaseFragment {
 
 
 
-    @Inject
-    ConnectionUtils connectionUtils;
+
     private ArtworkSummary artworkSummary;
 
     private ArtworkViewModel artworkViewModel;
@@ -72,15 +71,11 @@ public class BuyFragment extends BaseFragment {
     @BindView(R.id.pb_loading)
     ProgressBar loadingPb;
 
-    private UserResult userResult;
 
-    ProgressDialog progressDialog;
-    ViewGroup dummyFrame;
 
     //To ensure it doesnt recur while getting the summary
     private boolean newCheck = false;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,12 +99,9 @@ public class BuyFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_buy, container, false);
         ButterKnife.bind(this, rootView);
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
-        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
         artworkViewModel.getBuyResponse().observe(this, this::handleBuy);
 
         if (getArguments() != null) {
-            userResult = getArguments().getParcelable(CURRENT_USER);
             artworkSummary = getArguments().getParcelable(ARTWORK_STRING);
         }
         loadUi();

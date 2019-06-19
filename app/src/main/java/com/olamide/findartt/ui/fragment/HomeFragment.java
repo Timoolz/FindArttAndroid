@@ -46,25 +46,13 @@ import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 
-
 public class HomeFragment extends BaseFragment implements ArtworkAdapter.ArtworkAdapterOnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
 
-
-    ViewGroup dummyFrame;
-
-    @Inject
-    AppAuthUtil appAuthUtil;
-    @Inject
-    ConnectionUtils connectionUtils;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     HomeViewModel homeViewModel;
 
-    private UserResult userResult;
 
     @BindView(R.id.rv_artwork)
     RecyclerView artworkRv;
@@ -88,7 +76,6 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userResult = appAuthUtil.authorize();
         homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
         if (getArguments() != null) {
 
@@ -104,7 +91,6 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
         this.setHasOptionsMenu(true);
 
         homeViewModel.getArtWorkResponse().observe(this, this::displayUi);
-        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
         int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
         layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
@@ -204,7 +190,7 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
     @Override
     public void onClickListener(Artwork artwork) {
         HomeFragmentDirections.GoToArtwork action = HomeFragmentDirections.goToArtwork(artwork);
-        Navigation.findNavController(Objects.requireNonNull(getActivity()),R.id.nav_host_fragment)
+        Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.nav_host_fragment)
                 .navigate(action);
 
     }

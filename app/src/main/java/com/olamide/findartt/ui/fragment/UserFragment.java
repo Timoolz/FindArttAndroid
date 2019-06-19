@@ -33,18 +33,13 @@ import com.olamide.findartt.models.UserUpdate;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ui.activity.ImagePickerActivity;
-import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.ConnectionUtils;
-import com.olamide.findartt.utils.network.FirebaseUtil;
 import com.olamide.findartt.viewmodels.UserViewModel;
 
 import java.util.Objects;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,16 +56,7 @@ public class UserFragment extends BaseFragment {
 
     private HomeFragment.OnFragmentInteractionListener mListener;
 
-    @Inject
-    AppAuthUtil appAuthUtil;
-    @Inject
-    ConnectionUtils connectionUtils;
 
-
-    @Inject
-    FirebaseUtil firebaseUtil;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     UserViewModel userViewModel;

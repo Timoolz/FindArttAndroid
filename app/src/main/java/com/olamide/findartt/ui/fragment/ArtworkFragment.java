@@ -83,19 +83,12 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
     @Inject
     Lazy<ExoUtilFactory> exoUtilFactory;
 
-    @Inject
-    AppAuthUtil appAuthUtil;
-    @Inject
-    ConnectionUtils connectionUtils;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    ViewGroup dummyFrame;
 
     ArtworkViewModel artworkViewModel;
     VideoViewModel videoViewModel;
 
-    private UserResult userResult;
     private Artwork artwork;
     private ArtworkSummary artworkSummary;
 
@@ -117,7 +110,7 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
 
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    ProgressDialog progressDialog;
+
 
     @BindView(R.id.tv_art_name)
     TextView tvArtName;
@@ -161,8 +154,6 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userResult = appAuthUtil.authorize();
-
         //get from safe args
         artwork = ArtworkFragmentArgs.fromBundle(getArguments()).getArtwork();
     }
@@ -172,9 +163,7 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_artwork, container, false);
-        dummyFrame = UiUtils.getDummyFrame(Objects.requireNonNull(getActivity()));
         ButterKnife.bind(this, rootView);
-        progressDialog = UiUtils.getProgressDialog(getContext(), getString(R.string.loading), false);
         artworkViewModel = ViewModelProviders.of(this, viewModelFactory).get(ArtworkViewModel.class);
         artworkViewModel.getArtWorkResponse().observe(this, this::showUi);
         artworkViewModel.getArtWorkFavourite().observe(this, this::showFavUi);
@@ -301,7 +290,6 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
         FragmentManager fragmentManager = getChildFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putParcelable(ARTWORK_STRING, artworkSummary);
-        bundle.putParcelable(CURRENT_USER, userResult);
         if (artworkSummary.getPurchaseType().equals(PurchaseType.BID)) {
             BidFragment bidFragment = new BidFragment();
             bidFragment.setArguments(bundle);

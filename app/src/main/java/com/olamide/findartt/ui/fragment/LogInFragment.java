@@ -1,6 +1,5 @@
 package com.olamide.findartt.ui.fragment;
 
-import android.app.ProgressDialog;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -11,7 +10,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
@@ -38,7 +36,6 @@ import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.models.mvvm.MVResponse;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.TokenInfo;
@@ -48,7 +45,6 @@ import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import java.util.Objects;
 
@@ -68,8 +64,6 @@ public class LogInFragment extends BaseFragment {
 
 
 
-    @Inject
-    ConnectionUtils connectionUtils;
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,12 +90,8 @@ public class LogInFragment extends BaseFragment {
 
     @BindView(R.id.btn_login_google)
     SignInButton signInButton;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     LoginViewModel loginViewModel;
-
-    ProgressDialog progressDialog;
-    ViewGroup dummyFrame;
 
 
     private String accessToken;
