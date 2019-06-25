@@ -102,7 +102,7 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
         artworkRv.setAdapter(mAdapter);
 
 
-        if (savedInstanceState == null) {
+        if (artworkList == null || artworkList.size()<=0) {
             loadArtWorks();
         }
 
