@@ -26,7 +26,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.ImagePickerActivity"></activity>
+        <activity android:name=".ui.activity.ImagePickerActivity"
+            android:theme="@style/AppTheme.Transparent"></activity>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
