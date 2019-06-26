@@ -81,8 +81,8 @@
 //
 //        try {
 //            Bitmap b = Picasso.with(mContext).load(mArtts.get(i).getImageUrl())
-//                    .placeholder(R.drawable.img_load)
-//                    .error(R.drawable.img_error).get();
+//                    .placeholder(R.drawable.img_area_24dp)
+//                    .error(R.drawable.img_off_24dp).get();
 //            ui.setImageViewBitmap(R.id.iv_art, Bitmap.createScaledBitmap(b, 1000, 1000, false));
 //        } catch (Exception e) {
 //            Timber.e(e);

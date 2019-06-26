@@ -90,8 +90,8 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkA
         Picasso.with(context)
                 .load(image_url)
                 .fit()
-                .placeholder(R.drawable.img_load)
-                .error(R.drawable.img_error)
+                .placeholder(R.drawable.img_area_24dp)
+                .error(R.drawable.img_off_24dp)
                 .into(holder.artworkImage);
 
         holder.artTitle.setText(currentArtwork.getName());

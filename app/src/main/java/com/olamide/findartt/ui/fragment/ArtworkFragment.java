@@ -277,8 +277,8 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
         Picasso.with(getContext())
                 .load(artworkSummary.getImageUrl())
                 .fit()
-                .placeholder(R.drawable.img_load)
-                .error(R.drawable.img_error)
+                .placeholder(R.drawable.img_area_24dp)
+                .error(R.drawable.img_off_24dp)
                 .into(ivArt);
 
         if (artworkSummary.getVideoUrl() != null && !artworkSummary.getVideoUrl().isEmpty()) {

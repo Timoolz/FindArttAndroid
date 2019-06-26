@@ -97,8 +97,8 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidAdapterViewHo
 //        Picasso.with(context)
 //                .load(image_url)
 //                .fit()
-//                .placeholder(R.drawable.img_load)
-//                .error(R.drawable.img_error)
+//                .placeholder(R.drawable.img_area_24dp)
+//                .error(R.drawable.img_off_24dp)
 //                .into(holder.bidImage);
 
         holder.tvAmount.setText(currentBid.getAmount().toString());
