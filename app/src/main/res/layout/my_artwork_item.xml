@@ -64,7 +64,7 @@
                     android:textColor="@color/success"
                     android:padding="2dp"
                     android:layout_marginHorizontal="15dp"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:theme="@style/AppTheme.TextView.Small"
                     android:text="@string/app_dummy_text_medium"/>
 
