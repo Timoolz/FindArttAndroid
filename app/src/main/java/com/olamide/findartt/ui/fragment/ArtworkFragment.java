@@ -39,6 +39,7 @@ import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
+import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
@@ -112,8 +113,6 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
     private PlaybackStateCompat.Builder mStateBuilder;
 
 
-    @BindView(R.id.tv_art_name)
-    TextView tvArtName;
 
     @BindView(R.id.iv_art)
     ImageView ivArt;
@@ -156,6 +155,7 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
         super.onCreate(savedInstanceState);
         //get from safe args
         artwork = ArtworkFragmentArgs.fromBundle(getArguments()).getArtwork();
+        ((DashboardActivity) getActivity()).getSupportActionBar().setTitle(artwork.getName());
     }
 
     @Override
@@ -272,7 +272,6 @@ public class ArtworkFragment extends BaseFragment implements ExoUtil.PlayerState
 //        Date date = Converters.toDate(artworkSummary.getCreatedDateEpoch());
 //        tvDate.setText(outputFormat.format(date));
         tvDate.setText(GeneralUtils.dateFromNowFormat(artworkSummary.getCreatedDateEpoch()));
-        tvArtName.setText(artworkSummary.getName());
         tv_description.setText(artworkSummary.getDescription());
 
         Picasso.with(getContext())

@@ -6,6 +6,11 @@
             android:id="@+id/home_dest"
             android:icon="@drawable/ic_home_24dp"
             android:title="@string/home" />
+
+        <item
+            android:id="@+id/my_art_dest"
+            android:icon="@drawable/ic_my_art"
+            android:title="@string/my_art" />
         <item
             android:id="@+id/user_dest"
             android:icon="@drawable/ic_account_circle_24dp"

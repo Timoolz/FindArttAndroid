@@ -6,8 +6,11 @@ import android.util.Base64;
 import com.olamide.findartt.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class GeneralUtils {
 
@@ -36,7 +39,7 @@ public class GeneralUtils {
     }
 
     public static String dateFromNowFormat(long dateMillis) {
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM" , Locale.ENGLISH);
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM", Locale.ENGLISH);
         String date = "";
         long now = System.currentTimeMillis();
 
@@ -45,7 +48,7 @@ public class GeneralUtils {
         if (now - dateMillis < (WEEK_MILLIS)) {
             if (now - dateMillis < (HOUR_MILLIS)) {
                 long minutes = Math.round((now - dateMillis) / MINUTE_MILLIS);
-                date = String.valueOf(minutes) + "m" ;
+                date = String.valueOf(minutes) + "m";
             } else if (now - dateMillis < (DAY_MILLIS)) {
                 long hours = Math.round((now - dateMillis) / HOUR_MILLIS);
                 date = String.valueOf(hours) + "h";
@@ -56,7 +59,7 @@ public class GeneralUtils {
         } else {
             Date dateDate = new Date(dateMillis);
             if (now - dateMillis > (YEAR_MILLIS)) {
-                sDateFormat = new SimpleDateFormat("dd MMM yyyy" , Locale.ENGLISH);
+                sDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
             }
             date = sDateFormat.format(dateDate);
 
@@ -65,5 +68,16 @@ public class GeneralUtils {
         // Add a dot to the date string
         date = "\u2022 " + date;
         return date;
+    }
+
+    public static Set<Integer> getRootLayouts() {
+        Set<Integer> rootLayouts =
+                new HashSet<>(Arrays.asList(
+                        R.id.home_dest,
+                        R.id.user_dest,
+                        R.id.my_art_dest)
+                );
+        return rootLayouts;
+
     }
 }

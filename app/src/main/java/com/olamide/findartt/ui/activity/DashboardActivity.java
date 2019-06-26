@@ -1,6 +1,5 @@
 package com.olamide.findartt.ui.activity;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,10 +17,9 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 import com.olamide.findartt.R;
 import com.olamide.findartt.models.User;
+import com.olamide.findartt.utils.GeneralUtils;
 import com.olamide.findartt.utils.UiUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -53,14 +51,13 @@ public class DashboardActivity extends BaseActivity {
         setContentView(R.layout.activity_dashboard);
         setSupportActionBar(toolbar);
 
-        setDrawerListener(findViewById(R.id.nav_view));
 
         host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         // Set up Action Bar
         navController = Objects.requireNonNull(host).getNavController();
         //appBarConfiguration = new AppBarConfiguration.Builder((navController.getGraph()))
         appBarConfiguration = new AppBarConfiguration
-                .Builder(new HashSet<>(Arrays.asList(R.id.home_dest, R.id.user_dest)))
+                .Builder(GeneralUtils.getRootLayouts())
                 .setDrawerLayout(drawerLayout)
                 .build();
 
@@ -102,45 +99,20 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
+        UiUtils.handleDrawerSlide(drawerLayout,sideNavView);
+
+
     }
 
 
     @Override
     public boolean onSupportNavigateUp() {
-        //return super.onSupportNavigateUp();
+         super.onSupportNavigateUp();
         //return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout);
         return NavigationUI.navigateUp(navController, appBarConfiguration);
     }
 
 
-    private void setDrawerListener( View navView) {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navView);
-        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, navView);
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, navView);
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-
-
-    }
 
 
 

@@ -24,6 +24,9 @@ public class ArtworkSummary extends Artwork implements Parcelable {
     @SerializedName("bids")
     private List<Bid> bids;
 
+    @SerializedName("bidCount")
+    private Integer bidCount;
+
     public Buy getCurrentBuy() {
         return currentBuy;
     }
@@ -56,6 +59,14 @@ public class ArtworkSummary extends Artwork implements Parcelable {
         this.bids = bids;
     }
 
+    public Integer getBidCount() {
+        return bidCount;
+    }
+
+    public void setBidCount(Integer bidCount) {
+        this.bidCount = bidCount;
+    }
+
 
     @Override
     public int describeContents() {
@@ -69,6 +80,7 @@ public class ArtworkSummary extends Artwork implements Parcelable {
         dest.writeParcelable(currentBid,flags);
         dest.writeParcelable(acceptedBid,flags);
         dest.writeTypedList( bids);
+        dest.writeInt(bidCount);
 
 
     }
@@ -84,6 +96,7 @@ public class ArtworkSummary extends Artwork implements Parcelable {
             artworkSummary.acceptedBid = in.readParcelable(Bid.class.getClassLoader());
             in.readTypedList(bidList, Bid.CREATOR);
             artworkSummary.bids = bidList;
+            artworkSummary.bidCount = in.readInt();
 
             return artworkSummary;
         }

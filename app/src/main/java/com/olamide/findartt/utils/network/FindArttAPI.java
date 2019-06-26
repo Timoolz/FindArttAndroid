@@ -64,7 +64,7 @@ public interface FindArttAPI {
     Observable<FindArttResponse<List<Artwork>>> findArt(@Header("Authorization") String auth );
 
     @GET("v1/art/owner/find")
-    Observable<FindArttResponse<List<Artwork>>> findMyArt(@Header("Authorization") String auth );
+    Observable<FindArttResponse<List<ArtworkSummary>>> findMyArt(@Header("Authorization") String auth );
 
     @GET("v1/art/find/{id}/summary")
     Observable<FindArttResponse<ArtworkSummary>> getArtSummary(@Header("Authorization") String auth, @Path("id") int artworkId );

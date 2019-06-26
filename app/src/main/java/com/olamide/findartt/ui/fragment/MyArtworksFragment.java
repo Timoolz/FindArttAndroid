@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,13 @@ import android.view.ViewGroup;
 import com.olamide.findartt.R;
 
 import butterknife.ButterKnife;
-import dagger.android.support.AndroidSupportInjection;
 
 
-public class MyArtworkFragment extends BaseFragment {
+public class MyArtworksFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public MyArtworkFragment() {
+    public MyArtworksFragment() {
         // Required empty public constructor
     }
 
@@ -36,7 +33,7 @@ public class MyArtworkFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_my_artwork, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_my_artworks, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
     }

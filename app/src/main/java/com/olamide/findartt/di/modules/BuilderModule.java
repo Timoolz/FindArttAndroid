@@ -10,7 +10,7 @@ import com.olamide.findartt.ui.activity.SignInActivity;
 import com.olamide.findartt.ui.fragment.BidFragment;
 import com.olamide.findartt.ui.fragment.BuyFragment;
 import com.olamide.findartt.ui.fragment.LogInFragment;
-import com.olamide.findartt.ui.fragment.MyArtworkFragment;
+import com.olamide.findartt.ui.fragment.MyArtworksFragment;
 import com.olamide.findartt.ui.fragment.SignUpFragment;
 import com.olamide.findartt.ui.fragment.UserFragment;
 
@@ -54,7 +54,7 @@ public abstract class BuilderModule {
     abstract ArtworkFragment bindArtworkFragment();
 
     @ContributesAndroidInjector
-    abstract MyArtworkFragment bindMyArtworkFragment();
+    abstract MyArtworksFragment bindMyArtworkFragment();
 
     @ContributesAndroidInjector
     abstract LogoutService logoutService();

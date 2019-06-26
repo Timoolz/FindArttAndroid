@@ -81,7 +81,7 @@ public class FindArttRepository {
         return findArttAPI.findArt(ApiAccessToken);
     }
 
-    public Observable<FindArttResponse<List<Artwork>>> findMyArt(String ApiAccessToken) {
+    public Observable<FindArttResponse<List<ArtworkSummary>>> findMyArt(String ApiAccessToken) {
         return findArttAPI.findMyArt(ApiAccessToken);
     }
 
