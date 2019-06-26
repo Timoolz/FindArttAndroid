@@ -1,16 +1,18 @@
-package com.olamide.findartt;
+package com.olamide.findartt.viewmodels.factory;
 
 import android.app.Application;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
+import com.olamide.findartt.viewmodels.VideoViewModel;
 import com.olamide.findartt.di.rx.SchedulersFactory;
 import com.olamide.findartt.utils.network.FindArttRepository;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.olamide.findartt.viewmodels.HomeViewModel;
 import com.olamide.findartt.viewmodels.LoginViewModel;
 import com.olamide.findartt.viewmodels.SignUpViewModel;
+import com.olamide.findartt.viewmodels.UserArtworksViewModel;
 import com.olamide.findartt.viewmodels.UserViewModel;
 
 import javax.inject.Inject;
@@ -41,6 +43,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
         if (modelClass.isAssignableFrom(HomeViewModel.class)) {
             return (T) new HomeViewModel(application, findArttRepository, schedulersFactory);
+        }
+
+        if (modelClass.isAssignableFrom(UserArtworksViewModel.class)) {
+            return (T) new UserArtworksViewModel(application, findArttRepository, schedulersFactory);
         }
 
         if (modelClass.isAssignableFrom(ArtworkViewModel.class)) {

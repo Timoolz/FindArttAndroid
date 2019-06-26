@@ -1,7 +1,5 @@
 package com.olamide.findartt.ui.fragment;
 
-import android.app.ProgressDialog;
-
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -12,8 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavDirections;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
@@ -25,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,9 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.olamide.findartt.AppConstants;
 import com.olamide.findartt.utils.NavigationUtils;
 import com.olamide.findartt.viewmodels.SignUpViewModel;
-import com.olamide.findartt.ViewModelFactory;
 
-import com.olamide.findartt.ui.activity.DashboardActivity;
 import com.olamide.findartt.enums.Gender;
 
 import com.olamide.findartt.R;
@@ -52,21 +45,16 @@ import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.TempStorageUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 
 import java.util.Objects;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.RC_SIGN_IN;
-import static com.olamide.findartt.AppConstants.TYPE_STRING;
 
 
 /**

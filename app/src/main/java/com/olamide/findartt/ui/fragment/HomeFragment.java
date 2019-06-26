@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,29 +19,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.ArtworkAdapter;
 import com.olamide.findartt.models.Artwork;
-import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
-import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.RecyclerViewUtils;
-import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.viewmodels.HomeViewModel;
 
 import java.util.List;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.support.AndroidSupportInjection;
 import timber.log.Timber;
 
 

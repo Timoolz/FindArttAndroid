@@ -8,7 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.ViewModelProviders;
+
 import com.olamide.findartt.R;
+import com.olamide.findartt.viewmodels.HomeViewModel;
+import com.olamide.findartt.viewmodels.UserArtworksViewModel;
 
 import butterknife.ButterKnife;
 
@@ -16,6 +20,8 @@ import butterknife.ButterKnife;
 public class MyArtworksFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
+
+    UserArtworksViewModel userArtworksViewModel;
 
     public MyArtworksFragment() {
         // Required empty public constructor
@@ -25,8 +31,9 @@ public class MyArtworksFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userArtworksViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserArtworksViewModel.class);
         if (getArguments() != null) {
-            }
+        }
     }
 
     @Override
@@ -37,7 +44,6 @@ public class MyArtworksFragment extends BaseFragment {
         ButterKnife.bind(this, rootView);
         return rootView;
     }
-
 
 
     @Override

@@ -1,4 +1,4 @@
-package com.olamide.findartt;
+package com.olamide.findartt.viewmodels;
 
 import android.os.SystemClock;
 

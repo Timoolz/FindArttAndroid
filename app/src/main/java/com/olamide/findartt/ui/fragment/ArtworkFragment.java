@@ -1,7 +1,6 @@
 package com.olamide.findartt.ui.fragment;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
@@ -31,22 +29,17 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.olamide.findartt.R;
-import com.olamide.findartt.VideoViewModel;
-import com.olamide.findartt.ViewModelFactory;
+import com.olamide.findartt.viewmodels.VideoViewModel;
 import com.olamide.findartt.enums.PurchaseType;
 import com.olamide.findartt.models.Artwork;
 import com.olamide.findartt.models.ArtworkSummary;
-import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.ui.activity.DashboardActivity;
-import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.GeneralUtils;
-import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.exo.ExoUtil;
 import com.olamide.findartt.utils.exo.ExoUtilFactory;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -58,13 +51,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Lazy;
-import dagger.android.support.AndroidSupportInjection;
-import dagger.android.support.DaggerAppCompatDialogFragment;
-import dagger.android.support.DaggerFragment;
 import timber.log.Timber;
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
-import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 /**
  * A simple {@link Fragment} subclass.

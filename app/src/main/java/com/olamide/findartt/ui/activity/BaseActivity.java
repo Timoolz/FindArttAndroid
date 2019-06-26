@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 
 
-import androidx.annotation.CallSuper;
 import androidx.annotation.LayoutRes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
-import com.olamide.findartt.models.User;
+import com.olamide.findartt.viewmodels.factory.ViewModelFactory;
 import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.UiUtils;

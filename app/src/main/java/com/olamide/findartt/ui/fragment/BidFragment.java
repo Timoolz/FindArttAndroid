@@ -1,6 +1,5 @@
 package com.olamide.findartt.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,19 +14,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.adapter.BidAdapter;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Bid;
 
-import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 
 import com.olamide.findartt.models.mvvm.MVResponse;
@@ -46,13 +42,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.support.AndroidSupportInjection;
 
 import timber.log.Timber;
 
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
-import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
 public class BidFragment extends BaseFragment {

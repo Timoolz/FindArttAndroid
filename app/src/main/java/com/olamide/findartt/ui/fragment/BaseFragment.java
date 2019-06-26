@@ -6,9 +6,8 @@ import android.view.ViewGroup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
+import com.olamide.findartt.viewmodels.factory.ViewModelFactory;
 import com.olamide.findartt.models.UserResult;
-import com.olamide.findartt.ui.activity.SignInActivity;
 import com.olamide.findartt.utils.AppAuthUtil;
 import com.olamide.findartt.utils.UiUtils;
 import com.olamide.findartt.utils.network.ConnectionUtils;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 
 public abstract class BaseFragment extends DaggerFragment {

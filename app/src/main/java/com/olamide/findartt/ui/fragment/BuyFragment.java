@@ -1,6 +1,5 @@
 package com.olamide.findartt.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,37 +13,28 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.models.ArtworkSummary;
 import com.olamide.findartt.models.Buy;
-import com.olamide.findartt.models.UserResult;
 import com.olamide.findartt.models.api.FindArttResponse;
 import com.olamide.findartt.models.mvvm.MVResponse;
 import com.olamide.findartt.utils.ErrorUtils;
 import com.olamide.findartt.utils.UiUtils;
-import com.olamide.findartt.utils.network.ConnectionUtils;
 import com.olamide.findartt.viewmodels.ArtworkViewModel;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.support.AndroidSupportInjection;
 
 
 import timber.log.Timber;
 
 
 import static com.olamide.findartt.AppConstants.ARTWORK_STRING;
-import static com.olamide.findartt.AppConstants.CURRENT_USER;
 
 
 public class BuyFragment extends BaseFragment {

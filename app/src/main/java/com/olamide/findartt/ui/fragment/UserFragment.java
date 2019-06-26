@@ -20,12 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.olamide.findartt.R;
-import com.olamide.findartt.ViewModelFactory;
 import com.olamide.findartt.enums.Gender;
 import com.olamide.findartt.models.User;
 import com.olamide.findartt.models.UserResult;

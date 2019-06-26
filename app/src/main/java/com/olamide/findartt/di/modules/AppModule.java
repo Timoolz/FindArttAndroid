@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.olamide.findartt.AppConstants;
-import com.olamide.findartt.ViewModelFactory;
+import com.olamide.findartt.viewmodels.factory.ViewModelFactory;
 import com.olamide.findartt.database.ArtworkDao;
 import com.olamide.findartt.database.FindArttDatabase;
 import com.olamide.findartt.di.rx.SchedulersFactory;
