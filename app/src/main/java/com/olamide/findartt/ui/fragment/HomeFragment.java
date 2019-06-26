@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
         this.setHasOptionsMenu(true);
 
         homeViewModel.getArtWorkResponse().observe(this, this::displayUi);
-        int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, 450);
+        int spanCount = RecyclerViewUtils.getSpanCount(artworkRv, getResources().getDimension(R.dimen.card_width));
         layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         artworkRv.setLayoutManager(layoutManager);
 
@@ -92,9 +92,8 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
         artworkRv.setAdapter(mAdapter);
 
 
-        if (artworkList == null || artworkList.size()<=0) {
-            loadArtWorks();
-        }
+        loadArtWorks();
+
 
         return rootView;
     }
@@ -104,7 +103,9 @@ public class HomeFragment extends BaseFragment implements ArtworkAdapter.Artwork
         switch (mvResponse.status) {
 
             case LOADING:
-                loadingPb.setVisibility(View.VISIBLE);
+                if (artworkList == null || artworkList.size() <= 0) {
+                    loadingPb.setVisibility(View.VISIBLE);
+                }
                 break;
             case SUCCESS:
                 displayUi();

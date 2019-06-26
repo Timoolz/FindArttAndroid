@@ -29,6 +29,9 @@ public class RecyclerViewUtils {
         Timber.i( "width  %s", width);
         Timber.i( "cardWidth  %s", cardWidth);
         Timber.i( "Spancount  %s", newSpanCount);
+        if(newSpanCount<1){
+            return 1;
+        }
 
         return newSpanCount;
     }

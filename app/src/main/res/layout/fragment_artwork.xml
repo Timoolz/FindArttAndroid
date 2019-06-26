@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="15dp"
             app:layout_constraintTop_toTopOf="parent">
@@ -36,7 +36,7 @@
                     <ImageView
                         android:id="@+id/iv_art"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="@dimen/card_width"
                         android:background="@color/photo_placeholder"
                         android:contentDescription="@string/desc_art_image"
                         android:scaleType="fitXY"
