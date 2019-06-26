@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/user_card_height">
+
+        <ImageView
+            android:id="@+id/iv_art"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="100dp"
+            android:background="@color/photo_placeholder"
+            android:scaleType="fitXY"
+            android:transitionName="animated" />
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+
+            android:layout_marginHorizontal="@dimen/card_margin_small"
+            android:layout_marginVertical="@dimen/card_margin_large"
+            android:background="@color/detail_text"
+            android:elevation="@dimen/fab_elevation"
+            android:orientation="vertical"
+
+            >
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:layout_marginHorizontal="15dp"
+                android:theme="@style/AppTheme.TextView.Medium"
+                android:text="@string/app_dummy_text_short"/>
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_text"
+                android:padding="2dp"
+                android:layout_marginHorizontal="15dp"
+                android:maxLines="2"
+                android:theme="@style/AppTheme.TextView.Small"
+                android:text="@string/app_dummy_text_medium"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_bid_buy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/success"
+                    android:padding="2dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:maxLines="1"
+                    android:theme="@style/AppTheme.TextView.Small"
+                    android:text="@string/app_dummy_text_medium"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -86,7 +86,6 @@ public class ArtworkAdapter extends RecyclerView.Adapter<ArtworkAdapter.ArtworkA
 
         Artwork currentArtwork = artworkList.get(position);
         String image_url = currentArtwork.getImageUrl();
-        //image_url = "https://firebasestorage.googleapis.com/v0/b/maximus-163513.appspot.com/o/fifa-19-de-bruyne_due7v4yr8dly1j4det4we9efy.jpg?alt=media&token=bb6f428a-dfdc-40fd-8c56-09622410d170";
         Picasso.with(context)
                 .load(image_url)
                 .fit()

@@ -4,6 +4,8 @@
     <bool name="isLand">false</bool>
 
     <dimen name="card_width">400dp</dimen>
+    <dimen name="card_height">400dp</dimen>
+    <dimen name="user_card_height">200dp</dimen>
 
     <!-- detail -->
     <dimen name="detail_title_text_size">24sp</dimen>
@@ -21,6 +23,9 @@
     <dimen name="avatar_dimen">160dp</dimen>
     <dimen name="icons_dimen">40dp</dimen>
     <dimen name="icons_margin">36dp</dimen>
+
+    <dimen name="card_margin_small">12dp</dimen>
+    <dimen name="card_margin_large">24dp</dimen>
 
 
     <!--
