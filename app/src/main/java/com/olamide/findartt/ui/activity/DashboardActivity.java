@@ -1,9 +1,11 @@
 package com.olamide.findartt.ui.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -44,7 +46,6 @@ public class DashboardActivity extends BaseActivity {
     NavController navController;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,16 +77,18 @@ public class DashboardActivity extends BaseActivity {
     private void setupNavigationMenu(NavController navController) {
         NavigationUI.setupWithNavController(sideNavView, navController);
 
-        currentUser = userResult.getUser();
-        if (sideNavView.getHeaderCount() > 0) {
-            View hView = sideNavView.getHeaderView(0);
-            TextView tvEmail = (TextView) hView.findViewById(R.id.nav_email);
-            tvEmail.setText(currentUser.getEmail());
-            if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
-                ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
-                UiUtils.loadAvatarView(currentUser.getImageUrl(), ivAvatar, getApplicationContext());
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if( appBarConfiguration.getTopLevelDestinations().contains(destination.getId())){
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                } else {
+                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                }
             }
-        }
+        });
+
+
 
         //
         // *TO CALL THE LOGOUT METHOD*
@@ -99,7 +102,17 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
-        UiUtils.handleDrawerSlide(drawerLayout,sideNavView);
+        //Load avatar image
+        currentUser = userResult.getUser();
+        if (sideNavView.getHeaderCount() > 0) {
+            View hView = sideNavView.getHeaderView(0);
+            TextView tvEmail = (TextView) hView.findViewById(R.id.nav_email);
+            tvEmail.setText(currentUser.getEmail());
+            if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+                ImageView ivAvatar = (ImageView) hView.findViewById(R.id.nav_avatar);
+                UiUtils.loadAvatarView(currentUser.getImageUrl(), ivAvatar, getApplicationContext());
+            }
+        }
 
 
     }
@@ -107,13 +120,10 @@ public class DashboardActivity extends BaseActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-         super.onSupportNavigateUp();
+        super.onSupportNavigateUp();
         //return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout);
         return NavigationUI.navigateUp(navController, appBarConfiguration);
     }
-
-
-
 
 
 }
