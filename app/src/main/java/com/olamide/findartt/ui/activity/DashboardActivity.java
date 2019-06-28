@@ -76,11 +76,11 @@ public class DashboardActivity extends BaseActivity {
 
     private void setupNavigationMenu(NavController navController) {
         NavigationUI.setupWithNavController(sideNavView, navController);
-
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if( appBarConfiguration.getTopLevelDestinations().contains(destination.getId())){
+                drawerLayout.closeDrawers();
+                if (appBarConfiguration.getTopLevelDestinations().contains(destination.getId())) {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 } else {
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -88,19 +88,31 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
-
-
         //
         // *TO CALL THE LOGOUT METHOD*
         // *AND TO PREVENT JETPACK NAVIGATION FROM HANDLING IT*
-        //
-        sideNavView.getMenu().findItem(R.id.log_out).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        //METHOD 1
+        //Totally Override the Navigation view Listener and handle all custom cases
+        sideNavView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                appAuthUtil.logout();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.log_out) {
+                    appAuthUtil.logout();
+                } else if (menuItem.getItemId() > 0) {
+                    navController.navigate(menuItem.getItemId());
+                }
                 return true;
             }
         });
+        //METHOD 2
+        //Get the menuItem you want and ovveride the on click listener
+//        sideNavView.getMenu().findItem(R.id.log_out).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                appAuthUtil.logout();
+//                return true;
+//            }
+//        });
 
         //Load avatar image
         currentUser = userResult.getUser();
