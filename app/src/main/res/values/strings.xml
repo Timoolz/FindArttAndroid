@@ -106,6 +106,8 @@ Each Android ND project will be reviewed against the Common Project Requirements
     <string name="dummy_address">5, BroadWay drive, Somewhere. On Earth</string>
     <string name="dob">19 -Jan -1900</string>
     <string name="update">Make Changes</string>
+    <string name="camera_option">Camera</string>
+    <string name="gallery_option">Gallery</string>
 
 
 </resources>

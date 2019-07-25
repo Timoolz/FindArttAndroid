@@ -20,6 +20,7 @@ import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.olamide.findartt.R;
 import com.olamide.findartt.utils.ImageUtils;
 import com.yalantis.ucrop.UCrop;
@@ -49,12 +50,11 @@ public class ImagePickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_picker);
 
         // setup the alert builder
-        LayoutInflater layoutInflater = LayoutInflater.from(ImagePickerActivity.this);
-        View promptView = layoutInflater.inflate(R.layout.image_picker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(ImagePickerActivity.this);
-        builder.setView(promptView);
-        builder.setCancelable(true);
-        builder.setOnCancelListener(
+        View promptView = LayoutInflater.from(ImagePickerActivity.this).inflate(R.layout.image_picker, null);
+        BottomSheetDialog bottomDialog = new BottomSheetDialog(this);
+        bottomDialog.setContentView(promptView);
+        bottomDialog.setCancelable(true);
+        bottomDialog.setOnCancelListener(
                 new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -62,15 +62,13 @@ public class ImagePickerActivity extends AppCompatActivity {
                     }
                 }
         );
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        bottomDialog.show();
 
         promptView.findViewById(R.id.camera_picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchCamera();
-                dialog.dismiss();
+                bottomDialog.dismiss();
             }
         });
 
@@ -78,7 +76,7 @@ public class ImagePickerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 launchGallery();
-                dialog.dismiss();
+                bottomDialog.dismiss();
             }
         });
     }
