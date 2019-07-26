@@ -55,12 +55,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         bottomDialog.setContentView(promptView);
         bottomDialog.setCancelable(true);
         bottomDialog.setOnCancelListener(
-                new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        setResultCancelled();
-                    }
-                }
+                dialog -> setResultCancelled()
         );
         bottomDialog.show();
 
