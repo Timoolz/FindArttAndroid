@@ -8,7 +8,9 @@
 
         android:id="@+id/camera_picker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:weightSum="10"
         android:orientation="horizontal">
 
@@ -17,7 +19,8 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="#fff"
-            android:padding="3dp"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="35dp"
             android:scaleType="fitXY"
 
             android:src="@drawable/ic_camera_24dp" />
@@ -28,14 +31,16 @@
             android:layout_weight="7"
             style="@style/AppTheme.TextView.Medium"
             android:padding="6dp"
-            android:textColor="@color/icons"
+            android:textColor="@color/grey_icon"
             android:text="@string/camera_option"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/gallery_picker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:weightSum="10"
         android:orientation="horizontal">
 
@@ -44,7 +49,10 @@
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="#fff"
-            android:padding="4dp"
+
+            android:paddingVertical="22dp"
+            android:paddingHorizontal="37dp"
+
             android:scaleType="fitXY"
 
             android:src="@drawable/ic_folder_multiple_image_24dp" />
@@ -53,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="7"
-            android:textColor="@color/icons"
+            android:textColor="@color/grey_icon"
             android:padding="6dp"
             style="@style/AppTheme.TextView.Medium"
             android:text="@string/gallery_option"/>
