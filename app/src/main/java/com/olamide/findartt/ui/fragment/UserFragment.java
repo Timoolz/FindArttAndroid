@@ -55,8 +55,6 @@ public class UserFragment extends BaseFragment {
     private HomeFragment.OnFragmentInteractionListener mListener;
 
 
-
-
     UserViewModel userViewModel;
     ViewGroup dummyFrame;
 
@@ -280,7 +278,7 @@ public class UserFragment extends BaseFragment {
     }
 
     private boolean updateValid(UserUpdate userUpdate1) {
-        if ( userUpdate1.getFirstName().trim().isEmpty()
+        if (userUpdate1.getFirstName().trim().isEmpty()
                 || userUpdate1.getLastName().trim().isEmpty()
                 || userUpdate1.getPhone().trim().isEmpty()
                 || userUpdate1.getCountry().trim().isEmpty()
@@ -299,18 +297,15 @@ public class UserFragment extends BaseFragment {
             case RC_IMAGE_PICKER:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImageUri = data.getParcelableExtra(IMAGE_URI_PATH);
-                    firebaseUtil.storeUserImage(selectedImageUri, new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                downloadString = Objects.requireNonNull(downloadUri).toString();
-                                userUpdate.setImageUrl(downloadString);
-                                fillImageView(downloadString, false);
+                    firebaseUtil.storeUserImage(selectedImageUri, task -> {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            downloadString = Objects.requireNonNull(downloadUri).toString();
+                            userUpdate.setImageUrl(downloadString);
+                            fillImageView(downloadString, false);
 
-                            } else {
-                                ErrorUtils.handleUserError("Error uploading Image", getActivity(), UiUtils.getDummyFrame(getActivity()));
-                            }
+                        } else {
+                            ErrorUtils.handleUserError("Error uploading Image", getActivity(), UiUtils.getDummyFrame(getActivity()));
                         }
                     });
                 }
