@@ -2,6 +2,7 @@
 Android Application for an online art gallery.(Still in development)
 It implements FindArtt Service for all business logic https://findartt.herokuapp.com/api/swagger-ui.html#/
 Implemented with MVVM architecture.
+Implemeted using AndroidX.
 
 It uses the following libraries;
 
