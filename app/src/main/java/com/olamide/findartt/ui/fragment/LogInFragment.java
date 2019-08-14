@@ -150,7 +150,7 @@ public class LogInFragment extends BaseFragment {
 //            if (connectionUtils.handleNoInternet(getActivity())) {
 //                login(login);
 //            }
-            return rootView;
+//            return rootView;
         }
 
 
